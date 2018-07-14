@@ -36,5 +36,9 @@ namespace ECBack.Models
 
         // password 的哈希值
         public string PasswordHash { get; set; }
+
+        public List<Address> Addresses { get; set; }
+
+        public List<Orderform> orderforms { get; set; }
     }
 }

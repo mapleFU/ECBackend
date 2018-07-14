@@ -28,7 +28,25 @@ namespace ECBack.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("NEW_DB2018");
+
+            // Address 属性
+            //modelBuilder.Entity<Address>()
+            //    .HasRequired(add => add.User)
+            //    .WithMany(usr => usr.Addresses)
+            //    .HasForeignKey(add => add.UserID)
+            //    .WillCascadeOnDelete(true);
+
+            //modelBuilder.Entity<Orderform>()
+            //    .HasRequired(ofm => ofm.FormCustomer)
+            //    .WithMany(usr => usr.orderforms)
+            //    .HasForeignKey(ad => ad.FormCustomer)
+            //    .WillCascadeOnDelete(true);
+
+            
         }
 
+        public System.Data.Entity.DbSet<ECBack.Models.Orderform> Orderforms { get; set; }
+
+        public System.Data.Entity.DbSet<ECBack.Models.Address> Addresses { get; set; }
     }
 }
