@@ -39,6 +39,6 @@ namespace ECBack.Models
 
         public List<Address> Addresses { get; set; }
 
-        public List<Orderform> orderforms { get; set; }
+        public List<Orderform> Orderforms { get; set; }
     }
 }

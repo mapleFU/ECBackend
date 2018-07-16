@@ -203,6 +203,8 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AddressesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LogisticInfoesController.cs" />
+    <Compile Include="Controllers\LogisticsController.cs" />
     <Compile Include="Controllers\OrderformsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -213,8 +215,13 @@
     <Compile Include="Migrations\201807160300297_initialize models.Designer.cs">
       <DependentUpon>201807160300297_initialize models.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807160643223_add logistic and info for them.cs" />
+    <Compile Include="Migrations\201807160643223_add logistic and info for them.Designer.cs">
+      <DependentUpon>201807160643223_add logistic and info for them.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\Logistic.cs" />
     <Compile Include="Models\OracleDbContext.cs" />
     <Compile Include="Models\Orderform.cs" />
     <Compile Include="Models\User.cs" />
@@ -313,6 +320,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201807160300297_initialize models.resx">
       <DependentUpon>201807160300297_initialize models.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807160643223_add logistic and info for them.resx">
+      <DependentUpon>201807160643223_add logistic and info for them.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

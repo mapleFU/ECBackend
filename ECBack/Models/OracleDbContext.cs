@@ -38,15 +38,26 @@ namespace ECBack.Models
 
             //modelBuilder.Entity<Orderform>()
             //    .HasRequired(ofm => ofm.FormCustomer)
-            //    .WithMany(usr => usr.orderforms)
-            //    .HasForeignKey(ad => ad.FormCustomer)
+            //    .WithMany(user => user.Orderforms)
+            //    .HasForeignKey(ad => ad.OrderformID)
             //    .WillCascadeOnDelete(true);
 
-            
+            //modelBuilder.Entity<LogisticInfo>()
+            //    .HasRequired(ofm => ofm.FormCustomer)
+            //    .WithMany(user => user.Orderforms)
+            //    .HasForeignKey(ad => ad.OrderformID)
+            //    .WillCascadeOnDelete(true);
+
+
+
         }
 
         public System.Data.Entity.DbSet<ECBack.Models.Orderform> Orderforms { get; set; }
 
         public System.Data.Entity.DbSet<ECBack.Models.Address> Addresses { get; set; }
+
+        public System.Data.Entity.DbSet<ECBack.Models.Logistic> Logistics { get; set; }
+
+        public System.Data.Entity.DbSet<ECBack.Models.LogisticInfo> LogisticInfoes { get; set; }
     }
 }
