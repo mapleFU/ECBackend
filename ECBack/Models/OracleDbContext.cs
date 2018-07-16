@@ -27,7 +27,7 @@ namespace ECBack.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("NEW_DB2018");
+            modelBuilder.HasDefaultSchema("DB2018");
 
             // Address 属性
             //modelBuilder.Entity<Address>()
