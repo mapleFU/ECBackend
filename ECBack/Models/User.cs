@@ -18,6 +18,8 @@ namespace ECBack.Models
         [MaxLength(50)]
         public string RealName { get; set; }
 
+        [Index]
+        [Required]
         [MaxLength(11)]
         public string PhoneNumber { get; set; }
 
@@ -35,6 +37,7 @@ namespace ECBack.Models
         [MaxLength(100)] public string Home { get; set; }
 
         // password 的哈希值
+        [Required]
         public string PasswordHash { get; set; }
 
         public List<Address> Addresses { get; set; }
