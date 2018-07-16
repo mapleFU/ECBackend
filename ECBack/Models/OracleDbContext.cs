@@ -19,7 +19,7 @@ namespace ECBack.Models
         {
         }
 
-        public OracleDbContext(string connectString) : base("DATA SOURCE= (DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = 10.60.42.201)(PORT = 1521))  (CONNECT_DATA = (SERVICE_NAME = xe) ) );PASSWORD=db2018;PERSIST SECURITY INFO=True;USER ID=db2018")
+        public OracleDbContext(string connectString) : base("DATA SOURCE= (DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = 10.60.42.201)(PORT = 1521))  (CONNECT_DATA = (SERVICE_NAME = xe) ) );PASSWORD=DB2018;PERSIST SECURITY INFO=True;USER ID=DB2018")
         {
         }
 
@@ -59,5 +59,15 @@ namespace ECBack.Models
         public System.Data.Entity.DbSet<ECBack.Models.Logistic> Logistics { get; set; }
 
         public System.Data.Entity.DbSet<ECBack.Models.LogisticInfo> LogisticInfoes { get; set; }
+
+        public System.Data.Entity.DbSet<ECBack.Models.Category> Categories { get; set; }
+
+        public System.Data.Entity.DbSet<ECBack.Models.GoodEntity> GoodEntities { get; set; }
+
+        public System.Data.Entity.DbSet<ECBack.Models.SaleEntity> SaleEntities { get; set; }
+
+        public System.Data.Entity.DbSet<ECBack.Models.AttributeOption> AttributeOptions { get; set; }
+
+        public System.Data.Entity.DbSet<ECBack.Models.GoodAttribute> GoodAttributes { get; set; }
     }
 }

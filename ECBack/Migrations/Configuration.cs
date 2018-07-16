@@ -18,6 +18,10 @@ namespace ECBack.Migrations
 
             //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
             //  to avoid creating duplicate seed data.
+            context.Categories.AddOrUpdate(x => x.CategoryID,
+                new Models.Category() { CategoryID = 1, Name = "Novels" },
+                new Models.Category() { CategoryID = 2, Name = "Toys" }
+            );
         }
     }
 }

@@ -202,10 +202,15 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AddressesController.cs" />
+    <Compile Include="Controllers\AttributeOptionsController.cs" />
+    <Compile Include="Controllers\CategoriesController.cs" />
+    <Compile Include="Controllers\GoodAttributesController.cs" />
+    <Compile Include="Controllers\GoodEntitiesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogisticInfoesController.cs" />
     <Compile Include="Controllers\LogisticsController.cs" />
     <Compile Include="Controllers\OrderformsController.cs" />
+    <Compile Include="Controllers\SaleEntitiesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
@@ -219,8 +224,20 @@
     <Compile Include="Migrations\201807160643223_add logistic and info for them.Designer.cs">
       <DependentUpon>201807160643223_add logistic and info for them.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807160742282_add category Goodentity and SalesEntity.cs" />
+    <Compile Include="Migrations\201807160742282_add category Goodentity and SalesEntity.Designer.cs">
+      <DependentUpon>201807160742282_add category Goodentity and SalesEntity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807161214385_add attributes and options.cs" />
+    <Compile Include="Migrations\201807161214385_add attributes and options.Designer.cs">
+      <DependentUpon>201807161214385_add attributes and options.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\Attribute.cs" />
+    <Compile Include="Models\Cart.cs" />
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\GoodEntity.cs" />
     <Compile Include="Models\Logistic.cs" />
     <Compile Include="Models\OracleDbContext.cs" />
     <Compile Include="Models\Orderform.cs" />
@@ -323,6 +340,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807160643223_add logistic and info for them.resx">
       <DependentUpon>201807160643223_add logistic and info for them.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807160742282_add category Goodentity and SalesEntity.resx">
+      <DependentUpon>201807160742282_add category Goodentity and SalesEntity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807161214385_add attributes and options.resx">
+      <DependentUpon>201807161214385_add attributes and options.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
