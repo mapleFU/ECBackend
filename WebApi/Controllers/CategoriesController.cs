@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using ECBack.Models;
@@ -8,6 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
+    public class CategoryDTO
+    {
+        public string Name { get; set;}
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
@@ -21,12 +27,12 @@ namespace WebApi.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult Get()
+        public async Task<ActionResult<List<Category>>> Get()
         {
-            var products = _context.Categories
-                .OrderBy(e => e.CategoryID)
-                .ToList();
-            return Ok(products);
+            var categories = await (from b in _context.Categories
+                                    orderby b.CategoryID
+                                    select b).ToListAsync();
+            return categories;
         }
     }
 }
