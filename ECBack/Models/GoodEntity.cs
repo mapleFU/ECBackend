@@ -54,6 +54,8 @@ namespace ECBack.Models
 
         public virtual ICollection<Category> Categories { get; set; }
 
+        public Favorite Favorite { get; set; }
+
         public GoodEntity()
         {
             Categories = new HashSet<Category>();

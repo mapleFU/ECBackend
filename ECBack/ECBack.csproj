@@ -264,6 +264,7 @@
     <Compile Include="Models\Attribute.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Favorite.cs" />
     <Compile Include="Models\GoodEntity.cs" />
     <Compile Include="Models\Logistic.cs" />
     <Compile Include="Models\OracleDbContext.cs" />
