@@ -3,11 +3,19 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Security.Principal;
 using System.Web;
 
 namespace ECBack.Models
 {
-    public class User
+    interface ICustomPrincipal : IPrincipal
+    {
+        string PhoneNumber { get; set; }
+        
+        string PasswordHash { get; set; }
+    }
+
+    public class User: ICustomPrincipal
     {
         [Key]
         public int UserID { get; set; }
@@ -43,5 +51,12 @@ namespace ECBack.Models
         public List<Address> Addresses { get; set; }
 
         public List<Orderform> Orderforms { get; set; }
+
+        public IIdentity Identity { get; private set; }
+
+        public bool IsInRole(string role)
+        {
+            return true;
+        }
     }
 }

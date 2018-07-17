@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using ECBack.Filters;
 using ECBack.Models;
 
 namespace ECBack.Controllers
@@ -18,6 +19,7 @@ namespace ECBack.Controllers
         private OracleDbContext db = new OracleDbContext();
 
         // GET: api/Users
+        [AuthFilterTest]
         public IQueryable<User> GetUsers()
         {
             return db.Users;

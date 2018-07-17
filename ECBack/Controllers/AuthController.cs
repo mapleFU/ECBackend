@@ -119,7 +119,7 @@ namespace ECBack.Controllers
                 response = Request.CreateResponse(HttpStatusCode.Unauthorized, "password error");
             } else
             {
-                var jwt = GenerateToken(result.RealName);
+                var jwt = GenerateToken(result.PhoneNumber);
                 response = Request.CreateResponse(HttpStatusCode.OK, jwt);
             }
 
@@ -127,7 +127,7 @@ namespace ECBack.Controllers
             return response;
         }
 
-        private static bool ValidateToken(string token, out string username)
+        public static bool ValidateToken(string token, out string username)
         {
             username = null;
 
