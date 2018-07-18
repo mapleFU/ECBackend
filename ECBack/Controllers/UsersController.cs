@@ -14,14 +14,32 @@ using ECBack.Models;
 
 namespace ECBack.Controllers
 {
+    /// <summary>
+    /// response error
+    /// https://stackoverflow.com/questions/10732644/best-practice-to-return-errors-in-asp-net-web-api
+    /// 
+    /// 
+    /// </summary>
+    
+    class GetUsersURI
+    {
+        string Name { get; set; }
+        string Pn { get; set; }
+    }
+
     public class UsersController : ApiController
     {
         private OracleDbContext db = new OracleDbContext();
-
-        // GET: api/Users
+        
+        // GET: api/Users?name=
         [AuthFilterTest]
-        public IQueryable<User> GetUsers()
+        public IQueryable<User> GetAll([FromUri] GetUsersURI data)
         {
+            if (name == null)
+            {
+                // https://stackoverflow.com/questions/9454811/which-http-status-code-to-use-for-required-parameters-not-provided
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            } 
             return db.Users;
         }
 

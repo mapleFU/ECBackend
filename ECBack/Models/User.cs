@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,12 +16,18 @@ namespace ECBack.Models
         string PasswordHash { get; set; }
     }
 
+    /// <summary>
+    /// inspired by https://stackoverflow.com/questions/33170771/web-api-return-some-fields-from-model
+    /// ignore json https://stackoverflow.com/questions/11851207/prevent-property-from-being-serialized-in-web-api
+    /// </summary>
     public class User: ICustomPrincipal
     {
         [Key]
         public int UserID { get; set; }
 
         [MaxLength(50)]
+        [Required]
+        [Index]
         public string NickName { get; set; }
 
         [MaxLength(50)]
@@ -46,6 +53,7 @@ namespace ECBack.Models
 
         // password 的哈希值
         [Required]
+        [JsonIgnore]
         public string PasswordHash { get; set; }
 
         public List<Address> Addresses { get; set; }
@@ -55,6 +63,7 @@ namespace ECBack.Models
         public ICollection<Favorite> Favorites { get; set; }
 
         [NotMapped]
+        [JsonIgnore]
         public IIdentity Identity { get; private set; }
 
         public bool IsInRole(string role)
