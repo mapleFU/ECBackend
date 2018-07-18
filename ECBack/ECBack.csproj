@@ -249,7 +249,6 @@
     <Compile Include="Controllers\OrderformsController.cs" />
     <Compile Include="Controllers\SaleEntitiesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Filters\UserAuthenticationFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -265,6 +264,10 @@
     <Compile Include="Migrations\201807180743466_Update Controller.cs" />
     <Compile Include="Migrations\201807180743466_Update Controller.Designer.cs">
       <DependentUpon>201807180743466_Update Controller.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807181221413_Add index in Categories.cs" />
+    <Compile Include="Migrations\201807181221413_Add index in Categories.Designer.cs">
+      <DependentUpon>201807181221413_Add index in Categories.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -379,6 +382,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807180743466_Update Controller.resx">
       <DependentUpon>201807180743466_Update Controller.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807181221413_Add index in Categories.resx">
+      <DependentUpon>201807181221413_Add index in Categories.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

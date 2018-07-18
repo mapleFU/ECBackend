@@ -21,10 +21,10 @@ namespace ECBack.Controllers
     /// 
     /// </summary>
     
-    class GetUsersURI
+    public class GetUsersURI
     {
-        string Name { get; set; }
-        string Pn { get; set; }
+        public string Name { get; set; }
+        public int? Pn { get; set; }
     }
 
     public class UsersController : ApiController
@@ -32,15 +32,19 @@ namespace ECBack.Controllers
         private OracleDbContext db = new OracleDbContext();
         
         // GET: api/Users?name=
-        [AuthFilterTest]
-        public IQueryable<User> GetAll([FromUri] GetUsersURI data)
+        public IHttpActionResult GetAll([FromUri] string Name)
         {
-            if (name == null)
+            if (Name == null)
             {
                 // https://stackoverflow.com/questions/9454811/which-http-status-code-to-use-for-required-parameters-not-provided
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
-            } 
-            return db.Users;
+            }
+            var usr = db.Users.First(u => u.NickName == Name);
+            if (usr == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+            return Ok(usr);
         }
 
         // GET: api/Users/5
@@ -92,35 +96,49 @@ namespace ECBack.Controllers
         }
 
         // POST: api/Users
+        // https://stackoverflow.com/questions/21758615/why-should-i-use-ihttpactionresult-instead-of-httpresponsemessage
         [ResponseType(typeof(User))]
         public async Task<IHttpActionResult> PostUser(User user)
         {
+            
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            var usr = await db.Users.FirstAsync(u => u.UserID == user.UserID);
+            if (usr != null)
+            {
+                // 303 redirect
+                usr = user;
+                await db.SaveChangesAsync();
+                var response = Request.CreateResponse(HttpStatusCode.Moved);
+                response.Headers.Location = new Uri("/api/users/" + user.UserID);
+                return ResponseMessage(response);
+            } else
+            {
+                return Redirect("/api/register");
+            }
+            //db.Users.Add(user);
+            //await db.SaveChangesAsync();
 
-            db.Users.Add(user);
-            await db.SaveChangesAsync();
-
-            return CreatedAtRoute("DefaultApi", new { id = user.UserID }, user);
+            //return CreatedAtRoute("DefaultApi", new { id = user.UserID }, user);
         }
 
         // DELETE: api/Users/5
-        [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> DeleteUser(int id)
-        {
-            User user = await db.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+        //[ResponseType(typeof(User))]
+        //public async Task<IHttpActionResult> DeleteUser(int id)
+        //{
+        //    User user = await db.Users.FindAsync(id);
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            db.Users.Remove(user);
-            await db.SaveChangesAsync();
+        //    db.Users.Remove(user);
+        //    await db.SaveChangesAsync();
 
-            return Ok(user);
-        }
+        //    return Ok(user);
+        //}
 
         protected override void Dispose(bool disposing)
         {
