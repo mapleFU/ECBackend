@@ -18,18 +18,22 @@ namespace ECBack.Models
         /// <summary>
         /// Id of goo
         /// </summary>
+        [Key]
         public int GoodEntityID { get; set; }
         
         /// <summary>
         /// Name OF ENTITY
         /// </summary>
         [MaxLength(100)]
+        [Required]
+        [Index]
         public string GoodName { get; set; }
 
         /// <summary>
         /// brief introduction of good
         /// </summary>
         [MaxLength(1000)]
+        [Required]
         public string Brief { get; set; }
         
         /// <summary>
@@ -40,40 +44,43 @@ namespace ECBack.Models
         /// <summary>
         /// 商品的库存
         /// </summary>
+        [Required]
         public int Stock { get; set; }
 
         /// <summary>
         /// 寄出的省份
         /// </summary>
+        [Required]
         public string SellProvince { get; set; }
 
         /// <summary>
         /// 失效/下架
         /// </summary>
+        [Required]
         public int GoodEntityState { get; set; }
 
-        public virtual ICollection<Category> Categories { get; set; }
-
-        public Favorite Favorite { get; set; }
-
-        public GoodEntity()
-        {
-            Categories = new HashSet<Category>();
-        }
+        public virtual ICollection<Favorite> Categories { get; set; }
+        
     }
 
     public class SaleEntity
     {
+        [Key]
+        [Required]
         public int ID { get; set;}
         
         /// <summary>
         /// 售价
         /// </summary>
+        
+        [Required]
         public decimal Price { get; set; }
 
         /// <summary>
         /// id of foreign key good entity
         /// </summary>
+        [Index]
+        [Required]
         public int GoodEntityID { get; set; }
 
         [ForeignKey("GoodEntityID")]
@@ -82,6 +89,7 @@ namespace ECBack.Models
         /// <summary>
         /// 这玩意的总量
         /// </summary>
+        [Required]
         public int Amount { get; set;}
 
 

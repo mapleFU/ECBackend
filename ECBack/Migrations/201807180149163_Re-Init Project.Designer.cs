@@ -7,13 +7,13 @@ namespace ECBack.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class addlogisticandinfoforthem : IMigrationMetadata
+    public sealed partial class ReInitProject : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(addlogisticandinfoforthem));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ReInitProject));
         
         string IMigrationMetadata.Id
         {
-            get { return "201807160643223_add logistic and info for them"; }
+            get { return "201807180149163_Re-Init Project"; }
         }
         
         string IMigrationMetadata.Source

@@ -8,6 +8,7 @@ namespace ECBack.Models
 {
     public class Category
     {
+        [Key]
         public int CategoryID { get; set; }
 
         /// <summary>
@@ -15,6 +16,8 @@ namespace ECBack.Models
         /// </summary>
         [MaxLength(50)]
         public string Name { get; set; }
+
+        public virtual ICollection<GoodEntity> GoodEntities { get; set; }
     }
 
 }
