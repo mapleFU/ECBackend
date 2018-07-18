@@ -245,6 +245,10 @@
     <Compile Include="Migrations\201807180149163_Re-Init Project.Designer.cs">
       <DependentUpon>201807180149163_Re-Init Project.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807180248001_add cart.cs" />
+    <Compile Include="Migrations\201807180248001_add cart.Designer.cs">
+      <DependentUpon>201807180248001_add cart.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Attribute.cs" />
@@ -352,6 +356,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201807180149163_Re-Init Project.resx">
       <DependentUpon>201807180149163_Re-Init Project.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807180248001_add cart.resx">
+      <DependentUpon>201807180248001_add cart.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
