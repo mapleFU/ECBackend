@@ -52,8 +52,9 @@ namespace ECBack.Models
 
         public List<Orderform> Orderforms { get; set; }
 
-        public Favorite Favorite { get; set; }
+        public ICollection<Favorite> Favorites { get; set; }
 
+        [NotMapped]
         public IIdentity Identity { get; private set; }
 
         public bool IsInRole(string role)
