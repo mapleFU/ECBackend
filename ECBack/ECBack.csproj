@@ -225,6 +225,7 @@
     <Compile Include="Controllers\AddressesController.cs" />
     <Compile Include="Controllers\AttributeOptionsController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\CartsController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\FavoritesController.cs" />
     <Compile Include="Controllers\GoodAttributesController.cs" />
@@ -255,6 +256,7 @@
     <Compile Include="Models\OracleDbContext.cs" />
     <Compile Include="Models\Orderform.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\VIP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

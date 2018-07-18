@@ -20,7 +20,7 @@ namespace ECBack.Models
         [MaxLength(100)]
         public string GoodAttributeName { get; set;}
 
-        public List<AttributeOption> GoodAttributeOptions { get; set; }
+        public ICollection<AttributeOption> GoodAttributeOptions { get; set; }
     }
 
     public class AttributeOption

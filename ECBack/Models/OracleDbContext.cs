@@ -71,5 +71,7 @@ namespace ECBack.Models
         public System.Data.Entity.DbSet<ECBack.Models.GoodAttribute> GoodAttributes { get; set; }
 
         public System.Data.Entity.DbSet<ECBack.Models.Favorite> Favorites { get; set; }
+
+        public System.Data.Entity.DbSet<ECBack.Models.Cart> Carts { get; set; }
     }
 }

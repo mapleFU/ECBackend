@@ -9,13 +9,27 @@ namespace ECBack.Models
 {
     public class Cart
     {
-        public User User;
+        public User User { get; set; }
 
         [Required]
         [Key]
         [ForeignKey("User")]
-        public int UserID;
+        public int UserID { get; set; }
 
+        ICollection<SaleEntity> SaleEntities { get; set; }
 
+        [NotMapped]
+        public int TotalPrice
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+        void AddToCart()
+        {
+            throw new NotImplementedException();
+        }
+        
     }
 }
