@@ -246,6 +246,8 @@
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\CartsController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
+    <Compile Include="Controllers\CommentInfoesController.cs" />
+    <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\FavoritesController.cs" />
     <Compile Include="Controllers\GoodAttributesController.cs" />
     <Compile Include="Controllers\GoodEntitiesController.cs" />
@@ -264,11 +266,16 @@
     <Compile Include="Migrations\201807190255313_Update User and Address.Designer.cs">
       <DependentUpon>201807190255313_Update User and Address.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807190902408_add Comment and User.cs" />
+    <Compile Include="Migrations\201807190902408_add Comment and User.Designer.cs">
+      <DependentUpon>201807190902408_add Comment and User.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Attribute.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Favorite.cs" />
     <Compile Include="Models\GoodEntity.cs" />
     <Compile Include="Models\Logistic.cs" />
@@ -389,6 +396,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201807190255313_Update User and Address.resx">
       <DependentUpon>201807190255313_Update User and Address.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807190902408_add Comment and User.resx">
+      <DependentUpon>201807190902408_add Comment and User.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
