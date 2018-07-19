@@ -7,99 +7,125 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
+using ECBack.Filters;
 using ECBack.Models;
 
 namespace ECBack.Controllers
 {
+    /// <summary>
+    /// 表示地址的CONTROLLER
+    /// </summary>
     public class AddressesController : ApiController
     {
         private OracleDbContext db = new OracleDbContext();
 
-        // GET: api/Addresses
-        public IQueryable<Address> GetAddresses()
+        /// <summary>
+        ///  验证自身是否对 User 有操作权
+        /// </summary>
+        /// <param name="UserID"></param>
+        [NonAction]
+        private void VerifyUser(int UserID)
         {
-            return db.Addresses;
-        }
-
-        // GET: api/Addresses/5
-        [ResponseType(typeof(Address))]
-        public async Task<IHttpActionResult> GetAddress(int id)
-        {
-            Address address = await db.Addresses.FindAsync(id);
-            if (address == null)
+            User requestUser = (User)HttpContext.Current.User;
+            if (requestUser.UserID != UserID)
             {
-                return NotFound();
+                throw new HttpException(403, "You can't view other's information");
             }
-
-            return Ok(address);
         }
 
-        // PUT: api/Addresses/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutAddress(int id, Address address)
+        [NonAction]
+        private async Task<User> GetUser(int UserID)
         {
+            var usr = await db.Users.FindAsync(UserID);
+            if (usr == null)
+            {
+                throw new HttpException(404, "User not found");
+            }
+            return usr;
+        }
+
+
+        [Route("api/Users/{UserID}/Addresses/{AddressId}")]
+        [HttpGet]
+        [AuthenticationFilter]
+        public async Task<IHttpActionResult> GetAddresses(int UserID, int AddressID)
+        {
+            // load user
+            //var usr = await db.Users.FindAsync(UserID);
+            //if (usr == null)
+            //{
+            //    return NotFound();
+            //}
+            VerifyUser(UserID);
+            var usr = await GetUser(UserID);
+            
+            // usr is not null 
+            
+            await db.Entry(usr).Collection(u => u.Addresses).LoadAsync();
+            return Ok(usr.Addresses);
+        }
+
+        [Route("api/Users/{UserID}/Addresses")]
+        [HttpPost]
+        [AuthenticationFilter]
+        public async Task<IHttpActionResult> PostAddresses(int UserID, [FromBody] Address data)
+        {
+            // load user
+            var usr = await GetUser(UserID);
+            VerifyUser(UserID);
+
+            data.UserID = usr.UserID;
+            db.Addresses.Add(data);
+            await db.SaveChangesAsync();
+            string newUrl = "api/Users/" + usr.UserID + "/Addresses/" + data.AddressID;
+            var responseMessage = Request.CreateResponse(HttpStatusCode.NoContent);
+            responseMessage.Headers.Add("Location", newUrl);
+            return ResponseMessage(responseMessage);
+        }
+
+        [Route("api/Users/{UserID:int}/Addresses/{AddressID:int}")]
+        [HttpPost]
+        [AuthenticationFilter]
+        public async Task<IHttpActionResult> PartialUpdateAddresses(int UserID, int AddressID, [FromBody] Address data)
+        {
+            // load user
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            if (id != address.AddressID)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(address).State = EntityState.Modified;
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AddressExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/Addresses
-        [ResponseType(typeof(Address))]
-        public async Task<IHttpActionResult> PostAddress(Address address)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.Addresses.Add(address);
-            await db.SaveChangesAsync();
-
-            return CreatedAtRoute("DefaultApi", new { id = address.AddressID }, address);
-        }
-
-        // DELETE: api/Addresses/5
-        [ResponseType(typeof(Address))]
-        public async Task<IHttpActionResult> DeleteAddress(int id)
-        {
-            Address address = await db.Addresses.FindAsync(id);
+            VerifyUser(UserID);
+            var usr = await GetUser(UserID);
+            Address address = await db.Addresses.FindAsync(AddressID);
             if (address == null)
             {
                 return NotFound();
             }
-
-            db.Addresses.Remove(address);
+            address = data;
+            address.AddressID = AddressID;
+            
             await db.SaveChangesAsync();
+            return Ok();
+        }
 
-            return Ok(address);
+        [Route("api/Users/{UserID:int}/Addresses/{AddressID:int}")]
+        [HttpPost]
+        [AuthenticationFilter]
+        public async Task<IHttpActionResult> DeleteAddress(int UserID, int AddressID)
+        {
+            VerifyUser(UserID);
+            var add = await db.Addresses.FindAsync(AddressID);
+            if (add == null)
+            {
+                return NotFound();
+            } else
+            {
+                db.Addresses.Remove(add);
+                return Ok();
+            }
         }
 
         protected override void Dispose(bool disposing)
