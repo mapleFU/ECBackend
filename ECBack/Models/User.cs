@@ -40,11 +40,47 @@ namespace ECBack.Models
 
         // 'f' for female, 'm' for male ,'n' for none, https://stackoverflow.com/questions/6760765/how-do-i-map-a-char-property-using-the-entity-framework-4-1-code-only-fluent-a
         [Column(TypeName = "char")]
+        [JsonIgnore]
         public string Gender { get; set; }
+
+        [NotMapped]
+        public string GenderString
+        {
+            get
+            {
+                char g = Gender[0];
+                if (g == 'n')
+                {
+                    return "未填写";
+                } else if (g == 'm')
+                {
+                    return "男";
+                } else
+                {
+                    return "女";
+                }
+            }
+        }
 
         // https://stackoverflow.com/questions/5658216/entity-framework-code-first-date-field-creation
         [Column(TypeName = "Date")]
+        [JsonIgnore]
         public DateTime BirthDay { get; set; }
+
+        [NotMapped]
+        public string BirthDayDate
+        {
+            get
+            {
+                return BirthDay.Date.ToString("dd/MM/yyyy");
+            }
+        }
+
+        public User()
+        {
+            // 性别先不填
+            Gender = "n";
+        }
 
         // 居住地
         [MaxLength(100)] public string Local { get; set; }

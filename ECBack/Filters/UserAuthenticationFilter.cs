@@ -46,11 +46,11 @@ namespace ECBack.Filters
 
     // https://stackoverflow.com/questions/1064271/asp-net-mvc-set-custom-iidentity-or-iprincipal
     // https://blog.codeinside.eu/2015/04/17/basic-authentication-in-aspnet-webapi/
-    public class AuthFilterTest : Attribute, System.Web.Http.Filters.IAuthenticationFilter
+    public class AuthenticationFilter : Attribute, System.Web.Http.Filters.IAuthenticationFilter
     {
         private readonly OracleDbContext dbContext;
 
-        public AuthFilterTest(): base()
+        public AuthenticationFilter(): base()
         {
             dbContext = new OracleDbContext();
         }

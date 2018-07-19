@@ -32,6 +32,7 @@ namespace ECBack.Controllers
         private OracleDbContext db = new OracleDbContext();
         
         // GET: api/Users?name=
+        [HttpGet]
         public IHttpActionResult GetAll([FromUri] string Name)
         {
             if (Name == null)
@@ -39,19 +40,21 @@ namespace ECBack.Controllers
                 // https://stackoverflow.com/questions/9454811/which-http-status-code-to-use-for-required-parameters-not-provided
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
             }
-            var usr = db.Users.First(u => u.NickName == Name);
+            var usr = db.Users.Include(u => u.Addresses).First(u => u.NickName == Name);
             if (usr == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
+            } 
+
             return Ok(usr);
         }
 
         // GET: api/Users/5
         [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> GetUser(int id)
+        public IHttpActionResult GetUser(int id)
         {
-            User user = await db.Users.FindAsync(id);
+            User user =  db.Users.Include(u => u.Addresses).First(u => u.UserID == id);
+            
             if (user == null)
             {
                 return NotFound();

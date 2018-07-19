@@ -237,7 +237,6 @@
     <Compile Include="Controllers\AddressesController.cs" />
     <Compile Include="Controllers\AttributeOptionsController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
-    <Compile Include="Controllers\BuyController.cs" />
     <Compile Include="Controllers\CartsController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\FavoritesController.cs" />
@@ -248,26 +247,15 @@
     <Compile Include="Controllers\LogisticsController.cs" />
     <Compile Include="Controllers\OrderformsController.cs" />
     <Compile Include="Controllers\SaleEntitiesController.cs" />
+    <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Filters\UserAuthenticationFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201807180149163_Re-Init Project.cs" />
-    <Compile Include="Migrations\201807180149163_Re-Init Project.Designer.cs">
-      <DependentUpon>201807180149163_Re-Init Project.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807180248001_add cart.cs" />
-    <Compile Include="Migrations\201807180248001_add cart.Designer.cs">
-      <DependentUpon>201807180248001_add cart.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807180743466_Update Controller.cs" />
-    <Compile Include="Migrations\201807180743466_Update Controller.Designer.cs">
-      <DependentUpon>201807180743466_Update Controller.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807181221413_Add index in Categories.cs" />
-    <Compile Include="Migrations\201807181221413_Add index in Categories.Designer.cs">
-      <DependentUpon>201807181221413_Add index in Categories.cs</DependentUpon>
+    <Compile Include="Migrations\201807190255313_Update User and Address.cs" />
+    <Compile Include="Migrations\201807190255313_Update User and Address.Designer.cs">
+      <DependentUpon>201807190255313_Update User and Address.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -374,17 +362,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201807180149163_Re-Init Project.resx">
-      <DependentUpon>201807180149163_Re-Init Project.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807180248001_add cart.resx">
-      <DependentUpon>201807180248001_add cart.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807180743466_Update Controller.resx">
-      <DependentUpon>201807180743466_Update Controller.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807181221413_Add index in Categories.resx">
-      <DependentUpon>201807181221413_Add index in Categories.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807190255313_Update User and Address.resx">
+      <DependentUpon>201807190255313_Update User and Address.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

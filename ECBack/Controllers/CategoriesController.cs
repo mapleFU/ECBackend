@@ -30,6 +30,7 @@ namespace ECBack.Controllers
         private OracleDbContext db = new OracleDbContext();
         /// <summary>
         /// 单个页面的记录数目
+        /// 用KW 查询
         /// </summary>
         private const int PageDataNumber = 20;
         // GET: api/Categories

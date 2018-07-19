@@ -3,7 +3,7 @@ namespace ECBack.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class ReInitProject : DbMigration
+    public partial class UpdateUserandAddress : DbMigration
     {
         public override void Up()
         {
@@ -12,12 +12,12 @@ namespace ECBack.Migrations
                 c => new
                     {
                         AddressID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
-                        ReceiverName = c.String(maxLength: 50),
-                        Phone = c.String(maxLength: 50),
-                        Province = c.String(),
-                        City = c.String(),
-                        Block = c.String(),
-                        DetailAddress = c.String(),
+                        ReceiverName = c.String(nullable: false, maxLength: 50),
+                        Phone = c.String(nullable: false, maxLength: 50),
+                        Province = c.String(nullable: false, maxLength: 20),
+                        City = c.String(nullable: false, maxLength: 20),
+                        Block = c.String(nullable: false, maxLength: 20),
+                        DetailAddress = c.String(nullable: false),
                         IsDefault = c.Decimal(nullable: false, precision: 1, scale: 0),
                         UserID = c.Decimal(nullable: false, precision: 10, scale: 0),
                     })
@@ -30,7 +30,7 @@ namespace ECBack.Migrations
                 c => new
                     {
                         UserID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
-                        NickName = c.String(maxLength: 50),
+                        NickName = c.String(nullable: false, maxLength: 50),
                         RealName = c.String(maxLength: 50),
                         PhoneNumber = c.String(nullable: false, maxLength: 11),
                         Gender = c.String(maxLength: 2000, fixedLength: true, unicode: false),
@@ -40,6 +40,7 @@ namespace ECBack.Migrations
                         PasswordHash = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.UserID)
+                .Index(t => t.NickName)
                 .Index(t => t.PhoneNumber);
             
             CreateTable(
@@ -109,13 +110,24 @@ namespace ECBack.Migrations
                 .PrimaryKey(t => t.GoodAttributeID);
             
             CreateTable(
+                "DB2018.Carts",
+                c => new
+                    {
+                        UserID = c.Decimal(nullable: false, precision: 10, scale: 0),
+                    })
+                .PrimaryKey(t => t.UserID)
+                .ForeignKey("DB2018.Users", t => t.UserID)
+                .Index(t => t.UserID);
+            
+            CreateTable(
                 "DB2018.Categories",
                 c => new
                     {
                         CategoryID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
                         Name = c.String(maxLength: 50),
                     })
-                .PrimaryKey(t => t.CategoryID);
+                .PrimaryKey(t => t.CategoryID)
+                .Index(t => t.Name);
             
             CreateTable(
                 "DB2018.LogisticInfoes",
@@ -162,6 +174,7 @@ namespace ECBack.Migrations
             DropForeignKey("DB2018.SaleEntities", "GoodEntityID", "DB2018.GoodEntities");
             DropForeignKey("DB2018.LogisticInfoes", "LogisticID", "DB2018.Logistics");
             DropForeignKey("DB2018.GoodEntities", "Category_CategoryID", "DB2018.Categories");
+            DropForeignKey("DB2018.Carts", "UserID", "DB2018.Users");
             DropForeignKey("DB2018.AttributeOptions", "GoodAttributeID", "DB2018.GoodAttributes");
             DropForeignKey("DB2018.Orderforms", "UserID", "DB2018.Users");
             DropForeignKey("DB2018.Favorites", "UserID", "DB2018.Users");
@@ -169,6 +182,8 @@ namespace ECBack.Migrations
             DropForeignKey("DB2018.Addresses", "UserID", "DB2018.Users");
             DropIndex("DB2018.SaleEntities", new[] { "GoodEntityID" });
             DropIndex("DB2018.LogisticInfoes", new[] { "LogisticID" });
+            DropIndex("DB2018.Categories", new[] { "Name" });
+            DropIndex("DB2018.Carts", new[] { "UserID" });
             DropIndex("DB2018.AttributeOptions", new[] { "GoodAttributeID" });
             DropIndex("DB2018.Orderforms", new[] { "UserID" });
             DropIndex("DB2018.GoodEntities", new[] { "Category_CategoryID" });
@@ -176,11 +191,13 @@ namespace ECBack.Migrations
             DropIndex("DB2018.Favorites", new[] { "UserID" });
             DropIndex("DB2018.Favorites", new[] { "GoodEntityID" });
             DropIndex("DB2018.Users", new[] { "PhoneNumber" });
+            DropIndex("DB2018.Users", new[] { "NickName" });
             DropIndex("DB2018.Addresses", new[] { "UserID" });
             DropTable("DB2018.SaleEntities");
             DropTable("DB2018.Logistics");
             DropTable("DB2018.LogisticInfoes");
             DropTable("DB2018.Categories");
+            DropTable("DB2018.Carts");
             DropTable("DB2018.GoodAttributes");
             DropTable("DB2018.AttributeOptions");
             DropTable("DB2018.Orderforms");
