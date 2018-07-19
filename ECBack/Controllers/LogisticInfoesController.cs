@@ -82,6 +82,7 @@ namespace ECBack.Controllers
 
             db.LogisticInfoes.Add(logisticInfo);
             await db.SaveChangesAsync();
+            ;
 
             return CreatedAtRoute("DefaultApi", new { id = logisticInfo.LogisticInfoId }, logisticInfo);
         }

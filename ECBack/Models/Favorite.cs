@@ -32,14 +32,5 @@ namespace ECBack.Models
         [ForeignKey("GoodEntityID")]
         public virtual GoodEntity GoodEntity { get; set; }
 
-        [NotMapped]
-        public int FavorUser
-        {
-            get
-            {
-                throw new NotImplementedException();
-                // return 0;
-            }
-        }
     }
 }
