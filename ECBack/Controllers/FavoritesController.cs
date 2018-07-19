@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ECBack.Models;
+using ECBack.Filters;
+using Newtonsoft.Json.Linq;
 
 namespace ECBack.Controllers
 {
@@ -71,19 +73,42 @@ namespace ECBack.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Favorites
-        [ResponseType(typeof(Favorite))]
-        public async Task<IHttpActionResult> PostFavorite(Favorite favorite)
+        /// <summary>
+        /// Create a Favorite
+        /// Json中字段为user_id与good_id
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        [Route("api/Favorites")]
+        [HttpPost]
+        public HttpResponseMessage PostFavorite([FromBody] JObject obj)
         {
-            if (!ModelState.IsValid)
+            int user_id = int.Parse(obj["user_id"].ToString());
+            int good_id = int.Parse(obj["good_id"].ToString());
+            HttpResponseMessage response;
+
+            User user = db.Users.Find(user_id);
+            GoodEntity good = db.GoodEntities.Find(good_id);
+            if (user == null )
             {
-                return BadRequest(ModelState);
+                response = Request.CreateResponse(HttpStatusCode.NotFound, "the user not exists");
             }
-
-            db.Favorites.Add(favorite);
-            await db.SaveChangesAsync();
-
-            return CreatedAtRoute("DefaultApi", new { id = favorite.FavoriteID }, favorite);
+            else if (good==null)
+            {
+                response = Request.CreateResponse(HttpStatusCode.NotFound, "the GoodEntity not exists");
+            }
+            else
+            {
+                Favorite favorite = new Favorite();
+                favorite.GoodEntity = good;
+                favorite.GoodEntityID = good_id;
+                favorite.User = user;
+                favorite.UserID = user_id;
+                db.Favorites.Add(favorite);
+                response = Request.CreateResponse(HttpStatusCode.OK,"Created");
+            }
+            db.SaveChanges();
+            return response;
         }
 
         // DELETE: api/Favorites/5

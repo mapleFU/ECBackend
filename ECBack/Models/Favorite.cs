@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -33,15 +32,5 @@ namespace ECBack.Models
         [ForeignKey("GoodEntityID")]
         public virtual GoodEntity GoodEntity { get; set; }
 
-        [NotMapped]
-        [JsonIgnore]
-        public int FavorUser
-        {
-            get
-            {
-                throw new NotImplementedException();
-                // return 0;
-            }
-        }
     }
 }
