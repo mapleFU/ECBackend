@@ -13,14 +13,44 @@ using ECBack.Models;
 
 namespace ECBack.Controllers
 {
+    /// <summary>
+    /// 标识Category的查询类型
+    /// </summary>
+    public class CategoryQuery
+    {
+        /// <summary>
+        /// KeyWord
+        /// </summary>
+        public string Kw { get; set; }
+
+        public int? Pn { get; set;}
+    }
     public class CategoriesController : ApiController
     {
         private OracleDbContext db = new OracleDbContext();
-
+        /// <summary>
+        /// 单个页面的记录数目
+        /// 用KW 查询
+        /// </summary>
+        private const int PageDataNumber = 20;
         // GET: api/Categories
-        public IQueryable<Category> GetCategories()
+        public async Task<IHttpActionResult> GetCategories([FromBody] CategoryQuery data)
         {
-            return db.Categories;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            int pn = data.Pn ?? 1 ;
+            IQueryable<Category> categories;
+            if (data.Kw == null)
+            {
+                categories =  db.Categories;
+            } else
+            {
+                categories = db.Categories.Where(u => u.Name.ToLower().Contains(data.Kw.ToLower()));
+            }
+            var rs = await categories.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
+            return Ok(rs);
         }
 
         // GET: api/Categories/5

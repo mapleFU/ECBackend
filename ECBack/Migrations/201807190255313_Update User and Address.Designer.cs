@@ -7,13 +7,13 @@ namespace ECBack.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class addcart : IMigrationMetadata
+    public sealed partial class UpdateUserandAddress : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(addcart));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(UpdateUserandAddress));
         
         string IMigrationMetadata.Id
         {
-            get { return "201807180248001_add cart"; }
+            get { return "201807190255313_Update User and Address"; }
         }
         
         string IMigrationMetadata.Source

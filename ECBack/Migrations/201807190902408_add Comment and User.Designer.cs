@@ -7,13 +7,13 @@ namespace ECBack.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class ReInitProject : IMigrationMetadata
+    public sealed partial class addCommentandUser : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ReInitProject));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(addCommentandUser));
         
         string IMigrationMetadata.Id
         {
-            get { return "201807180149163_Re-Init Project"; }
+            get { return "201807190902408_add Comment and User"; }
         }
         
         string IMigrationMetadata.Source

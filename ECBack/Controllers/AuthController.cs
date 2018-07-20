@@ -38,7 +38,7 @@ namespace ECBack.Controllers
         /// <summary>
         /// RealName
         /// </summary>
-        public string RealName { get; set; }
+        public string NickName { get; set; }
     }
 
 
@@ -47,7 +47,7 @@ namespace ECBack.Controllers
     {
         // https://stackoverflow.com/questions/40281050/jwt-authentication-for-asp-net-web-api
         private OracleDbContext db = new OracleDbContext();
-
+        private const int defaultExpireMinutes = 20;
         // 我恨asp.net，我觉得这是个傻屌玩意
         private const string Secret = "5oiR5oGoYXNwLm5ldO+8jOaIkeinieW+l+i/meaYr+S4quWCu+WxjOeOqeaEjw==";
 
@@ -92,13 +92,15 @@ namespace ECBack.Controllers
                 User user = new User()
                 {
                     PhoneNumber = registerData.PhoneNumber,
-                    RealName = registerData.RealName,
+                    NickName = registerData.NickName,
                     PasswordHash = registerData.Password,
                 };
                 // 204, OK
                 db.Users.Add(user);
                 db.SaveChanges();
-                response = Request.CreateResponse(HttpStatusCode.OK, "Created.");
+                response = Request.CreateResponse(HttpStatusCode.OK, user);
+                response.Headers.Add("Location", "/users/" + user.UserID);
+                
             }
 
             return response;
@@ -109,7 +111,12 @@ namespace ECBack.Controllers
         public HttpResponseMessage Login([FromBody] UserData data)
         {
             HttpResponseMessage response;
-            var phone = data.UserID;
+            if (data.UserID == null)
+            {
+                response =  Request.CreateResponse((HttpStatusCode)422, "No User ID");
+                return response;
+            }
+            
             var result = db.Users.First(x => string.Equals(x.PhoneNumber, data.UserID));
             if (result == null)
             {
@@ -120,9 +127,12 @@ namespace ECBack.Controllers
             } else
             {
                 var jwt = GenerateToken(result.PhoneNumber);
-                response = Request.CreateResponse(HttpStatusCode.OK, jwt);
+                response = Request.CreateResponse(HttpStatusCode.OK, new {
+                    token = jwt,
+                    timeout = defaultExpireMinutes
+                });
             }
-
+            
 
             return response;
         }
