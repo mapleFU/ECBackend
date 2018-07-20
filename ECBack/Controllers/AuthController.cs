@@ -82,11 +82,19 @@ namespace ECBack.Controllers
         {
             HttpResponseMessage response;
             
-            var duplicate = db.Users.Any(x => x.PhoneNumber == registerData.PhoneNumber);
-            if (duplicate)
+            var duplicate = db.Users.First(x => x.PhoneNumber == registerData.PhoneNumber || x.NickName == registerData.NickName);
+            if (duplicate != null)
             {
                 // find duplicate in program.
-                response = Request.CreateErrorResponse(HttpStatusCode.Conflict, "Phone number duplicate.");
+                string confict;
+                if (duplicate.PhoneNumber == registerData.PhoneNumber)
+                {
+                    confict = "电话号码";
+                } else
+                {
+                    confict = "用户名";
+                }
+                response = Request.CreateErrorResponse(HttpStatusCode.Conflict, confict + "重复");
             } else
             {
                 User user = new User()
@@ -98,8 +106,8 @@ namespace ECBack.Controllers
                 // 204, OK
                 db.Users.Add(user);
                 db.SaveChanges();
-                response = Request.CreateResponse(HttpStatusCode.OK, user);
-                response.Headers.Add("Location", "/users/" + user.UserID);
+                response = Request.CreateResponse(HttpStatusCode.NoContent);
+                response.Headers.Add("Location", "/Users/" + user.UserID);
                 
             }
 
@@ -129,7 +137,8 @@ namespace ECBack.Controllers
                 var jwt = GenerateToken(result.PhoneNumber);
                 response = Request.CreateResponse(HttpStatusCode.OK, new {
                     token = jwt,
-                    timeout = defaultExpireMinutes
+                    timeout = defaultExpireMinutes,
+                    userID = result.UserID
                 });
             }
             

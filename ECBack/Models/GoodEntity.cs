@@ -60,7 +60,7 @@ namespace ECBack.Models
         [Required]
         public int GoodEntityState { get; set; }
 
-        public virtual ICollection<Favorite> Categories { get; set; }
+        public virtual ICollection<Category> Categories { get; set; }
         
     }
 
