@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
+using ECBack.Filters;
 using ECBack.Models;
 
 namespace ECBack.Controllers
@@ -32,13 +33,21 @@ namespace ECBack.Controllers
         /// 单个页面的记录数目
         /// 用KW 查询
         /// </summary>
-        private const int PageDataNumber = 20;
+        
+        // 默认15条
+        private const int PageDataNumber = 15;
         // GET: api/Categories
+        [HttpGet]
+        [Route("api/Categories")]
         public async Task<IHttpActionResult> GetCategories([FromBody] CategoryQuery data)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+            if (data.Kw == null)
+            {
+                return BadRequest("No Kw in your URI");
             }
             int pn = data.Pn ?? 1 ;
             IQueryable<Category> categories;
@@ -50,7 +59,13 @@ namespace ECBack.Controllers
                 categories = db.Categories.Where(u => u.Name.ToLower().Contains(data.Kw.ToLower()));
             }
             var rs = await categories.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
-            return Ok(rs);
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
+                new
+                {
+                    result_num = rs.Count(),
+                    categories = rs,
+                    page_num = pn
+                }));
         }
 
         // GET: api/Categories/5
@@ -67,6 +82,7 @@ namespace ECBack.Controllers
         }
 
         // PUT: api/Categories/5
+        [AuthenticationFilter]
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutCategory(int id, Category category)
         {

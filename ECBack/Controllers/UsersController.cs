@@ -114,7 +114,7 @@ namespace ECBack.Controllers
                 // 303 redirect
                 usr = user;
                 await db.SaveChangesAsync();
-                var response = Request.CreateResponse(HttpStatusCode.Moved);
+                var response = Request.CreateResponse((HttpStatusCode)(303));
                 response.Headers.Location = new Uri("/api/users/" + user.UserID);
                 return ResponseMessage(response);
             } else

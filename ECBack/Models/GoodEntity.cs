@@ -60,8 +60,18 @@ namespace ECBack.Models
         [Required]
         public int GoodEntityState { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<Category> Categories { get; set; }
-        
+
+        /// <summary>
+        /// 商品属性
+        /// </summary>
+        public ICollection<Attribute> Attributes { get; set; }
+
+        public GoodEntity()
+        {
+            GoodEntityState = 1;
+        }
     }
 
     public class SaleEntity
@@ -93,6 +103,6 @@ namespace ECBack.Models
         [Required]
         public int Amount { get; set;}
 
-
+        public ICollection<AttributeOption> AttributeOptions { get; set; }
     }
 }

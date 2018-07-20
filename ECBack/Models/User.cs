@@ -92,15 +92,21 @@ namespace ECBack.Models
         [JsonIgnore]
         public string PasswordHash { get; set; }
 
+        [JsonIgnore]
         public List<Address> Addresses { get; set; }
 
+        [JsonIgnore]
         public List<Orderform> Orderforms { get; set; }
 
+        [JsonIgnore]
         public ICollection<Favorite> Favorites { get; set; }
 
         [NotMapped]
         [JsonIgnore]
         public IIdentity Identity { get; private set; }
+
+        [JsonIgnore]
+        public Cart Cart { get; set;}
 
         public bool IsInRole(string role)
         {

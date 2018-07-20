@@ -31,6 +31,9 @@ namespace ECBack.Models
         [Required]
         public float TotalPrice { get; set; }
 
+        // 多个 SaleEntities
+        ICollection<SaleEntity> SaleEntities { get; set; }
+
         [Required]
         public int UserID { get; set; }
 
@@ -38,6 +41,7 @@ namespace ECBack.Models
         /// 非实体属性
         /// </summary>
         [ForeignKey("UserID")]
+        [JsonIgnore]
         public User FormCustomer { get; set; }
 
         public Orderform()
@@ -46,6 +50,7 @@ namespace ECBack.Models
             // 订单成为默认状态。
             State = 2;
         }
+
 
         [NotMapped]
         [JsonIgnore]

@@ -242,6 +242,7 @@
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\CommentInfoesController.cs" />
     <Compile Include="Controllers\CommentsController.cs" />
+    <Compile Include="Controllers\ControllersTool.cs" />
     <Compile Include="Controllers\FavoritesController.cs" />
     <Compile Include="Controllers\GoodAttributesController.cs" />
     <Compile Include="Controllers\GoodEntitiesController.cs" />

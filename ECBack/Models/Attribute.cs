@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -14,6 +15,7 @@ namespace ECBack.Models
         /// </summary>
         [Key]
         [Required]
+        [JsonIgnore]
         public int GoodAttributeID { get; set; }
 
         [Required]
@@ -27,9 +29,11 @@ namespace ECBack.Models
     {
         [Key]
         [Required]
+        [JsonIgnore]
         public int GoodAttributeID { get; set; }
 
         [Required]
+        [JsonIgnore]
         [ForeignKey("GoodAttributeID")]
         public GoodAttribute GoodAttribute { get; set; }
 

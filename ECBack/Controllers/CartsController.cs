@@ -7,8 +7,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
+using ECBack.Filters;
 using ECBack.Models;
 
 namespace ECBack.Controllers
@@ -17,26 +19,32 @@ namespace ECBack.Controllers
     {
         private OracleDbContext db = new OracleDbContext();
 
+        //[NonAction]
+        //private void VerifyUser(int UserID)
+        //{
+        //    User requestUser = (User)HttpContext.Current.User;
+        //    if (requestUser.UserID != UserID)
+        //    {
+        //        throw new HttpException(403, "You can't view other's information");
+        //    }
+        //}
+
         // GET: api/Carts
-        public IQueryable<Cart> GetCarts()
+        [AuthenticationFilter]
+        public async Task<IHttpActionResult> GetCarts()
         {
-            return db.Carts;
-        }
-
-        // GET: api/Carts/5
-        [ResponseType(typeof(Cart))]
-        public async Task<IHttpActionResult> GetCart(int id)
-        {
-            Cart cart = await db.Carts.FindAsync(id);
-            if (cart == null)
+            User requestUser = (User)HttpContext.Current.User;
+            if (requestUser == null)
             {
-                return NotFound();
+                // 无权
+                return ResponseMessage(Request.CreateResponse((HttpStatusCode)403));
             }
-
-            return Ok(cart);
+            await db.Entry(requestUser).Reference(u => u.Cart).LoadAsync();
+            return Ok(requestUser.Cart);
         }
 
-        // PUT: api/Carts/5
+
+        // POST: api/Carts/SalesEntity
         [ResponseType(typeof(void))]
         public async Task<IHttpActionResult> PutCart(int id, Cart cart)
         {

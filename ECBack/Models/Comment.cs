@@ -31,13 +31,14 @@ namespace ECBack.Models
     public class CommentInfo
     {
         [Key]
+        public int ID { get; set; }
+
+        [Index]
         public int CommentID { get; set; }
 
         [ForeignKey("CommentID")]
         [JsonIgnore]
         public Comment Comment { get; set; }
-
-
 
         [MaxLength(400)]
         public string Detail { get; set; }
