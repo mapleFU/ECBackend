@@ -40,7 +40,7 @@ namespace ECBack.Models
         /// <summary>
         /// detail introduction of good
         /// </summary>
-        public string Detail { get; set; }
+        //  public string Detail { get; set; }
         
         /// <summary>
         /// 商品的库存
@@ -60,8 +60,14 @@ namespace ECBack.Models
         [Required]
         public int GoodEntityState { get; set; }
 
-        public virtual ICollection<Favorite> Categories { get; set; }
-        
+        // public virtual ICollection<Favorite> Categories { get; set; }
+
+        /// <summary>
+        /// 收藏人数
+        /// </summary>
+        [Required]
+        public string FavoriteNum { get; set; }
+
     }
 
     public class SaleEntity
@@ -71,11 +77,50 @@ namespace ECBack.Models
         public int ID { get; set;}
         
         /// <summary>
-        /// 售价
+        /// 购买/加入购物车的价格
         /// </summary>
         
         [Required]
         public decimal Price { get; set; }
+
+        /// <summary>
+        /// id of foreign key DisplayEntity
+        /// </summary>
+        [Index]
+        [Required]
+        public int DisplayEntityID { get; set; }
+
+        [ForeignKey("DisplayEntityID")]
+        public DisplayEntity DisplayEntity { get; set; }
+
+        /// <summary>
+        /// 购买/加入购物车的数量
+        /// </summary>
+        [Required]
+        public int Amount { get; set;}
+
+
+    }
+
+    public class DisplayEntity
+    {
+        [Key]
+        [Required]
+        public int ID { get; set; }
+
+        /// <summary>
+        /// 商品的售价
+        /// </summary>
+
+        [Required]
+        public decimal Price { get; set; }
+
+        /// <summary>
+        /// 展示的图片
+        /// </summary>
+
+        [Required]
+        public ICollection<DisplayImg> Imgs { get; set; }
 
         /// <summary>
         /// id of foreign key good entity
@@ -87,12 +132,49 @@ namespace ECBack.Models
         [ForeignKey("GoodEntityID")]
         public GoodEntity GoodEntity { get; set; }
 
+
+
+    }
+
+
+    public class DisplayImg
+    {
         /// <summary>
-        /// 这玩意的总量
+        /// Id of Imgs
+        /// </summary>
+        [Key] 
+        public int ID { get; set; }
+
+        [MaxLength(1000)]
+        [Required]
+        public string LargeImg { get; set; }
+
+        [MaxLength(1000)]
+        [Required]
+        public string MediumImg { get; set; }
+
+        [MaxLength(1000)]
+        [Required]
+        public string SmallImg { get; set; }
+
+        /// <summary>
+        /// 是否为主图
         /// </summary>
         [Required]
-        public int Amount { get; set;}
+        public int IsMain { get; set; }
+    
+        /// <summary>
+        /// id of foreign key DisplayEntity
+        /// </summary>
+        [Index]
+        [Required]
+        public int DisplayEntityID { get; set; }
 
 
+        /// <summary>
+        /// 非实体属性
+        /// </summary>
+        [ForeignKey("DisplayEntityID")]
+        public DisplayEntity DisplayEntity { get; set; }
     }
 }

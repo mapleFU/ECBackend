@@ -77,5 +77,7 @@ namespace ECBack.Models
         public System.Data.Entity.DbSet<ECBack.Models.Comment> Comments { get; set; }
 
         public System.Data.Entity.DbSet<ECBack.Models.CommentInfo> CommentInfoes { get; set; }
+
+        public System.Data.Entity.DbSet<ECBack.Models.Coupons> Coupons { get; set; }
     }
 }
