@@ -46,7 +46,7 @@ namespace ECBack.Controllers
 
         // POST: api/Carts/SalesEntity
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutCart(int id, Cart cart)
+        public IHttpActionResult PutCart(int id, Cart cart)
         {
             if (!ModelState.IsValid)
             {
@@ -62,7 +62,7 @@ namespace ECBack.Controllers
 
             try
             {
-                await db.SaveChangesAsync();
+                db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -81,7 +81,7 @@ namespace ECBack.Controllers
 
         // POST: api/Carts
         [ResponseType(typeof(Cart))]
-        public async Task<IHttpActionResult> PostCart(Cart cart)
+        public IHttpActionResult PostCart(Cart cart)
         {
             if (!ModelState.IsValid)
             {
@@ -92,7 +92,7 @@ namespace ECBack.Controllers
 
             try
             {
-                await db.SaveChangesAsync();
+                db.SaveChanges();
             }
             catch (DbUpdateException)
             {
@@ -111,16 +111,16 @@ namespace ECBack.Controllers
 
         // DELETE: api/Carts/5
         [ResponseType(typeof(Cart))]
-        public async Task<IHttpActionResult> DeleteCart(int id)
+        public IHttpActionResult DeleteCart(int id)
         {
-            Cart cart = await db.Carts.FindAsync(id);
+            Cart cart = db.Carts.Find(id);
             if (cart == null)
             {
                 return NotFound();
             }
 
             db.Carts.Remove(cart);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
             return Ok(cart);
         }

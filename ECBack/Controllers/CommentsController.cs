@@ -6,7 +6,6 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ECBack.Models;
@@ -25,9 +24,9 @@ namespace ECBack.Controllers
 
         // GET: api/Comments/5
         [ResponseType(typeof(Comment))]
-        public async Task<IHttpActionResult> GetComment(int id)
+        public IHttpActionResult GetComment(int id)
         {
-            Comment comment = await db.Comments.FindAsync(id);
+            Comment comment = db.Comments.Find(id);
             if (comment == null)
             {
                 return NotFound();
@@ -38,7 +37,7 @@ namespace ECBack.Controllers
 
         // PUT: api/Comments/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutComment(int id, Comment comment)
+        public IHttpActionResult PutComment(int id, Comment comment)
         {
             if (!ModelState.IsValid)
             {
@@ -54,7 +53,7 @@ namespace ECBack.Controllers
 
             try
             {
-                await db.SaveChangesAsync();
+                db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -73,7 +72,7 @@ namespace ECBack.Controllers
 
         // POST: api/Comments
         [ResponseType(typeof(Comment))]
-        public async Task<IHttpActionResult> PostComment(Comment comment)
+        public IHttpActionResult PostComment(Comment comment)
         {
             if (!ModelState.IsValid)
             {
@@ -81,23 +80,23 @@ namespace ECBack.Controllers
             }
 
             db.Comments.Add(comment);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = comment.CommentID }, comment);
         }
 
         // DELETE: api/Comments/5
         [ResponseType(typeof(Comment))]
-        public async Task<IHttpActionResult> DeleteComment(int id)
+        public IHttpActionResult DeleteComment(int id)
         {
-            Comment comment = await db.Comments.FindAsync(id);
+            Comment comment = db.Comments.Find(id);
             if (comment == null)
             {
                 return NotFound();
             }
 
             db.Comments.Remove(comment);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
             return Ok(comment);
         }

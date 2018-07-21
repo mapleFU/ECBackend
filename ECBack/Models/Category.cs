@@ -10,6 +10,11 @@ namespace ECBack.Models
 {
     public class Category
     {
+        public Category()
+        {
+            this.GoodEntities = new HashSet<GoodEntity>();
+        }
+
         [Key]
         public int CategoryID { get; set; }
 
@@ -22,6 +27,8 @@ namespace ECBack.Models
 
         [JsonIgnore]
         public virtual ICollection<GoodEntity> GoodEntities { get; set; }
+
+        public ICollection<Coupons> Coupons { get; set; }
     }
 
 }

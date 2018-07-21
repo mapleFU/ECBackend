@@ -66,9 +66,11 @@ namespace ECBack.Models
 
         public System.Data.Entity.DbSet<ECBack.Models.SaleEntity> SaleEntities { get; set; }
 
-        public System.Data.Entity.DbSet<ECBack.Models.AttributeOption> AttributeOptions { get; set; }
+        public System.Data.Entity.DbSet<ECBack.Models.DisplayEntity> DisplayEntities { get; set; }
 
-        public System.Data.Entity.DbSet<ECBack.Models.GoodAttribute> GoodAttributes { get; set; }
+        public System.Data.Entity.DbSet<ECBack.Models.Option> Options { get; set; }
+
+        public System.Data.Entity.DbSet<ECBack.Models.GAttribute> GAttributes { get; set; }
 
         public System.Data.Entity.DbSet<ECBack.Models.Favorite> Favorites { get; set; }
 
@@ -76,10 +78,12 @@ namespace ECBack.Models
 
         public System.Data.Entity.DbSet<ECBack.Models.Comment> Comments { get; set; }
 
-        public System.Data.Entity.DbSet<ECBack.Models.CommentInfo> CommentInfoes { get; set; }
+        public System.Data.Entity.DbSet<ECBack.Models.Coupons> Coupons { get; set; }
 
         public System.Data.Entity.DbSet<ECBack.Models.Reply> Replies { get; set; }
 
         public System.Data.Entity.DbSet<ECBack.Models.Question> Questions { get; set; }
+
+        public System.Data.Entity.DbSet<ECBack.Models.Brand> Brands { get; set; }
     }
 }

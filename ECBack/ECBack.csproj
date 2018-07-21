@@ -236,19 +236,19 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AddressesController.cs" />
-    <Compile Include="Controllers\AttributeOptionsController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\CartsController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
-    <Compile Include="Controllers\CommentInfoesController.cs" />
     <Compile Include="Controllers\CommentsController.cs" />
+    <Compile Include="Controllers\CouponsController.cs" />
     <Compile Include="Controllers\ControllersTool.cs" />
     <Compile Include="Controllers\FavoritesController.cs" />
-    <Compile Include="Controllers\GoodAttributesController.cs" />
+    <Compile Include="Controllers\GAttributesController.cs" />
     <Compile Include="Controllers\GoodEntitiesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LogisticInfoesController.cs" />
     <Compile Include="Controllers\LogisticsController.cs" />
+    <Compile Include="Controllers\OptionsController.cs" />
     <Compile Include="Controllers\OrderformsController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\ReplyController.cs" />
@@ -259,13 +259,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201807190255313_Update User and Address.cs" />
-    <Compile Include="Migrations\201807190255313_Update User and Address.Designer.cs">
-      <DependentUpon>201807190255313_Update User and Address.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807190902408_add Comment and User.cs" />
-    <Compile Include="Migrations\201807190902408_add Comment and User.Designer.cs">
-      <DependentUpon>201807190902408_add Comment and User.cs</DependentUpon>
+    <Compile Include="Migrations\201807211127323_shorter_table_name.cs" />
+    <Compile Include="Migrations\201807211127323_shorter_table_name.Designer.cs">
+      <DependentUpon>201807211127323_shorter_table_name.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -273,6 +269,7 @@
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\Coupons.cs" />
     <Compile Include="Models\Favorite.cs" />
     <Compile Include="Models\GoodEntity.cs" />
     <Compile Include="Models\Logistic.cs" />
@@ -340,6 +337,11 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Coupons\Create.cshtml" />
+    <Content Include="Views\Coupons\Delete.cshtml" />
+    <Content Include="Views\Coupons\Details.cshtml" />
+    <Content Include="Views\Coupons\Edit.cshtml" />
+    <Content Include="Views\Coupons\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -374,11 +376,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201807190255313_Update User and Address.resx">
-      <DependentUpon>201807190255313_Update User and Address.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807190902408_add Comment and User.resx">
-      <DependentUpon>201807190902408_add Comment and User.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807211127323_shorter_table_name.resx">
+      <DependentUpon>201807211127323_shorter_table_name.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

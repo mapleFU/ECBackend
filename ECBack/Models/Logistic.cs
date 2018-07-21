@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Security.Principal;
 using System.Web;
 
 namespace ECBack.Models
@@ -38,7 +41,9 @@ namespace ECBack.Models
     /// </summary>
     public class Logistic
     {
+        [Required]
         [Key]
+        [ForeignKey("Orderform")]
         public int LogisticID { get; set; }
 
         /// <summary>
@@ -51,5 +56,8 @@ namespace ECBack.Models
         public string ToAddress { get; set; }
 
         public List<LogisticInfo> LogisticInfos { get; set; }
+ 
+        public virtual Orderform Orderform { get; set; }
+
     }
 }

@@ -51,6 +51,8 @@ namespace ECBack.Models
             State = 2;
         }
 
+        public virtual Logistic Logistic { get; set; }
+
 
         [NotMapped]
         [JsonIgnore]

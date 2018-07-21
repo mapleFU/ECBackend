@@ -69,9 +69,9 @@ namespace ECBack.Controllers
 
         // GET: api/GoodEntities/5
         [ResponseType(typeof(GoodEntity))]
-        public async Task<IHttpActionResult> GetGoodEntity(int id)
+        public IHttpActionResult GetGoodEntity(int id)
         {
-            GoodEntity goodEntity = await db.GoodEntities.FindAsync(id);
+            GoodEntity goodEntity = db.GoodEntities.Find(id);
             if (goodEntity == null)
             {
                 return NotFound();
@@ -144,7 +144,7 @@ namespace ECBack.Controllers
 
             try
             {
-                await db.SaveChangesAsync();
+                db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -172,23 +172,23 @@ namespace ECBack.Controllers
             }
 
             db.GoodEntities.Add(goodEntity);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = goodEntity.GoodEntityID }, goodEntity);
         }
 
         // DELETE: api/GoodEntities/5
         [ResponseType(typeof(GoodEntity))]
-        public async Task<IHttpActionResult> DeleteGoodEntity(int id)
+        public IHttpActionResult DeleteGoodEntity(int id)
         {
-            GoodEntity goodEntity = await db.GoodEntities.FindAsync(id);
+            GoodEntity goodEntity = db.GoodEntities.Find(id);
             if (goodEntity == null)
             {
                 return NotFound();
             }
 
             db.GoodEntities.Remove(goodEntity);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
             return Ok(goodEntity);
         }
