@@ -73,22 +73,22 @@ namespace ECBack.Controllers
         public HttpResponseMessage PostQuestion([FromBody] JObject obj )
         {
            
-            int good_id = int.Parse(obj["good_id"].ToString());
+            int Display_id = int.Parse(obj["Display_id"].ToString());
             string QuestionDetail = obj["qu_detail"].ToString();
             HttpResponseMessage response;
 
-            GoodEntity good = db.GoodEntities.Find(good_id);
+            DisplayEntity Display = db.DisplayEntities.Find(Display_id);
            
-            if (good == null)
+            if (Display == null)
             {
-                response = Request.CreateResponse(HttpStatusCode.NotFound, "the GoodEntity not exists");
+                response = Request.CreateResponse(HttpStatusCode.NotFound, "the DisplayEntity not exists");
             }
             else
             {
                
                 Question question = new Question();
                 question.Detail = QuestionDetail;
-                question.GoodEntityID = good_id;
+                question.DisplayEntityID = Display_id;
                 db.Questions.Add(question);
               
                 response = Request.CreateResponse(HttpStatusCode.OK, "Created");

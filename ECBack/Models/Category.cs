@@ -9,6 +9,11 @@ namespace ECBack.Models
 {
     public class Category
     {
+        public Category()
+        {
+            this.GoodEntities = new HashSet<GoodEntity>();
+        }
+
         [Key]
         public int CategoryID { get; set; }
 
@@ -20,6 +25,8 @@ namespace ECBack.Models
         public string Name { get; set; }
 
         public virtual ICollection<GoodEntity> GoodEntities { get; set; }
+
+        public ICollection<Coupons> Coupons { get; set; }
     }
 
 }

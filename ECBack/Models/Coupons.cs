@@ -11,11 +11,17 @@ namespace ECBack.Models
 {
     public class Coupons
     {
+        public Coupons()
+        {
+            this.Users = new HashSet<User>();
+        }
+
+
         /// <summary>
         /// Id of coupon
         /// </summary>
         [Key]
-        public int ID { get; set; }
+        public int CouponID { get; set; }
 
         /// <summary>
         /// 购买最低阈值
@@ -33,17 +39,15 @@ namespace ECBack.Models
         /// 是否需要会员权限
         /// </summary>
         [Required]
-        public int NeedVIP { get; set; }
+        public Boolean NeedVIP { get; set; }
 
-        /// <summary>
-        /// 打折范围（类别）
-        /// </summary>
-        [Required]
         public int CategoryID { get; set; }
 
-
+        // 打折范围（类别）
         [ForeignKey("CategoryID")]
         public Category Category { get; set; }
+
+        public virtual ICollection<User>  Users { get; set; }
 
     }
 }

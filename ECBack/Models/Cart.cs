@@ -16,7 +16,7 @@ namespace ECBack.Models
         [ForeignKey("User")]
         public int UserID { get; set; }
 
-        ICollection<SaleEntity> SaleEntities { get; set; }
+        public ICollection<SaleEntity> SaleEntities { get; set; }
 
         [NotMapped]
         public int TotalPrice

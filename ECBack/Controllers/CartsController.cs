@@ -6,7 +6,6 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ECBack.Models;
@@ -25,9 +24,9 @@ namespace ECBack.Controllers
 
         // GET: api/Carts/5
         [ResponseType(typeof(Cart))]
-        public async Task<IHttpActionResult> GetCart(int id)
+        public IHttpActionResult GetCart(int id)
         {
-            Cart cart = await db.Carts.FindAsync(id);
+            Cart cart = db.Carts.Find(id);
             if (cart == null)
             {
                 return NotFound();
@@ -38,7 +37,7 @@ namespace ECBack.Controllers
 
         // PUT: api/Carts/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutCart(int id, Cart cart)
+        public IHttpActionResult PutCart(int id, Cart cart)
         {
             if (!ModelState.IsValid)
             {
@@ -54,7 +53,7 @@ namespace ECBack.Controllers
 
             try
             {
-                await db.SaveChangesAsync();
+                db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -73,7 +72,7 @@ namespace ECBack.Controllers
 
         // POST: api/Carts
         [ResponseType(typeof(Cart))]
-        public async Task<IHttpActionResult> PostCart(Cart cart)
+        public IHttpActionResult PostCart(Cart cart)
         {
             if (!ModelState.IsValid)
             {
@@ -84,7 +83,7 @@ namespace ECBack.Controllers
 
             try
             {
-                await db.SaveChangesAsync();
+                db.SaveChanges();
             }
             catch (DbUpdateException)
             {
@@ -103,16 +102,16 @@ namespace ECBack.Controllers
 
         // DELETE: api/Carts/5
         [ResponseType(typeof(Cart))]
-        public async Task<IHttpActionResult> DeleteCart(int id)
+        public IHttpActionResult DeleteCart(int id)
         {
-            Cart cart = await db.Carts.FindAsync(id);
+            Cart cart = db.Carts.Find(id);
             if (cart == null)
             {
                 return NotFound();
             }
 
             db.Carts.Remove(cart);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
             return Ok(cart);
         }

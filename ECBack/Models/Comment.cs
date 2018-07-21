@@ -4,40 +4,25 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Security.Principal;
 using System.Web;
+
 
 namespace ECBack.Models
 {
     /// <summary>
-    /// 一个商品的所有评论
+    /// 评论
     /// </summary>
     public class Comment
     {
         [Key]
         public int CommentID { get; set; }
 
-        public ICollection<CommentInfo> CommentInfos { get; set; }
-
-        [ForeignKey("SaleEntity")]
-        public int SaleEntityID { get; set; }
+        [ForeignKey("DisplayEntity")]
+        public int DisplayEntityID { get; set; }
 
         [JsonIgnore]
-        public SaleEntity SaleEntity { get; set; }
-    }
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    public class CommentInfo
-    {
-        [Key]
-        public int CommentID { get; set; }
-
-        [ForeignKey("CommentID")]
-        [JsonIgnore]
-        public Comment Comment { get; set; }
-
-
+        public DisplayEntity DisplayEntity { get; set; }
 
         [MaxLength(400)]
         public string Detail { get; set; }
@@ -49,7 +34,7 @@ namespace ECBack.Models
         public DateTime UserCommentTime { get; set; }
 
 
-        public CommentInfo()
+        public Comment()
         {
             UserCommentTime = DateTime.Now;
             LevelRank = 0;

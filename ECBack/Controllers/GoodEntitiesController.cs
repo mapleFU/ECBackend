@@ -6,7 +6,6 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ECBack.Models;
@@ -25,9 +24,9 @@ namespace ECBack.Controllers
 
         // GET: api/GoodEntities/5
         [ResponseType(typeof(GoodEntity))]
-        public async Task<IHttpActionResult> GetGoodEntity(int id)
+        public IHttpActionResult GetGoodEntity(int id)
         {
-            GoodEntity goodEntity = await db.GoodEntities.FindAsync(id);
+            GoodEntity goodEntity = db.GoodEntities.Find(id);
             if (goodEntity == null)
             {
                 return NotFound();
@@ -38,7 +37,7 @@ namespace ECBack.Controllers
 
         // PUT: api/GoodEntities/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutGoodEntity(int id, GoodEntity goodEntity)
+        public IHttpActionResult PutGoodEntity(int id, GoodEntity goodEntity)
         {
             if (!ModelState.IsValid)
             {
@@ -54,7 +53,7 @@ namespace ECBack.Controllers
 
             try
             {
-                await db.SaveChangesAsync();
+                db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -73,7 +72,7 @@ namespace ECBack.Controllers
 
         // POST: api/GoodEntities
         [ResponseType(typeof(GoodEntity))]
-        public async Task<IHttpActionResult> PostGoodEntity(GoodEntity goodEntity)
+        public IHttpActionResult PostGoodEntity(GoodEntity goodEntity)
         {
             if (!ModelState.IsValid)
             {
@@ -81,23 +80,23 @@ namespace ECBack.Controllers
             }
 
             db.GoodEntities.Add(goodEntity);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = goodEntity.GoodEntityID }, goodEntity);
         }
 
         // DELETE: api/GoodEntities/5
         [ResponseType(typeof(GoodEntity))]
-        public async Task<IHttpActionResult> DeleteGoodEntity(int id)
+        public IHttpActionResult DeleteGoodEntity(int id)
         {
-            GoodEntity goodEntity = await db.GoodEntities.FindAsync(id);
+            GoodEntity goodEntity = db.GoodEntities.Find(id);
             if (goodEntity == null)
             {
                 return NotFound();
             }
 
             db.GoodEntities.Remove(goodEntity);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
             return Ok(goodEntity);
         }

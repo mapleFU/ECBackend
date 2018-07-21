@@ -47,6 +47,11 @@ namespace ECBack.Models
             State = 2;
         }
 
+        public ICollection<SaleEntity> SaleEntities { get; set; }
+
+        public virtual Logistic Logistic { get; set; }
+
+
         [NotMapped]
         [JsonIgnore]
         public string Status

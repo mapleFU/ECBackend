@@ -12,44 +12,44 @@ using ECBack.Models;
 
 namespace ECBack.Controllers
 {
-    public class CouponsController : ApiController
+    public class GAttributesController : ApiController
     {
         private OracleDbContext db = new OracleDbContext();
 
-        // GET: api/Coupons
-        public IQueryable<Coupons> GetCoupons()
+        // GET: api/GAttributes
+        public IQueryable<GAttribute> GetGAttributes()
         {
-            return db.Coupons;
+            return db.GAttributes;
         }
 
-        // GET: api/Coupons/5
-        [ResponseType(typeof(Coupons))]
-        public IHttpActionResult GetCoupons(int id)
+        // GET: api/GAttributes/5
+        [ResponseType(typeof(GAttribute))]
+        public IHttpActionResult GetGAttribute(int id)
         {
-            Coupons coupons = db.Coupons.Find(id);
-            if (coupons == null)
+            GAttribute gAttribute = db.GAttributes.Find(id);
+            if (gAttribute == null)
             {
                 return NotFound();
             }
 
-            return Ok(coupons);
+            return Ok(gAttribute);
         }
 
-        // PUT: api/Coupons/5
+        // PUT: api/GAttributes/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutCoupons(int id, Coupons coupons)
+        public IHttpActionResult PutGAttribute(int id, GAttribute gAttribute)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != coupons.CouponID)
+            if (id != gAttribute.GAttributeID)
             {
                 return BadRequest();
             }
 
-            db.Entry(coupons).State = EntityState.Modified;
+            db.Entry(gAttribute).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +57,7 @@ namespace ECBack.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CouponsExists(id))
+                if (!GAttributeExists(id))
                 {
                     return NotFound();
                 }
@@ -70,35 +70,35 @@ namespace ECBack.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Coupons
-        [ResponseType(typeof(Coupons))]
-        public IHttpActionResult PostCoupons(Coupons coupons)
+        // POST: api/GAttributes
+        [ResponseType(typeof(GAttribute))]
+        public IHttpActionResult PostGAttribute(GAttribute gAttribute)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Coupons.Add(coupons);
+            db.GAttributes.Add(gAttribute);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = coupons.CouponID }, coupons);
+            return CreatedAtRoute("DefaultApi", new { id = gAttribute.GAttributeID }, gAttribute);
         }
 
-        // DELETE: api/Coupons/5
-        [ResponseType(typeof(Coupons))]
-        public IHttpActionResult DeleteCoupons(int id)
+        // DELETE: api/GAttributes/5
+        [ResponseType(typeof(GAttribute))]
+        public IHttpActionResult DeleteGAttribute(int id)
         {
-            Coupons coupons = db.Coupons.Find(id);
-            if (coupons == null)
+            GAttribute gAttribute = db.GAttributes.Find(id);
+            if (gAttribute == null)
             {
                 return NotFound();
             }
 
-            db.Coupons.Remove(coupons);
+            db.GAttributes.Remove(gAttribute);
             db.SaveChanges();
 
-            return Ok(coupons);
+            return Ok(gAttribute);
         }
 
         protected override void Dispose(bool disposing)
@@ -110,9 +110,9 @@ namespace ECBack.Controllers
             base.Dispose(disposing);
         }
 
-        private bool CouponsExists(int id)
+        private bool GAttributeExists(int id)
         {
-            return db.Coupons.Count(e => e.CouponID == id) > 0;
+            return db.GAttributes.Count(e => e.GAttributeID == id) > 0;
         }
     }
 }

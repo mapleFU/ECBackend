@@ -80,6 +80,7 @@ namespace ECBack.Models
         {
             // 性别先不填
             Gender = "n";
+            this.Coupons = new HashSet<Coupons>();
         }
 
         // 居住地
@@ -98,7 +99,7 @@ namespace ECBack.Models
 
         public ICollection<Favorite> Favorites { get; set; }
 
-        public ICollection<Coupons> Coupons { get; set; }
+        public virtual ICollection<Coupons> Coupons { get; set; }
 
         [NotMapped]
         [JsonIgnore]

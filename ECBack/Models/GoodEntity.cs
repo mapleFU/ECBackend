@@ -16,6 +16,12 @@ namespace ECBack.Models
     /// </summary>
     public class GoodEntity
     {
+        public GoodEntity()
+        {
+            this.Categories = new HashSet<Category>();
+            this.AttributeOptions = new HashSet<Option>();
+        }
+
         /// <summary>
         /// Id of goo
         /// </summary>
@@ -36,11 +42,6 @@ namespace ECBack.Models
         [MaxLength(1000)]
         [Required]
         public string Brief { get; set; }
-        
-        /// <summary>
-        /// detail introduction of good
-        /// </summary>
-        //  public string Detail { get; set; }
         
         /// <summary>
         /// 商品的库存
@@ -67,11 +68,23 @@ namespace ECBack.Models
         public string FavoriteNum { get; set; }
 
         public virtual ICollection<Category> Categories { get; set; }
-        
+        public virtual ICollection<Option> AttributeOptions { get; set; }
+
+        public int BrandID { get; set; }
+
+        [ForeignKey("BrandID")]
+        public Brand Brand { get; set; }
     }
 
     public class SaleEntity
     {
+        public SaleEntity()
+        {
+            this.AttributeOptions = new HashSet<Option>();
+        }
+
+
+
         [Key]
         [Required]
         public int ID { get; set;}
@@ -83,6 +96,10 @@ namespace ECBack.Models
         [Required]
         public decimal Price { get; set; }
 
+        // 是在购物车中还是在订单中
+        [Required]
+        public Boolean InCart { get; set; }
+
         /// <summary>
         /// id of foreign key DisplayEntity
         /// </summary>
@@ -93,12 +110,21 @@ namespace ECBack.Models
         [ForeignKey("DisplayEntityID")]
         public DisplayEntity DisplayEntity { get; set; }
 
-        /// <summary>
-        /// 购买/加入购物车的数量
-        /// </summary>
+
+        // 购买/加入购物车的用户
+        [Index]
+        [Required]
+        public int UserID { get; set; }
+
+        [ForeignKey("UserID")]
+        public User User { get; set; }
+
+        
+        // 购买/加入购物车的数量
         [Required]
         public int Amount { get; set;}
 
+        public virtual ICollection<Option> AttributeOptions { get; set; }
 
     }
 
@@ -132,7 +158,9 @@ namespace ECBack.Models
         [ForeignKey("GoodEntityID")]
         public GoodEntity GoodEntity { get; set; }
 
+        public ICollection<Question> Questions { get; set; }
 
+        public ICollection<Comment> Comments { get; set; }
 
     }
 
@@ -172,5 +200,22 @@ namespace ECBack.Models
 
         [ForeignKey("DisplayEntityID")]
         public DisplayEntity DisplayEntity { get; set; }
+    }
+
+    public class Brand
+    {
+        [Key]
+        [Required]
+        public int BrandID { get; set; }
+
+        [Index]
+        [MaxLength(50)]
+        [Required]
+        public string BrandName { get; set; }
+
+        [MaxLength(500)]
+        public string Detail { get; set; }
+
+        public ICollection<GoodEntity> GoodEntities { get; set; }
     }
 }

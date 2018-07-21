@@ -12,44 +12,44 @@ using ECBack.Models;
 
 namespace ECBack.Controllers
 {
-    public class CouponsController : ApiController
+    public class OptionsController : ApiController
     {
         private OracleDbContext db = new OracleDbContext();
 
-        // GET: api/Coupons
-        public IQueryable<Coupons> GetCoupons()
+        // GET: api/Options
+        public IQueryable<Option> GetOptions()
         {
-            return db.Coupons;
+            return db.Options;
         }
 
-        // GET: api/Coupons/5
-        [ResponseType(typeof(Coupons))]
-        public IHttpActionResult GetCoupons(int id)
+        // GET: api/Options/5
+        [ResponseType(typeof(Option))]
+        public IHttpActionResult GetOption(int id)
         {
-            Coupons coupons = db.Coupons.Find(id);
-            if (coupons == null)
+            Option option = db.Options.Find(id);
+            if (option == null)
             {
                 return NotFound();
             }
 
-            return Ok(coupons);
+            return Ok(option);
         }
 
-        // PUT: api/Coupons/5
+        // PUT: api/Options/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutCoupons(int id, Coupons coupons)
+        public IHttpActionResult PutOption(int id, Option option)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != coupons.CouponID)
+            if (id != option.OptionID)
             {
                 return BadRequest();
             }
 
-            db.Entry(coupons).State = EntityState.Modified;
+            db.Entry(option).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +57,7 @@ namespace ECBack.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CouponsExists(id))
+                if (!OptionExists(id))
                 {
                     return NotFound();
                 }
@@ -70,35 +70,35 @@ namespace ECBack.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Coupons
-        [ResponseType(typeof(Coupons))]
-        public IHttpActionResult PostCoupons(Coupons coupons)
+        // POST: api/Options
+        [ResponseType(typeof(Option))]
+        public IHttpActionResult PostOption(Option option)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Coupons.Add(coupons);
+            db.Options.Add(option);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = coupons.CouponID }, coupons);
+            return CreatedAtRoute("DefaultApi", new { id = option.OptionID }, option);
         }
 
-        // DELETE: api/Coupons/5
-        [ResponseType(typeof(Coupons))]
-        public IHttpActionResult DeleteCoupons(int id)
+        // DELETE: api/Options/5
+        [ResponseType(typeof(Option))]
+        public IHttpActionResult DeleteOption(int id)
         {
-            Coupons coupons = db.Coupons.Find(id);
-            if (coupons == null)
+            Option option = db.Options.Find(id);
+            if (option == null)
             {
                 return NotFound();
             }
 
-            db.Coupons.Remove(coupons);
+            db.Options.Remove(option);
             db.SaveChanges();
 
-            return Ok(coupons);
+            return Ok(option);
         }
 
         protected override void Dispose(bool disposing)
@@ -110,9 +110,9 @@ namespace ECBack.Controllers
             base.Dispose(disposing);
         }
 
-        private bool CouponsExists(int id)
+        private bool OptionExists(int id)
         {
-            return db.Coupons.Count(e => e.CouponID == id) > 0;
+            return db.Options.Count(e => e.OptionID == id) > 0;
         }
     }
 }
