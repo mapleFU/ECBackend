@@ -1,14 +1,17 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace ECBack.Models
 {
     public class Cart
     {
+        [JsonIgnore]
         public User User { get; set; }
 
         [Required]
@@ -18,17 +21,23 @@ namespace ECBack.Models
 
         public ICollection<SaleEntity> SaleEntities { get; set; }
 
-        [NotMapped]
-        public int TotalPrice
+        public async Task<decimal> TotalPrice(OracleDbContext dbContext)
         {
-            get
+            await dbContext.Entry(this).Reference(u => u.SaleEntities).LoadAsync();
+            decimal price = 0;
+            foreach (var p in dbContext.SaleEntities)
             {
-                throw new NotImplementedException();
+                price += p.Price;
             }
+            return price;
         }
-        void AddToCart()
+
+        
+        public async void AddToCart(OracleDbContext dbContext, SaleEntity entity)
         {
-            throw new NotImplementedException();
+            await dbContext.Entry(this).Reference(u => u.SaleEntities).LoadAsync();
+            SaleEntities.Add(entity);
+            await dbContext.SaveChangesAsync();
         }
         
     }

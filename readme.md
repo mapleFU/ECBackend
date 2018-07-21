@@ -166,7 +166,7 @@ pn 是页面数目，默认为1
 
 #### Schema
 
-```
+```json
 {
     "GoodEntityID": 23, // int id
     "GoodName": "dasl", // 商品名称
@@ -174,9 +174,51 @@ pn 是页面数目，默认为1
     "Detail": "",		// 详情
     "Stock": 9,		// 库存
     "SellProvince": "",	// 寄出的省份
-    "GoodEntityState": 1 // 状态：1 销售 2 下架 3 失效
+    "GoodEntityState": 1, // 状态：1 销售 2 下架 3 失效
+    // 关联的 Attributes 表
+    "Attributes": [
+        {
+            "GoodAttributeID": 3
+            "GoodAttributeName": "等级",
+            "GoodAttributeOptions": [
+                {
+                    "Describe":"一星",
+                    "GoodAttributeID":  3
+                },
+                {
+                    "Describe":"俩星",
+                    "GoodAttributeID": 3
+                },
+        		{
+                    "Describe":"三星",
+                    "GoodAttributeID": 3
+                },
+            ]
+        },
+    ]
 }
 ```
+
+SaleEntities
+
+```json
+{
+    "ID": 213,
+    "Amount": 2213, // 总量
+    // 实际上不存在这段，但是我弄成这样了
+    "AttributeOptionData": [
+        {
+            "Describe":"一星",
+            "GoodAttributeID": 3
+            "GoodAttributeName": "等级"
+        },
+      	{},
+        {}
+    ]
+}
+```
+
+
 
 
 
@@ -251,43 +293,97 @@ HTTP 200
 }
 ```
 
-## 具体的商品及其评论
+## 商品评论
+
+### Comment: 单个商品所有评论
+
+### CommentInfo 单个评论
+
+```json
+CommentInfo
+{
+    "CommentID": 5
+    "Detail": "DALHDA",
+    "LevelRank": 1, // 0 没有评价，1差评 2中评 3好评
+    "UserCommentTime":"dd/MM/yyyy h-m-s" // 评论时间
+}
+```
+
+
+
+#### GET /api/GoodEntities/{GoodID}/Comments?pn=\_\_
+
+pn  默认为1，显示评论
+
+```
+{
+    "result_num": 28, 
+    "CommentInfos": [
+        {}
+    ]
+}
+```
 
 
 
 ## 购物车管理
 
+所有对购物车的访问需要：
+
+```
+Headers:
+	Authentication: Bearer + jwt
+```
+
+
+
+#### Schema
+
+```json
+{
+    "UserID": 13, // userID
+    "SalesEntities": [
+        {},
+        {},
+        {}
+    ]
+}
+```
+
+
+
 添加商品
 
-#### /api/cart/goods/{good\_id}
+#### POST /api/Carts/SalesEntities/{good\_id}
 
 把id为`good_id`的商品加入自己的`cart`. 
 
-PUT 200 表示加入成功，403表示不存在
+POST 200 表示加入成功，403表示不存在
 
-DELETE表示删除
+DELETE 表示删除 204 成功
 
-####  /api/cart/goods&kw=\_\_
+####  GET /api/Carts
 
-GET 用于对物品内容进行搜索
+获得 Schema那样的数据
 
-## 用户信息
+## 订单管理
 
-### GET /users/{id}
+### Schema
 
-获得用户的个人信息
+```json
+{
+    "OrderformID": 233,
+    "TransacDateTime": "dd/MM/yyyy h-m-s", // 交易时间
+    "State": 1,	// 状态 : 已完成0／已发货1／待支付2
+    "UserID": 213,
+    "TotalPrice": 21.4,
+    "SaleEntities": [
+        // sale entity 的结构
+    ]
+}
+```
 
-需要登录且是自己才能使用
 
-###GET /users?phonenumber=\_\_
-
-获得用户的信息，并且按照电话或者关键词查询
-
-两者只需要一个就可以了，获得用户
-
-### PUT /users/{id}
-
-按照数据库的模型更新用户的信息。
 
 ## 参考
 

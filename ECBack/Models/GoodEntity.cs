@@ -20,6 +20,7 @@ namespace ECBack.Models
         {
             this.Categories = new HashSet<Category>();
             this.AttributeOptions = new HashSet<Option>();
+            GoodEntityState = 1;
         }
 
         /// <summary>
@@ -67,13 +68,21 @@ namespace ECBack.Models
         [Required]
         public string FavoriteNum { get; set; }
 
-        public virtual ICollection<Category> Categories { get; set; }
         public virtual ICollection<Option> AttributeOptions { get; set; }
 
         public int BrandID { get; set; }
 
         [ForeignKey("BrandID")]
         public Brand Brand { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Category> Categories { get; set; }
+
+        /// <summary>
+        /// 商品属性
+        /// </summary>
+        public ICollection<Attribute> Attributes { get; set; }
+
+       
     }
 
     public class SaleEntity
