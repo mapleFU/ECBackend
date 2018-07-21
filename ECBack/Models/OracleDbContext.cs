@@ -23,8 +23,6 @@ namespace ECBack.Models
         {
         }
 
-        public System.Data.Entity.DbSet<ECBack.Models.User> Users { get; set; }
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("DB2018");
@@ -52,6 +50,8 @@ namespace ECBack.Models
 
         }
 
+        public System.Data.Entity.DbSet<ECBack.Models.User> Users { get; set; }
+
         public System.Data.Entity.DbSet<ECBack.Models.Orderform> Orderforms { get; set; }
 
         public System.Data.Entity.DbSet<ECBack.Models.Address> Addresses { get; set; }
@@ -66,7 +66,7 @@ namespace ECBack.Models
 
         public System.Data.Entity.DbSet<ECBack.Models.SaleEntity> SaleEntities { get; set; }
 
-        public System.Data.Entity.DbSet<ECBack.Models.DisplayEntity> DisplayEntities { get; set; }
+        // public System.Data.Entity.DbSet<ECBack.Models.DisplayEntity> DisplayEntities { get; set; }
 
         public System.Data.Entity.DbSet<ECBack.Models.Option> Options { get; set; }
 
@@ -85,5 +85,9 @@ namespace ECBack.Models
         public System.Data.Entity.DbSet<ECBack.Models.Question> Questions { get; set; }
 
         public System.Data.Entity.DbSet<ECBack.Models.Brand> Brands { get; set; }
+
+        public System.Data.Entity.DbSet<ECBack.Models.Image> Images { get; set; }
+
+        public System.Data.Entity.DbSet<ECBack.Models.VIP> VIPs { get; set; }
     }
 }

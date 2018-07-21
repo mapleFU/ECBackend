@@ -13,44 +13,44 @@ using ECBack.Models;
 
 namespace ECBack.Controllers
 {
-    public class SaleEntitiesController : ApiController
+    public class VIPsController : ApiController
     {
         private OracleDbContext db = new OracleDbContext();
 
-        // GET: api/SaleEntities
-        public IQueryable<SaleEntity> GetSaleEntities()
+        // GET: api/VIPs
+        public IQueryable<VIP> GetVIPs()
         {
-            return db.SaleEntities;
+            return db.VIPs;
         }
 
-        // GET: api/SaleEntities/5
-        [ResponseType(typeof(SaleEntity))]
-        public async Task<IHttpActionResult> GetSaleEntity(int id)
+        // GET: api/VIPs/5
+        [ResponseType(typeof(VIP))]
+        public async Task<IHttpActionResult> GetVIP(int id)
         {
-            SaleEntity saleEntity = await db.SaleEntities.FindAsync(id);
-            if (saleEntity == null)
+            VIP vIP = await db.VIPs.FindAsync(id);
+            if (vIP == null)
             {
                 return NotFound();
             }
 
-            return Ok(saleEntity);
+            return Ok(vIP);
         }
 
-        // PUT: api/SaleEntities/5
+        // PUT: api/VIPs/5
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutSaleEntity(int id, SaleEntity saleEntity)
+        public async Task<IHttpActionResult> PutVIP(int id, VIP vIP)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != saleEntity.SaleEntityID)
+            if (id != vIP.VIPID)
             {
                 return BadRequest();
             }
 
-            db.Entry(saleEntity).State = EntityState.Modified;
+            db.Entry(vIP).State = EntityState.Modified;
 
             try
             {
@@ -58,7 +58,7 @@ namespace ECBack.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SaleEntityExists(id))
+                if (!VIPExists(id))
                 {
                     return NotFound();
                 }
@@ -71,35 +71,35 @@ namespace ECBack.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/SaleEntities
-        [ResponseType(typeof(SaleEntity))]
-        public async Task<IHttpActionResult> PostSaleEntity(SaleEntity saleEntity)
+        // POST: api/VIPs
+        [ResponseType(typeof(VIP))]
+        public async Task<IHttpActionResult> PostVIP(VIP vIP)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.SaleEntities.Add(saleEntity);
+            db.VIPs.Add(vIP);
             await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = saleEntity.SaleEntityID }, saleEntity);
+            return CreatedAtRoute("DefaultApi", new { id = vIP.VIPID }, vIP);
         }
 
-        // DELETE: api/SaleEntities/5
-        [ResponseType(typeof(SaleEntity))]
-        public async Task<IHttpActionResult> DeleteSaleEntity(int id)
+        // DELETE: api/VIPs/5
+        [ResponseType(typeof(VIP))]
+        public async Task<IHttpActionResult> DeleteVIP(int id)
         {
-            SaleEntity saleEntity = await db.SaleEntities.FindAsync(id);
-            if (saleEntity == null)
+            VIP vIP = await db.VIPs.FindAsync(id);
+            if (vIP == null)
             {
                 return NotFound();
             }
 
-            db.SaleEntities.Remove(saleEntity);
+            db.VIPs.Remove(vIP);
             await db.SaveChangesAsync();
 
-            return Ok(saleEntity);
+            return Ok(vIP);
         }
 
         protected override void Dispose(bool disposing)
@@ -111,9 +111,9 @@ namespace ECBack.Controllers
             base.Dispose(disposing);
         }
 
-        private bool SaleEntityExists(int id)
+        private bool VIPExists(int id)
         {
-            return db.SaleEntities.Count(e => e.SaleEntityID == id) > 0;
+            return db.VIPs.Count(e => e.VIPID == id) > 0;
         }
     }
 }

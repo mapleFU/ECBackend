@@ -18,9 +18,8 @@ namespace ECBack.Models
     {
         public GoodEntity()
         {
-            this.Categories = new HashSet<Category>();
-            this.AttributeOptions = new HashSet<Option>();
             GoodEntityState = 1;
+            FavoriteNum = 0;
         }
 
         /// <summary>
@@ -66,14 +65,15 @@ namespace ECBack.Models
         /// 收藏人数
         /// </summary>
         [Required]
-        public string FavoriteNum { get; set; }
+        public int FavoriteNum { get; set; }
 
-        public virtual ICollection<Option> AttributeOptions { get; set; }
+        //public virtual ICollection<Option> AttributeOptions { get; set; }
 
         public int BrandID { get; set; }
 
         [ForeignKey("BrandID")]
         public Brand Brand { get; set; }
+
         [JsonIgnore]
         public virtual ICollection<Category> Categories { get; set; }
 
@@ -87,16 +87,9 @@ namespace ECBack.Models
 
     public class SaleEntity
     {
-        public SaleEntity()
-        {
-            this.AttributeOptions = new HashSet<Option>();
-        }
-
-
-
         [Key]
         [Required]
-        public int ID { get; set;}
+        public int SaleEntityID { get; set;}
         
         /// <summary>
         /// 购买/加入购物车的价格
@@ -105,111 +98,74 @@ namespace ECBack.Models
         [Required]
         public decimal Price { get; set; }
 
-        // 是在购物车中还是在订单中
-        [Required]
-        public Boolean InCart { get; set; }
+        //// 是在购物车中还是在订单中
+        //[Required]
+        //public Boolean InCart { get; set; }
 
-        /// <summary>
-        /// id of foreign key DisplayEntity
-        /// </summary>
-        [Index]
-        [Required]
-        public int DisplayEntityID { get; set; }
+        ///// <summary>
+        ///// id of foreign key DisplayEntity
+        ///// </summary>
+        //[Index]
+        //[Required]
+        //public int DisplayEntityID { get; set; }
 
-        [ForeignKey("DisplayEntityID")]
-        public DisplayEntity DisplayEntity { get; set; }
+        //[ForeignKey("DisplayEntityID")]
+        //public DisplayEntity DisplayEntity { get; set; }
 
 
         // 购买/加入购物车的用户
-        [Index]
-        [Required]
-        public int UserID { get; set; }
+        //[Index]
+        //[Required]
+        //public int UserID { get; set; }
 
-        [ForeignKey("UserID")]
-        public User User { get; set; }
+        //[ForeignKey("UserID")]
+        //public User User { get; set; }
 
         
-        // 购买/加入购物车的数量
-        [Required]
-        public int Amount { get; set;}
+        //// 购买/加入购物车的数量
+        //[Required]
+        //public int Amount { get; set;}
 
         public virtual ICollection<Option> AttributeOptions { get; set; }
 
     }
 
-    public class DisplayEntity
-    {
-        [Key]
-        [Required]
-        public int ID { get; set; }
+    //public class DisplayEntity
+    //{
+    //    [Key]
+    //    [Required]
+    //    public int DisplayEntityID { get; set; }
 
-        /// <summary>
-        /// 商品的售价
-        /// </summary>
+    //    /// <summary>
+    //    /// 商品的售价
+    //    /// </summary>
 
-        [Required]
-        public decimal Price { get; set; }
+    //    [Required]
+    //    public decimal Price { get; set; }
 
-        /// <summary>
-        /// 展示的图片
-        /// </summary>
+    //    /// <summary>
+    //    /// 展示的图片
+    //    /// </summary>
 
-        [Required]
-        public ICollection<DisplayImg> Imgs { get; set; }
+    //    [Required]
+    //    public ICollection<Image> Imgs { get; set; }
 
-        /// <summary>
-        /// id of foreign key good entity
-        /// </summary>
-        [Index]
-        [Required]
-        public int GoodEntityID { get; set; }
+    //    /// <summary>
+    //    /// id of foreign key good entity
+    //    /// </summary>
+    //    [Index]
+    //    [Required]
+    //    public int GoodEntityID { get; set; }
 
-        [ForeignKey("GoodEntityID")]
-        public GoodEntity GoodEntity { get; set; }
+    //    [ForeignKey("GoodEntityID")]
+    //    public GoodEntity GoodEntity { get; set; }
 
-        public ICollection<Question> Questions { get; set; }
+    //    public ICollection<Question> Questions { get; set; }
 
-        public ICollection<Comment> Comments { get; set; }
+    //    public ICollection<Comment> Comments { get; set; }
 
-    }
+    //}
 
-
-    public class DisplayImg
-    {
-        /// <summary>
-        /// Id of Imgs
-        /// </summary>
-        [Key] 
-        public int ID { get; set; }
-
-        [MaxLength(1000)]
-        [Required]
-        public string LargeImg { get; set; }
-
-        [MaxLength(1000)]
-        [Required]
-        public string MediumImg { get; set; }
-
-        [MaxLength(1000)]
-        [Required]
-        public string SmallImg { get; set; }
-
-        /// <summary>
-        /// 是否为主图
-        /// </summary>
-        [Required]
-        public Boolean IsMain { get; set; }
-    
-        /// <summary>
-        /// id of foreign key DisplayEntity
-        /// </summary>
-        [Index]
-        [Required]
-        public int DisplayEntityID { get; set; }
-
-        [ForeignKey("DisplayEntityID")]
-        public DisplayEntity DisplayEntity { get; set; }
-    }
 
     public class Brand
     {

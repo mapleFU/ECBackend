@@ -255,13 +255,18 @@
     <Compile Include="Controllers\SaleEntitiesController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="Controllers\VIPsController.cs" />
     <Compile Include="Filters\UserAuthenticationFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201807211337222_basic finish modesl.cs" />
-    <Compile Include="Migrations\201807211337222_basic finish modesl.Designer.cs">
-      <DependentUpon>201807211337222_basic finish modesl.cs</DependentUpon>
+    <Compile Include="Migrations\201807211909044_Init Proj.cs" />
+    <Compile Include="Migrations\201807211909044_Init Proj.Designer.cs">
+      <DependentUpon>201807211909044_Init Proj.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807212044237_Add vip.cs" />
+    <Compile Include="Migrations\201807212044237_Add vip.Designer.cs">
+      <DependentUpon>201807212044237_Add vip.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -272,6 +277,7 @@
     <Compile Include="Models\Coupons.cs" />
     <Compile Include="Models\Favorite.cs" />
     <Compile Include="Models\GoodEntity.cs" />
+    <Compile Include="Models\ImageFileManager.cs" />
     <Compile Include="Models\Logistic.cs" />
     <Compile Include="Models\OracleDbContext.cs" />
     <Compile Include="Models\Orderform.cs" />
@@ -319,6 +325,7 @@
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Uploads\Images\逸站.png" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -376,8 +383,11 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201807211337222_basic finish modesl.resx">
-      <DependentUpon>201807211337222_basic finish modesl.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807211909044_Init Proj.resx">
+      <DependentUpon>201807211909044_Init Proj.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807212044237_Add vip.resx">
+      <DependentUpon>201807212044237_Add vip.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

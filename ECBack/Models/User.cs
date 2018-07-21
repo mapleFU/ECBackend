@@ -80,7 +80,7 @@ namespace ECBack.Models
         {
             // 性别先不填
             Gender = "n";
-            this.Coupons = new HashSet<Coupons>();
+            
         }
 
         // 居住地
@@ -102,6 +102,7 @@ namespace ECBack.Models
         [JsonIgnore]
         public ICollection<Favorite> Favorites { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<Coupons> Coupons { get; set; }
 
         [NotMapped]
@@ -109,7 +110,7 @@ namespace ECBack.Models
         public IIdentity Identity { get; private set; }
 
         [JsonIgnore]
-        public Cart Cart { get; set;}
+        public Cart Cart { get; set; }
 
         public bool IsInRole(string role)
         {

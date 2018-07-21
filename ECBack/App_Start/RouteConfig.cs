@@ -11,7 +11,11 @@ namespace ECBack
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+            routes.RouteExistingFiles = true;
+            routes.IgnoreRoute("Uploads/Images/*.jpg");
+            routes.IgnoreRoute("Uploads/Images/*.png");
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            
 
             routes.MapRoute(
                 name: "Default",

@@ -7,13 +7,13 @@ namespace ECBack.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class basicfinishmodesl : IMigrationMetadata
+    public sealed partial class Addvip : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(basicfinishmodesl));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Addvip));
         
         string IMigrationMetadata.Id
         {
-            get { return "201807211337222_basic finish modesl"; }
+            get { return "201807212044237_Add vip"; }
         }
         
         string IMigrationMetadata.Source

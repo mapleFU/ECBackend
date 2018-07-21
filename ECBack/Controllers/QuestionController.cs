@@ -77,7 +77,7 @@ namespace ECBack.Controllers
             string QuestionDetail = obj["qu_detail"].ToString();
             HttpResponseMessage response;
 
-            DisplayEntity Display = db.DisplayEntities.Find(Display_id);
+            GoodEntity Display = db.GoodEntities.Find(Display_id);
            
             if (Display == null)
             {

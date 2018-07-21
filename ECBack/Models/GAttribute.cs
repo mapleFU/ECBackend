@@ -26,12 +26,7 @@ namespace ECBack.Models
 
     public class Option
     {
-        public Option()
-        {
-            this.GoodEntities = new HashSet<GoodEntity>();
-            this.SaleEntities = new HashSet<SaleEntity>();
-        }
-
+        
         [Key]
         [Required]
         public int OptionID { get; set; }
@@ -51,7 +46,7 @@ namespace ECBack.Models
         public string Describe { get; set; }
 
         public ICollection<GoodEntity> GoodEntities { get; set; }
-        public ICollection<SaleEntity> SaleEntities { get; set; }
+        
 
     }
 

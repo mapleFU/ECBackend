@@ -13,7 +13,7 @@ namespace ECBack.Models
     {
         public Coupons()
         {
-            this.Users = new HashSet<User>();
+            NeedVIP = false;
         }
 
 

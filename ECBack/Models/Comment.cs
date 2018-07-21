@@ -18,11 +18,11 @@ namespace ECBack.Models
         [Key]
         public int CommentID { get; set; }
 
-        [ForeignKey("DisplayEntity")]
-        public int DisplayEntityID { get; set; }
+        //[ForeignKey("DisplayEntity")]
+        //public int DisplayEntityID { get; set; }
 
-        [JsonIgnore]
-        public DisplayEntity DisplayEntity { get; set; }
+        //[JsonIgnore]
+        //public DisplayEntity DisplayEntity { get; set; }
 
         [MaxLength(400)]
         public string Detail { get; set; }
