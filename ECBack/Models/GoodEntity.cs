@@ -161,7 +161,7 @@ namespace ECBack.Models
         /// 是否为主图
         /// </summary>
         [Required]
-        public int IsMain { get; set; }
+        public Boolean IsMain { get; set; }
     
         /// <summary>
         /// id of foreign key DisplayEntity
@@ -170,10 +170,6 @@ namespace ECBack.Models
         [Required]
         public int DisplayEntityID { get; set; }
 
-
-        /// <summary>
-        /// 非实体属性
-        /// </summary>
         [ForeignKey("DisplayEntityID")]
         public DisplayEntity DisplayEntity { get; set; }
     }

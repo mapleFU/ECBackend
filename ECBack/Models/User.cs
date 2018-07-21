@@ -98,6 +98,8 @@ namespace ECBack.Models
 
         public ICollection<Favorite> Favorites { get; set; }
 
+        public ICollection<Coupons> Coupons { get; set; }
+
         [NotMapped]
         [JsonIgnore]
         public IIdentity Identity { get; private set; }
