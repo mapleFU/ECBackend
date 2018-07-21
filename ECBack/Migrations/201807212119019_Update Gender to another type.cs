@@ -3,7 +3,7 @@ namespace ECBack.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitProj : DbMigration
+    public partial class UpdateGendertoanothertype : DbMigration
     {
         public override void Up()
         {
@@ -33,7 +33,7 @@ namespace ECBack.Migrations
                         NickName = c.String(nullable: false, maxLength: 50),
                         RealName = c.String(maxLength: 50),
                         PhoneNumber = c.String(nullable: false, maxLength: 11),
-                        Gender = c.String(maxLength: 2000, fixedLength: true, unicode: false),
+                        Gender = c.String(maxLength: 2),
                         BirthDay = c.DateTime(nullable: false),
                         Local = c.String(maxLength: 100),
                         Home = c.String(maxLength: 100),
@@ -245,6 +245,16 @@ namespace ECBack.Migrations
                 .Index(t => t.QuestionID);
             
             CreateTable(
+                "DB2018.VIPs",
+                c => new
+                    {
+                        VIPID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
+                        StartDate = c.DateTime(nullable: false),
+                        DueDate = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.VIPID);
+            
+            CreateTable(
                 "DB2018.CouponsUsers",
                 c => new
                     {
@@ -319,6 +329,7 @@ namespace ECBack.Migrations
             DropIndex("DB2018.Addresses", new[] { "UserID" });
             DropTable("DB2018.CategoryGoodEntities");
             DropTable("DB2018.CouponsUsers");
+            DropTable("DB2018.VIPs");
             DropTable("DB2018.Replies");
             DropTable("DB2018.Questions");
             DropTable("DB2018.Images");

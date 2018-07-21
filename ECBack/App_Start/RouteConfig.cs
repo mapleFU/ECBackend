@@ -11,6 +11,7 @@ namespace ECBack
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+            routes.LowercaseUrls = true;
             routes.RouteExistingFiles = true;
             routes.IgnoreRoute("Uploads/Images/*.jpg");
             routes.IgnoreRoute("Uploads/Images/*.png");

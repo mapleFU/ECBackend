@@ -7,13 +7,13 @@ namespace ECBack.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class Addvip : IMigrationMetadata
+    public sealed partial class UpdateGendertoanothertype : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Addvip));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(UpdateGendertoanothertype));
         
         string IMigrationMetadata.Id
         {
-            get { return "201807212044237_Add vip"; }
+            get { return "201807212119019_Update Gender to another type"; }
         }
         
         string IMigrationMetadata.Source

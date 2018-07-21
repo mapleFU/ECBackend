@@ -100,29 +100,39 @@ namespace ECBack.Controllers
 
         // POST: api/Users
         // https://stackoverflow.com/questions/21758615/why-should-i-use-ihttpactionresult-instead-of-httpresponsemessage
-        [ResponseType(typeof(User))]
-        public async Task<IHttpActionResult> PostUser(User user)
+        
+        [HttpPost]
+        [Route("api/Users")]
+        public async Task<IHttpActionResult> AddOrUpdate(User data)
         {
-            
-            if (!ModelState.IsValid)
+            System.Diagnostics.Debug.WriteLine("c出错1");
+            if (data == null)
             {
-                return BadRequest(ModelState);
+                System.Diagnostics.Debug.WriteLine("Fuck Q, Data is null");
             }
-            var usr = await db.Users.FirstAsync(u => u.UserID == user.UserID);
+            
+            System.Diagnostics.Debug.WriteLine("2！！！！！！！！！！！！");
+            var usr = await db.Users.FirstAsync(u => u.UserID == data.UserID);
             if (usr != null)
             {
                 // 303 redirect
-                usr = user;
+
+                usr = data;
                 await db.SaveChangesAsync();
                 var response = Request.CreateResponse((HttpStatusCode)(303));
-                response.Headers.Location = new Uri("/api/users/" + user.UserID);
+                response.Headers.Location = new Uri("//api/users/" + data.UserID);
                 return ResponseMessage(response);
-            } else
-            {
-                return Redirect("/api/register");
             }
-            //db.Users.Add(user);
-            //await db.SaveChangesAsync();
+            
+            System.Diagnostics.Debug.WriteLine("3");
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+            
+
+            db.Users.Add(data);
+            await db.SaveChangesAsync();
 
             //return CreatedAtRoute("DefaultApi", new { id = user.UserID }, user);
         }

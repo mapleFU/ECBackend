@@ -260,13 +260,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201807211909044_Init Proj.cs" />
-    <Compile Include="Migrations\201807211909044_Init Proj.Designer.cs">
-      <DependentUpon>201807211909044_Init Proj.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807212044237_Add vip.cs" />
-    <Compile Include="Migrations\201807212044237_Add vip.Designer.cs">
-      <DependentUpon>201807212044237_Add vip.cs</DependentUpon>
+    <Compile Include="Migrations\201807212119019_Update Gender to another type.cs" />
+    <Compile Include="Migrations\201807212119019_Update Gender to another type.Designer.cs">
+      <DependentUpon>201807212119019_Update Gender to another type.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -383,11 +379,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201807211909044_Init Proj.resx">
-      <DependentUpon>201807211909044_Init Proj.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807212044237_Add vip.resx">
-      <DependentUpon>201807212044237_Add vip.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807212119019_Update Gender to another type.resx">
+      <DependentUpon>201807212119019_Update Gender to another type.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

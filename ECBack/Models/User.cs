@@ -16,6 +16,45 @@ namespace ECBack.Models
         string PasswordHash { get; set; }
     }
 
+    public class UserBasicInfo
+    {
+        public int? UserID { get; set; }
+        public virtual string RealName { get; set; }
+        public string NickName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Gender { get; set; }
+        public DateTime BirthDay { get; set; }
+        public string Local { get; set; }
+        public string Home { get; set; }
+        public string PasswordHash { get; set; }
+        public string Password { get; set; }
+
+        public void Cast(User usr)
+        {
+            if (UserID == null)
+            {
+                return;
+            }
+            if (RealName != null)
+            {
+                usr.RealName = RealName;
+            } 
+            if (NickName != null)
+            {
+                usr.NickName = NickName;
+            }
+            if (PhoneNumber != null)
+            {
+                usr.PhoneNumber = PhoneNumber;
+            }
+            if (BirthDay != null)
+            {
+                usr.BirthDay = BirthDay;
+            }
+        }
+
+    }
+
     /// <summary>
     /// inspired by https://stackoverflow.com/questions/33170771/web-api-return-some-fields-from-model
     /// ignore json https://stackoverflow.com/questions/11851207/prevent-property-from-being-serialized-in-web-api
@@ -39,28 +78,8 @@ namespace ECBack.Models
         public string PhoneNumber { get; set; }
 
         // 'f' for female, 'm' for male ,'n' for none, https://stackoverflow.com/questions/6760765/how-do-i-map-a-char-property-using-the-entity-framework-4-1-code-only-fluent-a
-        [Column(TypeName = "char")]
-        [JsonIgnore]
+        [MaxLength(2)]
         public string Gender { get; set; }
-
-        [NotMapped]
-        public string GenderString
-        {
-            get
-            {
-                char g = Gender[0];
-                if (g == 'n')
-                {
-                    return "未填写";
-                } else if (g == 'm')
-                {
-                    return "男";
-                } else
-                {
-                    return "女";
-                }
-            }
-        }
 
         // https://stackoverflow.com/questions/5658216/entity-framework-code-first-date-field-creation
         [Column(TypeName = "Date")]
