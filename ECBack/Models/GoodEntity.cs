@@ -60,14 +60,14 @@ namespace ECBack.Models
         [Required]
         public int GoodEntityState { get; set; }
 
-        // public virtual ICollection<Favorite> Categories { get; set; }
-
         /// <summary>
         /// 收藏人数
         /// </summary>
         [Required]
         public string FavoriteNum { get; set; }
 
+        public virtual ICollection<Category> Categories { get; set; }
+        
     }
 
     public class SaleEntity
