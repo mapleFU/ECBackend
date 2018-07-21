@@ -259,13 +259,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201807211127323_shorter_table_name.cs" />
-    <Compile Include="Migrations\201807211127323_shorter_table_name.Designer.cs">
-      <DependentUpon>201807211127323_shorter_table_name.cs</DependentUpon>
+    <Compile Include="Migrations\201807211337222_basic finish modesl.cs" />
+    <Compile Include="Migrations\201807211337222_basic finish modesl.Designer.cs">
+      <DependentUpon>201807211337222_basic finish modesl.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
-    <Compile Include="Models\Attribute.cs" />
+    <Compile Include="Models\GAttribute.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Comment.cs" />
@@ -376,8 +376,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201807211127323_shorter_table_name.resx">
-      <DependentUpon>201807211127323_shorter_table_name.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807211337222_basic finish modesl.resx">
+      <DependentUpon>201807211337222_basic finish modesl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

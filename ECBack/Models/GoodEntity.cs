@@ -80,7 +80,7 @@ namespace ECBack.Models
         /// <summary>
         /// 商品属性
         /// </summary>
-        public ICollection<Attribute> Attributes { get; set; }
+        public ICollection<GAttribute> GAttributes { get; set; }
 
        
     }

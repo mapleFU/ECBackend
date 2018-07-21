@@ -7,13 +7,13 @@ namespace ECBack.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class addCommentandUser : IMigrationMetadata
+    public sealed partial class basicfinishmodesl : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(addCommentandUser));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(basicfinishmodesl));
         
         string IMigrationMetadata.Id
         {
-            get { return "201807190902408_add Comment and User"; }
+            get { return "201807211337222_basic finish modesl"; }
         }
         
         string IMigrationMetadata.Source
