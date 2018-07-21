@@ -241,6 +241,7 @@
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\CouponsController.cs" />
+    <Compile Include="Controllers\ControllersTool.cs" />
     <Compile Include="Controllers\FavoritesController.cs" />
     <Compile Include="Controllers\GAttributesController.cs" />
     <Compile Include="Controllers\GoodEntitiesController.cs" />
