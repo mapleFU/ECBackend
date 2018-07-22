@@ -45,7 +45,7 @@ namespace ECBack.Models
         [MaxLength(20)]
         public string Describe { get; set; }
 
-        public ICollection<GoodEntity> GoodEntities { get; set; }
+        
         
 
     }

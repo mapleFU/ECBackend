@@ -125,16 +125,16 @@ namespace ECBack.Controllers
             }
             
             System.Diagnostics.Debug.WriteLine("3");
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
-            
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
 
             db.Users.Add(data);
             await db.SaveChangesAsync();
 
-            //return CreatedAtRoute("DefaultApi", new { id = user.UserID }, user);
+            return CreatedAtRoute("DefaultApi", new { id = data.UserID }, data);
         }
 
         // DELETE: api/Users/5

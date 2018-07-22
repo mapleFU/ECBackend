@@ -246,6 +246,7 @@
     <Compile Include="Controllers\GAttributesController.cs" />
     <Compile Include="Controllers\GoodEntitiesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ImagesController.cs" />
     <Compile Include="Controllers\LogisticInfoesController.cs" />
     <Compile Include="Controllers\LogisticsController.cs" />
     <Compile Include="Controllers\OptionsController.cs" />
@@ -260,9 +261,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201807212119019_Update Gender to another type.cs" />
-    <Compile Include="Migrations\201807212119019_Update Gender to another type.Designer.cs">
-      <DependentUpon>201807212119019_Update Gender to another type.cs</DependentUpon>
+    <Compile Include="Migrations\201807220820247_Delete GoodEntity in options.cs" />
+    <Compile Include="Migrations\201807220820247_Delete GoodEntity in options.Designer.cs">
+      <DependentUpon>201807220820247_Delete GoodEntity in options.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -379,8 +380,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201807212119019_Update Gender to another type.resx">
-      <DependentUpon>201807212119019_Update Gender to another type.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807220820247_Delete GoodEntity in options.resx">
+      <DependentUpon>201807220820247_Delete GoodEntity in options.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

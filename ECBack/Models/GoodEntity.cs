@@ -36,6 +36,7 @@ namespace ECBack.Models
         [Index]
         public string GoodName { get; set; }
 
+        
         /// <summary>
         /// brief introduction of good
         /// </summary>
@@ -43,6 +44,10 @@ namespace ECBack.Models
         [Required]
         public string Brief { get; set; }
         
+        public string Detail { get; set; }
+
+        public string DetailImages { get; set; }
+
         /// <summary>
         /// 商品的库存
         /// </summary>
@@ -82,6 +87,9 @@ namespace ECBack.Models
         /// </summary>
         public ICollection<GAttribute> GAttributes { get; set; }
 
+        public ICollection<Image> Images { get; set; }
+
+        public ICollection<Comment> Comments { get; set; }
        
     }
 
@@ -98,33 +106,11 @@ namespace ECBack.Models
         [Required]
         public decimal Price { get; set; }
 
-        //// 是在购物车中还是在订单中
-        //[Required]
-        //public Boolean InCart { get; set; }
+        [Index]
+        public int GoodEntityID { get; set; }
 
-        ///// <summary>
-        ///// id of foreign key DisplayEntity
-        ///// </summary>
-        //[Index]
-        //[Required]
-        //public int DisplayEntityID { get; set; }
-
-        //[ForeignKey("DisplayEntityID")]
-        //public DisplayEntity DisplayEntity { get; set; }
-
-
-        // 购买/加入购物车的用户
-        //[Index]
-        //[Required]
-        //public int UserID { get; set; }
-
-        //[ForeignKey("UserID")]
-        //public User User { get; set; }
-
-        
-        //// 购买/加入购物车的数量
-        //[Required]
-        //public int Amount { get; set;}
+        [ForeignKey("GoodEntityID")]
+        public GoodEntity GoodEntity;
 
         public virtual ICollection<Option> AttributeOptions { get; set; }
 
@@ -180,6 +166,7 @@ namespace ECBack.Models
 
         [MaxLength(500)]
         public string Detail { get; set; }
+
 
         public ICollection<GoodEntity> GoodEntities { get; set; }
     }

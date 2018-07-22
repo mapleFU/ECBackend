@@ -7,13 +7,13 @@ namespace ECBack.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class UpdateGendertoanothertype : IMigrationMetadata
+    public sealed partial class DeleteGoodEntityinoptions : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(UpdateGendertoanothertype));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(DeleteGoodEntityinoptions));
         
         string IMigrationMetadata.Id
         {
-            get { return "201807212119019_Update Gender to another type"; }
+            get { return "201807220820247_Delete GoodEntity in options"; }
         }
         
         string IMigrationMetadata.Source

@@ -60,7 +60,7 @@ namespace ECBack.Models
             {
                 var fs = new FileStream(path, FileMode.Open);
                 return fs;
-            } catch (FileNotFoundException e)
+            } catch (FileNotFoundException _)
             {
                 return null;
             }
@@ -77,8 +77,14 @@ namespace ECBack.Models
         [Key]
         public int ImageID { get; set; }
 
-        public string ImageURL;
+        [Required]
+        public string ImageURL { get; set; }
 
+        public bool Local { get; set; }
+        public Image()
+        {
+            Local = false;
+        }
         ///// <summary>
         ///// 是否为主图
         ///// </summary>

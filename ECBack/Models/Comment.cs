@@ -33,6 +33,11 @@ namespace ECBack.Models
         //时间
         public DateTime UserCommentTime { get; set; }
 
+        [Required]
+        public int UserID { get; set; }
+
+        [ForeignKey("UserID")]
+        public User User;
 
         public Comment()
         {
