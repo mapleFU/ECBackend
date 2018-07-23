@@ -17,9 +17,17 @@ namespace ECBack.Models
         [Key]
         public int LogisticInfoId { get; set; }
 
+        //[Required]
+        //public int OrderformID { get; set; }
+
+        //[JsonIgnore]
+        //public Orderform Orderform { get; set; }
         /// <summary>
         /// Foreign key
         /// </summary>
+        [JsonIgnore]
+        [Index]
+        [Required]
         public int LogisticID { get; set; }
 
         public DateTime Time { get; set; }

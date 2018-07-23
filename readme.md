@@ -379,7 +379,46 @@ DELETE 表示删除 204 成功
     "TotalPrice": 21.4,
     "SaleEntities": [
         // sale entity 的结构
+    ],
+    "Address" : {
+        
+    }
+}
+```
+
+Address 的 Schema
+
+```
+{
+    "ReceiverName": "",
+    "Phone": "1233213",
+    "Province": "上海",
+    "City": "上海",
+    "Block": "嘉定",
+    "DetailAddress" : "dlhakh kas",
+    
+}
+```
+
+### 物流
+
+```
+{
+    "FromAddress": "上海 ...",
+    "ToAddress" : "dalskfaskdj",
+    “State" : 1,
+    “LogisticInfos”: [
+        {},
+        {}
     ]
+}
+```
+
+```
+{
+    "Time": "dd/mm/yyyy s-f-m",
+    "Position" : "daskljdjasl",
+    "State": 1 // 0 离开 1到达
 }
 ```
 

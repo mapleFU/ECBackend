@@ -54,6 +54,10 @@ namespace ECBack.Models
         
         public virtual Logistic Logistic { get; set; }
 
+        public int AddressID { get; set; }
+
+        [ForeignKey("AddressID")]
+        public Address Address { get; set; }
 
         [NotMapped]
         [JsonIgnore]

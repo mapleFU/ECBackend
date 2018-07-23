@@ -89,7 +89,7 @@ namespace ECBack.Models
 
         public ICollection<Image> Images { get; set; }
 
-        public ICollection<Comment> Comments { get; set; }
+        
        
     }
 
@@ -114,6 +114,7 @@ namespace ECBack.Models
 
         public virtual ICollection<Option> AttributeOptions { get; set; }
 
+        public ICollection<Comment> Comments { get; set; }
     }
 
     //public class DisplayEntity

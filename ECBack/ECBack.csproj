@@ -265,6 +265,10 @@
     <Compile Include="Migrations\201807220820247_Delete GoodEntity in options.Designer.cs">
       <DependentUpon>201807220820247_Delete GoodEntity in options.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807221419231_Change Comments to SalesEntity.cs" />
+    <Compile Include="Migrations\201807221419231_Change Comments to SalesEntity.Designer.cs">
+      <DependentUpon>201807221419231_Change Comments to SalesEntity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\GAttribute.cs" />
@@ -382,6 +386,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201807220820247_Delete GoodEntity in options.resx">
       <DependentUpon>201807220820247_Delete GoodEntity in options.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807221419231_Change Comments to SalesEntity.resx">
+      <DependentUpon>201807221419231_Change Comments to SalesEntity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
