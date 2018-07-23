@@ -140,3 +140,4 @@ C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.ChangeCo
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.addassociatedtableCart.resources
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.adjustdb.resources
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.addmultiindexforgoodentitytosaleentity.resources
+C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.modifythestructureofordersaleandaddamidtable.resources

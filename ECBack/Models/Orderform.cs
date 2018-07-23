@@ -8,6 +8,20 @@ using System.Web;
 
 namespace ECBack.Models
 {
+    public class SaleEntityRecord
+    {
+        [Key]
+        public int SaleEntityRecordID { get; set; }
+
+        public int EntityNum { get; set; }
+
+        [JsonIgnore]
+        public int SaleEntityID { get; set; }
+
+        [ForeignKey("SaleEntityID")]
+        public SaleEntity SaleEntity { get; set; }
+    }
+
     /// <summary>
     /// 描述订单的类
     /// 
@@ -32,7 +46,7 @@ namespace ECBack.Models
         public float TotalPrice { get; set; }
 
         // 多个 SaleEntities
-        ICollection<SaleEntity> SaleEntities { get; set; }
+        ICollection<SaleEntityRecord> SaleEntities { get; set; }
 
         [Required]
         public int UserID { get; set; }

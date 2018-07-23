@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -15,6 +16,24 @@ using ECBack.Models;
 
 namespace ECBack.Controllers
 {
+    public class CreateAddressRequestData
+    {
+        [Required]
+        public string ReceiverName { get; set; }
+        [Required]
+        public string Phone { get; set; }
+        [Required]
+        public string Province { get; set; }
+        [Required]
+        public string City { get; set; }
+        [Required]
+        public string Block { get; set; }
+        [Required]
+        public string DetailAddress { get; set; }
+
+        public bool? IsDefault { get; set; }
+
+    }
     /// <summary>
     /// 表示地址的CONTROLLER
     /// </summary>
@@ -48,19 +67,13 @@ namespace ECBack.Controllers
         }
 
 
-        [Route("api/Users/{UserID}/Addresses/{AddressId}")]
+        [Route("api/Addresses/{AddressId}")]
         [HttpGet]
         [AuthenticationFilter]
-        public async Task<IHttpActionResult> GetAddresses(int UserID, int AddressID)
+        public async Task<IHttpActionResult> GetAddresses(int AddressID)
         {
             // load user
-            //var usr = await db.Users.FindAsync(UserID);
-            //if (usr == null)
-            //{
-            //    return NotFound();
-            //}
-            VerifyUser(UserID);
-            var usr = await GetUser(UserID);
+            var usr = (User)HttpContext.Current.User;
             
             // usr is not null 
             
@@ -68,19 +81,49 @@ namespace ECBack.Controllers
             return Ok(usr.Addresses);
         }
 
-        [Route("api/Users/{UserID}/Addresses")]
+        /// <summary>
+        ///  add address
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [Route("api/Addresses")]
         [HttpPost]
         [AuthenticationFilter]
-        public async Task<IHttpActionResult> PostAddresses(int UserID, [FromBody] Address data)
+        public async Task<IHttpActionResult> PostAddresses([FromBody] CreateAddressRequestData data)
         {
-            // load user
-            var usr = await GetUser(UserID);
-            VerifyUser(UserID);
+            // DEBUG 
+            if (data == null)
+            {
+                System.Diagnostics.Debug.WriteLine("Sorry, Your fucking data is null ");
+            } else
+            {
+                System.Diagnostics.Debug.WriteLine("data is not null");
+            }
 
-            data.UserID = usr.UserID;
-            db.Addresses.Add(data);
+            // load user
+            var usr = (User)HttpContext.Current.User;
+            if (usr == null)
+            {
+                System.Diagnostics.Debug.WriteLine("Usr here is null");
+            } else
+            {
+                System.Diagnostics.Debug.WriteLine("Hey " + usr.NickName);
+            }
+            Address newAddress = new Address()
+            {
+                ReceiverName = data.ReceiverName,
+                Phone = data.Phone,
+                Province = data.Province,
+                City = data.City,
+                Block = data.Block,
+                DetailAddress = data.DetailAddress,
+                IsDefault = data.IsDefault ?? false
+            };
+            newAddress.UserID = usr.UserID;
+            db.Addresses.Add(newAddress);
             await db.SaveChangesAsync();
-            string newUrl = "api/Users/" + usr.UserID + "/Addresses/" + data.AddressID;
+            string newUrl = "api/Addresses/" + newAddress.AddressID;
             var responseMessage = Request.CreateResponse(HttpStatusCode.NoContent);
             responseMessage.Headers.Add("Location", newUrl);
             return ResponseMessage(responseMessage);

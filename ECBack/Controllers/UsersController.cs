@@ -33,6 +33,7 @@ namespace ECBack.Controllers
         
         // GET: api/Users?name=
         [HttpGet]
+        [Route("api/Users")]
         public IHttpActionResult GetAll([FromUri] string Name)
         {
             if (Name == null)

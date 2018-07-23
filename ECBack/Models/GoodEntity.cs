@@ -121,6 +121,7 @@ namespace ECBack.Models
         public int GoodEntityID { get; set; }
 
         [ForeignKey("GoodEntityID")]
+        [JsonIgnore]
         public GoodEntity GoodEntity;
 
         public virtual ICollection<Option> AttributeOptions { get; set; }

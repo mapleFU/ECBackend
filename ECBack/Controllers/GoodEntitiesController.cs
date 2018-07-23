@@ -81,15 +81,21 @@ namespace ECBack.Controllers
 
         // GET: api/GoodEntities/5
         [ResponseType(typeof(GoodEntity))]
-        public IHttpActionResult GetGoodEntity(int id)
+        public async Task<IHttpActionResult> GetGoodEntity(int id)
         {
-            GoodEntity goodEntity = db.GoodEntities.Find(id);
-            if (goodEntity == null)
+            GoodEntity entity = db.GoodEntities.Find(id);
+            if (entity == null)
             {
                 return NotFound();
             }
-
-            return Ok(goodEntity);
+            await db.Entry(entity).Collection(ge => ge.Images).LoadAsync();
+            await db.Entry(entity).Collection(ge => ge.SaleEntities).LoadAsync();
+            await db.Entry(entity).Collection(ge => ge.GAttributes).LoadAsync();
+            foreach (var attr in entity.GAttributes)
+            {
+                await db.Entry(attr).Collection(a => a.Options).LoadAsync();
+            }
+            return Ok(entity);
         }
 
         // GET: api/GoodEntitie
@@ -124,6 +130,11 @@ namespace ECBack.Controllers
                 // https://stackoverflow.com/questions/3356541/entity-framework-linq-query-include-multiple-children-entities
                 await db.Entry(entity).Collection(ge => ge.Images).LoadAsync();
                 await db.Entry(entity).Collection(ge => ge.SaleEntities).LoadAsync();
+                //await db.Entry(entity).Collection(ge => ge.GAttributes).LoadAsync();
+                //foreach (var attr in entity.GAttributes)
+                //{
+                //    await db.Entry(attr).Collection(a => a.Options).LoadAsync();
+                //}
                 string image;
                 try
                 {
@@ -140,11 +151,7 @@ namespace ECBack.Controllers
                     Image = image,
                     Price = min_price
                 });
-                //await db.Entry(entity).Collection(ge => ge.GAttributes).LoadAsync();
-                //foreach (var attr in entity.GAttributes)
-                //{
-                //    await db.Entry(attr).Collection(a => a.Options).LoadAsync();
-                //}
+                
                 // load attrs
 
             }
@@ -155,92 +162,11 @@ namespace ECBack.Controllers
                 new
                 {
                     ResultNum = rs.Count(),
-                    GoodEntities = rs,
+                    GoodEntities = resultSchema,
                     PageNum = pn
                 }));
         }
-
-        // GET: api/GoodEntities/5
-        //[ResponseType(typeof(GoodEntity))]
-        //public async Task<IHttpActionResult> GetGoodEntity(int id)
-        //{
-        //    GoodEntity goodEntity = await db.GoodEntities.FindAsync(id);
-        //    if (goodEntity == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(goodEntity);
-        //}
-
-        // PUT: api/GoodEntities/5
-        [ResponseType(typeof(void))]
-        [AuthenticationFilter]
-        public async Task<IHttpActionResult> PutGoodEntity(int id, GoodEntity goodEntity)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != goodEntity.GoodEntityID)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(goodEntity).State = EntityState.Modified;
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!GoodEntityExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/GoodEntities
-        [ResponseType(typeof(GoodEntity))]
-        [AuthenticationFilter]
-        public async Task<IHttpActionResult> PostGoodEntity(GoodEntity goodEntity)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.GoodEntities.Add(goodEntity);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = goodEntity.GoodEntityID }, goodEntity);
-        }
-
-        // DELETE: api/GoodEntities/5
-        [ResponseType(typeof(GoodEntity))]
-        public IHttpActionResult DeleteGoodEntity(int id)
-        {
-            GoodEntity goodEntity = db.GoodEntities.Find(id);
-            if (goodEntity == null)
-            {
-                return NotFound();
-            }
-
-            db.GoodEntities.Remove(goodEntity);
-            db.SaveChanges();
-
-            return Ok(goodEntity);
-        }
-
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)

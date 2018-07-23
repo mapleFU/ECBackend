@@ -247,7 +247,6 @@
     <Compile Include="Controllers\GAttributesController.cs" />
     <Compile Include="Controllers\GoodEntitiesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ImagesController.cs" />
     <Compile Include="Controllers\LogisticInfoesController.cs" />
     <Compile Include="Controllers\LogisticsController.cs" />
     <Compile Include="Controllers\OptionsController.cs" />
@@ -281,6 +280,10 @@
     <Compile Include="Migrations\201807231217488_add multi index for good entity to sale entity.cs" />
     <Compile Include="Migrations\201807231217488_add multi index for good entity to sale entity.Designer.cs">
       <DependentUpon>201807231217488_add multi index for good entity to sale entity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807231519321_modify the structure of ordersale and add a mid table.cs" />
+    <Compile Include="Migrations\201807231519321_modify the structure of ordersale and add a mid table.Designer.cs">
+      <DependentUpon>201807231519321_modify the structure of ordersale and add a mid table.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -411,6 +414,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807231217488_add multi index for good entity to sale entity.resx">
       <DependentUpon>201807231217488_add multi index for good entity to sale entity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807231519321_modify the structure of ordersale and add a mid table.resx">
+      <DependentUpon>201807231519321_modify the structure of ordersale and add a mid table.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
