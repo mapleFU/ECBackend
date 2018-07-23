@@ -278,6 +278,10 @@
     <Compile Include="Migrations\201807230738308_adjust db.Designer.cs">
       <DependentUpon>201807230738308_adjust db.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807231217488_add multi index for good entity to sale entity.cs" />
+    <Compile Include="Migrations\201807231217488_add multi index for good entity to sale entity.Designer.cs">
+      <DependentUpon>201807231217488_add multi index for good entity to sale entity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\GAttribute.cs" />
@@ -404,6 +408,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807230738308_adjust db.resx">
       <DependentUpon>201807230738308_adjust db.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807231217488_add multi index for good entity to sale entity.resx">
+      <DependentUpon>201807231217488_add multi index for good entity to sale entity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

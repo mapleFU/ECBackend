@@ -139,3 +139,4 @@ C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.csproj.GenerateReso
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.ChangeCommentstoSalesEntity.resources
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.addassociatedtableCart.resources
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.adjustdb.resources
+C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.addmultiindexforgoodentitytosaleentity.resources
