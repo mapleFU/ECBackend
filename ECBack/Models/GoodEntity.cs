@@ -114,6 +114,7 @@ namespace ECBack.Models
 
         public virtual ICollection<Option> AttributeOptions { get; set; }
 
+        [JsonIgnore]
         public ICollection<Comment> Comments { get; set; }
     }
 

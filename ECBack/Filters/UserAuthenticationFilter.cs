@@ -105,9 +105,10 @@ namespace ECBack.Filters
                 
                 // fill value
                 context.Principal = usr;
+                HttpContext.Current.User = usr;
                 if (context.Principal != null)
                 {
-                    System.Diagnostics.Debug.WriteLine("User is not null, filled!");
+                    System.Diagnostics.Debug.WriteLine("User is not null, but we fill in it.");
                 }
             }
             

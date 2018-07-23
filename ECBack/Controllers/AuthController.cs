@@ -14,6 +14,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Net.Http.Formatting;
+using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace ECBack.Controllers
 {
@@ -28,16 +30,19 @@ namespace ECBack.Controllers
         /// <summary>
         /// Phone
         /// </summary>
+        [Required]
         public string PhoneNumber { get; set; }
 
         /// <summary>
         /// PWD
         /// </summary>
+        [Required]
         public string Password { get; set; }
 
         /// <summary>
         /// RealName
         /// </summary>
+        [Required]
         public string NickName { get; set; }
     }
 
@@ -47,7 +52,7 @@ namespace ECBack.Controllers
     {
         // https://stackoverflow.com/questions/40281050/jwt-authentication-for-asp-net-web-api
         private OracleDbContext db = new OracleDbContext();
-        private const int defaultExpireMinutes = 20;
+        private const int defaultExpireMinutes = 60;
         // 我恨asp.net，我觉得这是个傻屌玩意
         private const string Secret = "5oiR5oGoYXNwLm5ldO+8jOaIkeinieW+l+i/meaYr+S4quWCu+WxjOeOqeaEjw==";
 
@@ -81,21 +86,25 @@ namespace ECBack.Controllers
         public HttpResponseMessage Register([FromBody] RegisterData registerData)
         {
             HttpResponseMessage response;
-            
-            var duplicate = db.Users.First(x => x.PhoneNumber == registerData.PhoneNumber || x.NickName == registerData.NickName);
-            if (duplicate != null)
+            if (!ModelState.IsValid)
             {
-                // find duplicate in program.
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "参数错误");
+            }
+            try
+            {
+                var duplicate = db.Users.First(x => x.PhoneNumber == registerData.PhoneNumber || x.NickName == registerData.NickName)
+                    ;
                 string confict;
                 if (duplicate.PhoneNumber == registerData.PhoneNumber)
                 {
                     confict = "电话号码";
-                } else
+                }
+                else
                 {
                     confict = "用户名";
                 }
                 response = Request.CreateErrorResponse(HttpStatusCode.Conflict, confict + "重复");
-            } else
+            } catch (Exception ex)
             {
                 User user = new User()
                 {
@@ -106,11 +115,18 @@ namespace ECBack.Controllers
                 // 204, OK
                 db.Users.Add(user);
                 db.SaveChanges();
+                db.Carts.Add(new Cart()
+                {
+                    User = user,
+                    UserID = user.UserID
+                });
+                db.SaveChanges();
                 response = Request.CreateResponse(HttpStatusCode.NoContent);
-                response.Headers.Add("Location", "/Users/" + user.UserID);
+                response.Headers.Add("Location", "api/Users/" + user.UserID);
                 
             }
-
+            
+           
             return response;
         }
 
@@ -125,24 +141,34 @@ namespace ECBack.Controllers
                 return response;
             }
             
-            var result = db.Users.First(x => string.Equals(x.PhoneNumber, data.UserID));
-            if (result == null)
+            try
+            {
+                if (db.Users == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("Users is fucking null");
+                }
+                var result = db.Users.First(x => x.PhoneNumber == data.UserID);
+                if (!string.Equals(result.PasswordHash, data.Password))
+                {
+                    response = Request.CreateResponse(HttpStatusCode.Unauthorized, "password error");
+                } else
+                {
+                    var jwt = GenerateToken(result.PhoneNumber);
+                    HttpContext.Current.User = result;
+                    response = Request.CreateResponse(HttpStatusCode.OK, new
+                    {
+                        token = jwt,
+                        timeout = defaultExpireMinutes,
+                        userID = result.UserID
+                    });
+                }
+            } catch (ArgumentNullException _)
             {
                 response = Request.CreateResponse(HttpStatusCode.NotFound, "the phone number not exists");
-            } else if (!string.Equals(result.PasswordHash, data.Password))
+            } catch (InvalidOperationException _)
             {
-                response = Request.CreateResponse(HttpStatusCode.Unauthorized, "password error");
-            } else
-            {
-                var jwt = GenerateToken(result.PhoneNumber);
-                response = Request.CreateResponse(HttpStatusCode.OK, new {
-                    token = jwt,
-                    timeout = defaultExpireMinutes,
-                    userID = result.UserID
-                });
+                response = Request.CreateResponse(HttpStatusCode.NotFound, "the phone number not exists");
             }
-            
-
             return response;
         }
 

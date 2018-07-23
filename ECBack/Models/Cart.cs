@@ -9,6 +9,37 @@ using System.Web;
 
 namespace ECBack.Models
 {
+    public class CartRecord
+    {
+        [Key]
+        public int CartRecordID { get; set; }
+
+        
+
+        [ForeignKey("UserID")]
+        [JsonIgnore]
+        public Cart Cart { get; set; }
+
+        [Index]
+        [ForeignKey("Cart")]
+        public int UserID { get; set; }
+
+        [Index]
+        public int SaleEntityID { get; set; }
+
+        [ForeignKey("SaleEntityID")]
+        public SaleEntity SaleEntity { get; set; }
+
+        [Required]
+        public int RecordNum { get; set; }
+
+        public CartRecord()
+        {
+            RecordNum = 1;
+        }
+
+    }
+
     public class Cart
     {
         [JsonIgnore]
@@ -19,12 +50,13 @@ namespace ECBack.Models
         [ForeignKey("User")]
         public int UserID { get; set; }
 
-        public ICollection<SaleEntity> SaleEntities { get; set; }
+        public ICollection<CartRecord> CartRecords { get; set; }
 
         public async Task<decimal> TotalPrice(OracleDbContext dbContext)
         {
-            await dbContext.Entry(this).Reference(u => u.SaleEntities).LoadAsync();
+            await dbContext.Entry(this).Reference(u => u.CartRecords).LoadAsync();
             decimal price = 0;
+            throw new NotImplementedException();
             foreach (var p in dbContext.SaleEntities)
             {
                 price += p.Price;
@@ -33,12 +65,14 @@ namespace ECBack.Models
         }
 
         
-        public async void AddToCart(OracleDbContext dbContext, SaleEntity entity)
-        {
-            await dbContext.Entry(this).Reference(u => u.SaleEntities).LoadAsync();
-            SaleEntities.Add(entity);
-            await dbContext.SaveChangesAsync();
-        }
+        //public async void AddToCart(OracleDbContext dbContext, SaleEntity entity)
+        //{
+        //    await dbContext.Entry(this).Reference(u => u.SaleEntities).LoadAsync();
+        //    SaleEntities.Add(entity);
+        //    await dbContext.SaveChangesAsync();
+        //}
         
     }
+
+
 }

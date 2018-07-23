@@ -237,6 +237,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AddressesController.cs" />
     <Compile Include="Controllers\AuthController.cs" />
+    <Compile Include="Controllers\CartRecordsController.cs" />
     <Compile Include="Controllers\CartsController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\CommentsController.cs" />
@@ -268,6 +269,14 @@
     <Compile Include="Migrations\201807221419231_Change Comments to SalesEntity.cs" />
     <Compile Include="Migrations\201807221419231_Change Comments to SalesEntity.Designer.cs">
       <DependentUpon>201807221419231_Change Comments to SalesEntity.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807230321429_add associated table Cart.cs" />
+    <Compile Include="Migrations\201807230321429_add associated table Cart.Designer.cs">
+      <DependentUpon>201807230321429_add associated table Cart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807230738308_adjust db.cs" />
+    <Compile Include="Migrations\201807230738308_adjust db.Designer.cs">
+      <DependentUpon>201807230738308_adjust db.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -389,6 +398,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807221419231_Change Comments to SalesEntity.resx">
       <DependentUpon>201807221419231_Change Comments to SalesEntity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807230321429_add associated table Cart.resx">
+      <DependentUpon>201807230321429_add associated table Cart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807230738308_adjust db.resx">
+      <DependentUpon>201807230738308_adjust db.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

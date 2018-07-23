@@ -356,6 +356,14 @@ Headers:
 
 #### POST /api/Carts/SalesEntities/{good\_id}
 
+```
+{
+    "Number": 2 // 没有表示
+}
+```
+
+
+
 把id为`good_id`的商品加入自己的`cart`. 
 
 POST 200 表示加入成功，403表示不存在

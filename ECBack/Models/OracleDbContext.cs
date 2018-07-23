@@ -89,5 +89,7 @@ namespace ECBack.Models
         public System.Data.Entity.DbSet<ECBack.Models.Image> Images { get; set; }
 
         public System.Data.Entity.DbSet<ECBack.Models.VIP> VIPs { get; set; }
+
+        public System.Data.Entity.DbSet<ECBack.Models.CartRecord> CartRecords { get; set; }
     }
 }

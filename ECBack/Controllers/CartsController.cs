@@ -15,6 +15,17 @@ using ECBack.Models;
 
 namespace ECBack.Controllers
 {
+    public class CartRequest
+    {
+        public int? Number { get; set; }
+    }
+    /// <summary>
+    /// Page URI
+    /// </summary>
+    public class QueryPageURI
+    {
+        public int? Pn { get; set; }
+    }
     public class CartsController : ApiController
     {
         private OracleDbContext db = new OracleDbContext();
@@ -29,102 +40,126 @@ namespace ECBack.Controllers
         //    }
         //}
 
-        // GET: api/Carts
         [AuthenticationFilter]
-        public async Task<IHttpActionResult> GetCarts()
+        [HttpDelete]
+        [Route("api/Carts/SaleEntities/{GoodID:int}")]
+        public async Task<IHttpActionResult> DeleteSaleEntity(int GoodID, [FromBody] CartRequest cartRequest)
         {
-            User requestUser = (User)HttpContext.Current.User;
-            if (requestUser == null)
+            var usr = (User)HttpContext.Current.User;
+            
+            int deleteNum = -1;
+            if (cartRequest != null && cartRequest.Number != null)
             {
-                // 无权
-                return ResponseMessage(Request.CreateResponse((HttpStatusCode)403));
+                deleteNum = cartRequest.Number ?? -1;
             }
-            await db.Entry(requestUser).Reference(u => u.Cart).LoadAsync();
-            return Ok(requestUser.Cart);
-        }
-
-
-        // POST: api/Carts/SalesEntity
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutCart(int id, Cart cart)
-        {
-            if (!ModelState.IsValid)
+            SaleEntity saleEntity = await db.SaleEntities.FindAsync(GoodID);
+            if (saleEntity == null)
             {
-                return BadRequest(ModelState);
+                
+                return NotFound();
             }
-
-            if (id != cart.UserID)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(cart).State = EntityState.Modified;
+            
+            CartRecord record;
 
             try
             {
-                db.SaveChanges();
+                record = await db.CartRecords.FirstAsync(u => u.SaleEntityID == saleEntity.SaleEntityID);
+                
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CartExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/Carts
-        [ResponseType(typeof(Cart))]
-        public IHttpActionResult PostCart(Cart cart)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.Carts.Add(cart);
-
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (DbUpdateException)
-            {
-                if (CartExists(cart.UserID))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtRoute("DefaultApi", new { id = cart.UserID }, cart);
-        }
-
-        // DELETE: api/Carts/5
-        [ResponseType(typeof(Cart))]
-        public IHttpActionResult DeleteCart(int id)
-        {
-            Cart cart = db.Carts.Find(id);
-            if (cart == null)
+            catch (InvalidOperationException _)
             {
                 return NotFound();
             }
+            if (deleteNum == -1)
+            {
+                db.CartRecords.Remove(record);
+            } else
+            {
+                record.RecordNum -= deleteNum;
+                if (record.RecordNum <= 0)
+                {
+                    db.CartRecords.Remove(record);
+                }
+            }
+            
+            await db.SaveChangesAsync();
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.NoContent));
+        }
 
-            db.Carts.Remove(cart);
-            db.SaveChanges();
 
+        // GET: api/Carts
+        [AuthenticationFilter]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCarts([FromUri] QueryPageURI queryPageURI)
+        {
+            
+            if (HttpContext.Current.User == null)
+            {
+                // 无权
+                System.Diagnostics.Debug.WriteLine("Get Carts Null");
+                return ResponseMessage(Request.CreateResponse((HttpStatusCode)403));
+            }
+            User requestUser = (User)HttpContext.Current.User;
+            System.Diagnostics.Debug.WriteLine("GetCarts has:" + requestUser.NickName);
+
+            //var refer = db.Entry(requestUser).Reference(u => (u as User).Cart);
+            //if (!refer.IsLoaded)
+            //{
+            //    System.Diagnostics.Debug.WriteLine("Not loaded");
+            //    await refer.LoadAsync();
+            //} else
+            //{
+            //    System.Diagnostics.Debug.WriteLine("Loaded");
+            //}
+            var cart = await db.Carts.FindAsync(requestUser.UserID);
+            // Load data
+            await db.Entry(cart).Collection(c => c.CartRecords).LoadAsync();
+            // await db.Entry(requestUser).Reference(u => u.Cart).LoadAsync();
             return Ok(cart);
         }
 
+        [AuthenticationFilter]
+        [Route("api/Carts/SaleEntities/{GoodID:int}")]
+        [HttpPost]
+        public async Task<IHttpActionResult> AddToCart(int GoodID, [FromBody] CartRequest cartRequest)
+        {
+            var usr = (User)HttpContext.Current.User;
+            System.Diagnostics.Debug.WriteLine("Enter the function");
+            int addNumber = 1;
+            if (cartRequest != null && cartRequest.Number != null)
+            {
+                addNumber = cartRequest.Number ?? 1;
+            }
+            SaleEntity saleEntity = await db.SaleEntities.FindAsync(GoodID);
+            if (saleEntity == null)
+            {
+                System.Diagnostics.Debug.WriteLine("Not found saleEntity");
+                return NotFound();
+            }
+            System.Diagnostics.Debug.WriteLine("GetCarts has:" + usr.NickName);
+            CartRecord record;
+
+            try
+            {
+                record = await db.CartRecords.FirstAsync(u => u.SaleEntityID == saleEntity.SaleEntityID);
+                System.Diagnostics.Debug.WriteLine("Found Record.");
+            } catch (InvalidOperationException _)
+            {
+                System.Diagnostics.Debug.WriteLine("Record not found, so create it");
+                record = new CartRecord()
+                {
+                    RecordNum = 0,
+                    UserID = usr.UserID,
+                    SaleEntityID = GoodID
+                };
+                db.CartRecords.Add(record);
+            }
+            
+            record.RecordNum += addNumber;
+            await db.SaveChangesAsync();
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.NoContent));
+        }
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)
