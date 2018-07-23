@@ -285,6 +285,10 @@
     <Compile Include="Migrations\201807231519321_modify the structure of ordersale and add a mid table.Designer.cs">
       <DependentUpon>201807231519321_modify the structure of ordersale and add a mid table.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807231745481_update relationship of orderform.cs" />
+    <Compile Include="Migrations\201807231745481_update relationship of orderform.Designer.cs">
+      <DependentUpon>201807231745481_update relationship of orderform.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\GAttribute.cs" />
@@ -417,6 +421,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807231519321_modify the structure of ordersale and add a mid table.resx">
       <DependentUpon>201807231519321_modify the structure of ordersale and add a mid table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807231745481_update relationship of orderform.resx">
+      <DependentUpon>201807231745481_update relationship of orderform.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

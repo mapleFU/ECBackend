@@ -30,7 +30,8 @@ namespace ECBack.Controllers
 
     public class AddPostFormRequest
     {
-        public List<SaleSingleRecord> SaleSingleRecords { get; set; }
+        public SaleSingleRecord SaleSingleRecord { get; set; }
+        // public List<SaleSingleRecord> SaleSingleRecords { get; set; }
         public int AddressID { get; set; }
     }
 
@@ -43,7 +44,7 @@ namespace ECBack.Controllers
         [HttpPost]
         [Route("api/Orderforms")]
         public async Task<IHttpActionResult> AddPostForm([FromBody]AddPostFormRequest addPostFormRequest) {
-            if (addPostFormRequest == null || addPostFormRequest.SaleSingleRecords == null)
+            if (addPostFormRequest == null || addPostFormRequest.SaleSingleRecord == null)
             {
                 return BadRequest();
             }
@@ -51,6 +52,7 @@ namespace ECBack.Controllers
             // TODO: find out how to cascade create!!!!
             // create orderform and it's logistic
             Orderform orderform = new Orderform();
+
             Logistic logistic = new Logistic();
             logistic.Orderform = orderform;
             orderform.Logistic = logistic;
@@ -58,21 +60,29 @@ namespace ECBack.Controllers
             
             orderform.UserID = currentUsr.UserID;
             orderform.AddressID = addPostFormRequest.AddressID;
+            logistic.ToAddress = (await db.Addresses.FindAsync(addPostFormRequest.AddressID)).DetailAddress;
             // orderform.AddressID
             db.Orderforms.Add(orderform);
             db.Logistics.Add(logistic);
 
             float totalPrice = 0;
 
-            foreach (var record in addPostFormRequest.SaleSingleRecords)
+            var record = addPostFormRequest.SaleSingleRecord;
             {
-                var seRecord = new SaleEntityRecord()
+                var seRecord = new SERecord()
                 {
                     SaleEntityID = record.SaleEntityID,
                     EntityNum = record.Number ?? 1,
 
                 };
-                totalPrice += (float)(await db.SaleEntities.FindAsync(seRecord.SaleEntityID)).Price;
+                
+                orderform.SERecord = seRecord;
+                var saleEntity = await db.SaleEntities.FindAsync(seRecord.SaleEntityID);
+                totalPrice += (float)(saleEntity).Price;
+                // load good
+                // await db.Entry(saleEntity).Reference(s => s.GoodEntity).LoadAsync();
+                logistic.FromAddress = (await db.GoodEntities.FindAsync(saleEntity.GoodEntityID)).SellProvince;
+                
                 db.SaleEntityRecords.Add(seRecord);
 
             }

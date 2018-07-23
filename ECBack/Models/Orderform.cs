@@ -8,7 +8,7 @@ using System.Web;
 
 namespace ECBack.Models
 {
-    public class SaleEntityRecord
+    public class SERecord
     {
         [Key]
         public int SaleEntityRecordID { get; set; }
@@ -45,8 +45,9 @@ namespace ECBack.Models
         [Required]
         public float TotalPrice { get; set; }
 
+        public SERecord SERecord { get; set; }
         // 多个 SaleEntities
-        ICollection<SaleEntityRecord> SaleEntities { get; set; }
+        // ICollection<SaleEntityRecord> SaleEntities { get; set; }
 
         [Required]
         public int UserID { get; set; }

@@ -92,6 +92,6 @@ namespace ECBack.Models
 
         public System.Data.Entity.DbSet<ECBack.Models.CartRecord> CartRecords { get; set; }
 
-        public System.Data.Entity.DbSet<ECBack.Models.SaleEntityRecord> SaleEntityRecords { get; set; }
+        public System.Data.Entity.DbSet<ECBack.Models.SERecord> SaleEntityRecords { get; set; }
     }
 }
