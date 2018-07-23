@@ -10,6 +10,7 @@ namespace ECBack.Models
 {
     public class GAttribute
     {
+        
         /// <summary>
         /// ID of GAttribute
         /// </summary>
@@ -21,7 +22,11 @@ namespace ECBack.Models
         [MaxLength(100)]
         public string GAttributeName { get; set;}
 
-        public ICollection<Option> Options { get; set; }
+        
+        public ICollection<Option> Options
+        {
+            get; set;
+        }
     }
 
     public class Option
@@ -36,6 +41,7 @@ namespace ECBack.Models
 
         [Required]
         [ForeignKey("GAttributeID")]
+        [JsonIgnore]
         public GAttribute GAttribute { get; set; }
 
         /// <summary>

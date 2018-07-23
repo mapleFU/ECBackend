@@ -14,6 +14,15 @@ using ECBack.Models;
 
 namespace ECBack.Controllers
 {
+    public class GoodEntitySchema
+    {
+        public int GoodEntityID { get; set; }
+        public string GoodName { get; set; }
+        public string Image { get; set; }
+        public decimal Price { get; set; }
+
+    }
+
     public class GoodEntitiesController : ApiController
     {
         private OracleDbContext db = new OracleDbContext();
@@ -57,6 +66,9 @@ namespace ECBack.Controllers
             }
 
             var rs = await goodEntities.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
+            int resultNum = rs.Count();
+            List<GoodEntitySchema> resultSchema = new List<GoodEntitySchema>();
+            
 
             return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
                 new
@@ -80,7 +92,7 @@ namespace ECBack.Controllers
             return Ok(goodEntity);
         }
 
-        // GET: api/GoodEntities
+        // GET: api/GoodEntitie
         public async Task<IHttpActionResult> GetGoodEntities([FromUri] CategoryQuery data)
         {
             if (!ModelState.IsValid)
@@ -104,14 +116,39 @@ namespace ECBack.Controllers
             }
             goodEntities = goodEntities.Include(ge => ge.GAttributes).OrderBy(entity => entity.GoodEntityID);
             var rs = await goodEntities.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
+
+            List<GoodEntitySchema> resultSchema = new List<GoodEntitySchema>();
             foreach (var entity in rs)
             {
+                // TODO: only load one image
+                // https://stackoverflow.com/questions/3356541/entity-framework-linq-query-include-multiple-children-entities
                 await db.Entry(entity).Collection(ge => ge.Images).LoadAsync();
-                
+                await db.Entry(entity).Collection(ge => ge.SaleEntities).LoadAsync();
+                string image;
+                try
+                {
+                    image = entity.Images.First().ImageURL;
+                } catch
+                {
+                    image = null;
+                }
+                decimal min_price = entity.SaleEntities.Select(se => se.Price).Min();
+                resultSchema.Add(new GoodEntitySchema()
+                {
+                    GoodName = entity.GoodName,
+                    GoodEntityID = entity.GoodEntityID,
+                    Image = image,
+                    Price = min_price
+                });
+                //await db.Entry(entity).Collection(ge => ge.GAttributes).LoadAsync();
+                //foreach (var attr in entity.GAttributes)
+                //{
+                //    await db.Entry(attr).Collection(a => a.Options).LoadAsync();
+                //}
                 // load attrs
 
             }
-            // TODO: add 
+
 
 
             return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
