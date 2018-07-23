@@ -46,8 +46,18 @@ namespace ECBack.Models
         
         public string Detail { get; set; }
 
+        [JsonIgnore]
         public string DetailImages { get; set; }
 
+        [NotMapped]
+        public List<string> DescribeImages
+        {
+            get
+            {
+                string[] urls = DetailImages.Split(',');
+                return new List<string>(urls);
+            }
+        }
         /// <summary>
         /// 商品的库存
         /// </summary>

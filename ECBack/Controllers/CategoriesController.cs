@@ -58,6 +58,8 @@ namespace ECBack.Controllers
             {
                 categories = db.Categories.Where(u => u.Name.ToLower().Contains(data.Kw.ToLower()));
             }
+            // TODO: make it run faster with accerlerate it 
+            categories = categories.OrderBy(c => c.CategoryID);
             var rs = await categories.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
             return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
                 new

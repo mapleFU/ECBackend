@@ -61,9 +61,9 @@ namespace ECBack.Controllers
             return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
                 new
                 {
-                    result_num = rs.Count(),
-                    goodentities = rs,
-                    page_num = pn
+                    ResultNum = rs.Count(),
+                    GoodEntities = rs,
+                    PageNum = pn
                 }));
         }
 
@@ -79,6 +79,7 @@ namespace ECBack.Controllers
 
             return Ok(goodEntity);
         }
+
         // GET: api/GoodEntities
         public async Task<IHttpActionResult> GetGoodEntities([FromUri] CategoryQuery data)
         {
@@ -86,13 +87,14 @@ namespace ECBack.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (data.Kw == null)
+            int pn = 1;
+            if (data != null)
             {
-                return BadRequest("No Kw in your URI");
+                pn = data.Pn ?? 1;
             }
-            int pn = data.Pn ?? 1;
+            
             IQueryable<GoodEntity> goodEntities;
-            if (data.Kw == null)
+            if (data != null && data.Kw == null)
             {
                 goodEntities = db.GoodEntities;
             }
@@ -100,15 +102,24 @@ namespace ECBack.Controllers
             {
                 goodEntities = db.GoodEntities.Where(u => u.GoodName.ToLower().Contains(data.Kw.ToLower()));
             }
-           
+            goodEntities = goodEntities.Include(ge => ge.GAttributes).OrderBy(entity => entity.GoodEntityID);
             var rs = await goodEntities.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
-            
+            foreach (var entity in rs)
+            {
+                await db.Entry(entity).Collection(ge => ge.Images).LoadAsync();
+                
+                // load attrs
+
+            }
+            // TODO: add 
+
+
             return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
                 new
                 {
-                    result_num = rs.Count(),
-                    goodentities = rs,
-                    page_num = pn
+                    ResultNum = rs.Count(),
+                    GoodEntities = rs,
+                    PageNum = pn
                 }));
         }
 
