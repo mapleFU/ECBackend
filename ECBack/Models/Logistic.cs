@@ -63,8 +63,9 @@ namespace ECBack.Models
         public string FromAddress { get; set; }
         public string ToAddress { get; set; }
 
-        public List<LogisticInfo> LogisticInfos { get; set; }
+        public ICollection<LogisticInfo> LogisticInfos { get; set; }
  
+        [JsonIgnore]
         public virtual Orderform Orderform { get; set; }
 
     }

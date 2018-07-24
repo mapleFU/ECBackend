@@ -289,6 +289,10 @@
     <Compile Include="Migrations\201807231745481_update relationship of orderform.Designer.cs">
       <DependentUpon>201807231745481_update relationship of orderform.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807240249027_update logic for vip.cs" />
+    <Compile Include="Migrations\201807240249027_update logic for vip.Designer.cs">
+      <DependentUpon>201807240249027_update logic for vip.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\GAttribute.cs" />
@@ -424,6 +428,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807231745481_update relationship of orderform.resx">
       <DependentUpon>201807231745481_update relationship of orderform.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807240249027_update logic for vip.resx">
+      <DependentUpon>201807240249027_update logic for vip.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -17,14 +17,10 @@ namespace ECBack.Controllers
     {
         private OracleDbContext db = new OracleDbContext();
 
-        // GET: api/Logistics
-        public IQueryable<Logistic> GetLogistics()
-        {
-            return db.Logistics;
-        }
-
         // GET: api/Logistics/5
+        [HttpGet]
         [ResponseType(typeof(Logistic))]
+        [Route("api/Logistics/{id:int}")]
         public async Task<IHttpActionResult> GetLogistic(int id)
         {
             Logistic logistic = await db.Logistics.FindAsync(id);
@@ -32,75 +28,49 @@ namespace ECBack.Controllers
             {
                 return NotFound();
             }
-
+            await db.Entry(logistic).Collection(log => log.LogisticInfos).LoadAsync();
             return Ok(logistic);
         }
 
-        // PUT: api/Logistics/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutLogistic(int id, Logistic logistic)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != logistic.LogisticID)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(logistic).State = EntityState.Modified;
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LogisticExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
         // POST: api/Logistics
+        [HttpPost]
         [ResponseType(typeof(Logistic))]
-        public async Task<IHttpActionResult> PostLogistic(Logistic logistic)
+        [Route("api/Logistics/{LogisticID:int}")]
+        public async Task<IHttpActionResult> AddLogisticInfo(int LogisticID, [FromBody]LogisticInfo logisticInfo)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            db.Logistics.Add(logistic);
-            await db.SaveChangesAsync();
-
-            return CreatedAtRoute("DefaultApi", new { id = logistic.LogisticID }, logistic);
-        }
-
-        // DELETE: api/Logistics/5
-        [ResponseType(typeof(Logistic))]
-        public async Task<IHttpActionResult> DeleteLogistic(int id)
-        {
-            Logistic logistic = await db.Logistics.FindAsync(id);
+            Logistic logistic = await db.Logistics.FindAsync(LogisticID);
             if (logistic == null)
             {
                 return NotFound();
             }
-
-            db.Logistics.Remove(logistic);
+            logisticInfo.LogisticID = logistic.LogisticID;
+            db.LogisticInfoes.Add(logisticInfo);
             await db.SaveChangesAsync();
 
-            return Ok(logistic);
+            var httpResp = Request.CreateResponse(HttpStatusCode.NoContent);
+
+            return ResponseMessage(httpResp);
         }
+
+        //// DELETE: api/Logistics/5
+        //[ResponseType(typeof(Logistic))]
+        //public async Task<IHttpActionResult> DeleteLogistic(int id)
+        //{
+        //    Logistic logistic = await db.Logistics.FindAsync(id);
+        //    if (logistic == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    db.Logistics.Remove(logistic);
+        //    await db.SaveChangesAsync();
+
+        //    return Ok(logistic);
+        //}
 
         protected override void Dispose(bool disposing)
         {

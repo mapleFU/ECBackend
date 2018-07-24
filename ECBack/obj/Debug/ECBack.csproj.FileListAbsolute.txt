@@ -142,3 +142,4 @@ C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.adjustdb
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.addmultiindexforgoodentitytosaleentity.resources
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.modifythestructureofordersaleandaddamidtable.resources
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.updaterelationshipoforderform.resources
+C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.updatelogicforvip.resources

@@ -55,6 +55,7 @@ namespace ECBack.Controllers
 
             Logistic logistic = new Logistic();
             logistic.Orderform = orderform;
+            
             orderform.Logistic = logistic;
             logistic.State = 0;
             
@@ -97,6 +98,7 @@ namespace ECBack.Controllers
 
         // GET: api/Orderforms/5
         [ResponseType(typeof(Orderform))]
+        [AuthenticationFilter]
         public async Task<IHttpActionResult> GetOrderform(int id)
         {
             Orderform orderform = await db.Orderforms.FindAsync(id);
@@ -104,11 +106,49 @@ namespace ECBack.Controllers
             {
                 return NotFound();
             }
-
+            await db.Entry(orderform).Reference(odf => odf.SERecord).LoadAsync();
             return Ok(orderform);
         }
 
+        [NonAction]
+        private async Task<IHttpActionResult> SetState(int OrderformID, int state)
+        {
+            User usr = (User)HttpContext.Current.User;
+            var orderform = await db.Orderforms.FindAsync(OrderformID);
+            if (orderform == null)
+            {
+                return NotFound();
+            }
+            HttpResponseMessage httpResponse;
+            if (orderform.UserID != usr.UserID)
+            {
+                httpResponse = Request.CreateResponse((HttpStatusCode)403, "No Author");
+            }
+            else
+            {
+                orderform.State = state;
+                httpResponse = Request.CreateResponse(HttpStatusCode.NoContent);
+            }
 
+            return ResponseMessage(httpResponse);
+        }
+
+        [Route("api/Orderforms/{OrderformID:int}/Pay")]
+        [AuthenticationFilter]
+        [HttpPost]
+        public async Task<IHttpActionResult> PayForOrderform(int OrderformID)
+        {
+            return await SetState(OrderformID, 1);
+        }
+
+        [Route("api/Orderforms/{OrderformID:int}/Arrived")]
+        [AuthenticationFilter]
+        [HttpPost]
+        public async Task<IHttpActionResult> VerifyOrderform(int OrderformID)
+        {
+            var result = await SetState(OrderformID ,2);
+            return result;
+        }
         // POST: api/Orderforms
         //[AuthenticationFilter]
         //[ResponseType(typeof(Orderform))]
@@ -125,21 +165,6 @@ namespace ECBack.Controllers
             
         //}
 
-        // DELETE: api/Orderforms/5
-        [ResponseType(typeof(Orderform))]
-        public async Task<IHttpActionResult> DeleteOrderform(int id)
-        {
-            Orderform orderform = await db.Orderforms.FindAsync(id);
-            if (orderform == null)
-            {
-                return NotFound();
-            }
-
-            db.Orderforms.Remove(orderform);
-            await db.SaveChangesAsync();
-
-            return Ok(orderform);
-        }
 
         protected override void Dispose(bool disposing)
         {
