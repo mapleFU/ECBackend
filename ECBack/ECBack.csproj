@@ -293,6 +293,10 @@
     <Compile Include="Migrations\201807240249027_update logic for vip.Designer.cs">
       <DependentUpon>201807240249027_update logic for vip.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807240255026_add reference between user and vip.cs" />
+    <Compile Include="Migrations\201807240255026_add reference between user and vip.Designer.cs">
+      <DependentUpon>201807240255026_add reference between user and vip.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\GAttribute.cs" />
@@ -431,6 +435,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807240249027_update logic for vip.resx">
       <DependentUpon>201807240249027_update logic for vip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807240255026_add reference between user and vip.resx">
+      <DependentUpon>201807240255026_add reference between user and vip.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -143,3 +143,4 @@ C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.addmulti
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.modifythestructureofordersaleandaddamidtable.resources
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.updaterelationshipoforderform.resources
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.updatelogicforvip.resources
+C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.addreferencebetweenuserandvip.resources

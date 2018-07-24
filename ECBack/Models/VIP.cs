@@ -16,6 +16,9 @@ namespace ECBack.Models
         [Key]
         public int VIPID { get; set; }
 
+        [JsonIgnore]
+        public User User;
+
         public DateTime StartDate { get; set; }
 
         public DateTime DueDate { get; set; }
@@ -51,6 +54,11 @@ namespace ECBack.Models
             var vip = new VIP();
             vip.DueDate = vip.StartDate.Add(duration);
             return vip;
-        } 
+        }
+        
+        public bool HasEnoughAuth(int requiredLevel)
+        {
+            return Level >= requiredLevel;
+        }
     }
 }
