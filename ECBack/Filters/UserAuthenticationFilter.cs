@@ -58,9 +58,9 @@ namespace ECBack.Filters
                 return;
             }
 
-            string userName = "";
+            string phoneNumber = "";
             System.Diagnostics.Debug.WriteLine(authorization.Parameter);
-            bool validate = AuthController.ValidateToken(authorization.Parameter, out userName);
+            bool validate = AuthController.ValidateToken(authorization.Parameter, out phoneNumber, "Seller");
             if (!validate)
             {
                 // 403
@@ -68,8 +68,8 @@ namespace ECBack.Filters
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine(userName);
-                var usr = await dbContext.Users.Where(s => s.PhoneNumber == userName).FirstOrDefaultAsync();
+                System.Diagnostics.Debug.WriteLine(phoneNumber);
+                var usr = await dbContext.Sellers.Where(s => s.PhoneNumber == phoneNumber).FirstOrDefaultAsync();
                 if (usr == null)
                 {
                     System.Diagnostics.Debug.WriteLine("User is null, refused!");

@@ -136,3 +136,4 @@ C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\UnityEngine.dll
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.csprojAssemblyReference.cache
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.addinitforallmodels.resources
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.csproj.GenerateResource.cache
+C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.addseller.resources
