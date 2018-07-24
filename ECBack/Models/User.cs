@@ -55,6 +55,31 @@ namespace ECBack.Models
 
     }
 
+    public class Seller : ICustomPrincipal
+    {
+        [Key]
+        public int SellerID { get; set; }
+
+        public string PhoneNumber { get; set; }
+        
+        [JsonIgnore]
+        public string PasswordHash { get; set; }
+
+        [JsonIgnore]
+        public IIdentity Identity
+        {
+            get; private set;
+        }
+
+        public bool IsInRole(string role)
+        {
+            return true;
+        }
+
+        [JsonIgnore]
+        public ICollection<GoodEntity> GoodEntities { get; set; }
+    }
+
     /// <summary>
     /// inspired by https://stackoverflow.com/questions/33170771/web-api-return-some-fields-from-model
     /// ignore json https://stackoverflow.com/questions/11851207/prevent-property-from-being-serialized-in-web-api

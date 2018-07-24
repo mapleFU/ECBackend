@@ -16,6 +16,11 @@ namespace ECBack.Models
     /// </summary>
     public class GoodEntity
     {
+        public int SellerID { get; set; }
+
+        [ForeignKey("SellerID")]
+        public Seller Seller { get; set; }
+
         public GoodEntity()
         {
             GoodEntityState = 1;
@@ -133,41 +138,7 @@ namespace ECBack.Models
         public ICollection<Comment> Comments { get; set; }
     }
 
-    //public class DisplayEntity
-    //{
-    //    [Key]
-    //    [Required]
-    //    public int DisplayEntityID { get; set; }
-
-    //    /// <summary>
-    //    /// 商品的售价
-    //    /// </summary>
-
-    //    [Required]
-    //    public decimal Price { get; set; }
-
-    //    /// <summary>
-    //    /// 展示的图片
-    //    /// </summary>
-
-    //    [Required]
-    //    public ICollection<Image> Imgs { get; set; }
-
-    //    /// <summary>
-    //    /// id of foreign key good entity
-    //    /// </summary>
-    //    [Index]
-    //    [Required]
-    //    public int GoodEntityID { get; set; }
-
-    //    [ForeignKey("GoodEntityID")]
-    //    public GoodEntity GoodEntity { get; set; }
-
-    //    public ICollection<Question> Questions { get; set; }
-
-    //    public ICollection<Comment> Comments { get; set; }
-
-    //}
+   
 
 
     public class Brand

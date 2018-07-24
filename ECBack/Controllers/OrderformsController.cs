@@ -30,8 +30,8 @@ namespace ECBack.Controllers
 
     public class AddPostFormRequest
     {
-        public SaleSingleRecord SaleSingleRecord { get; set; }
-        // public List<SaleSingleRecord> SaleSingleRecords { get; set; }
+        // public SaleSingleRecord SaleSingleRecord { get; set; }
+        public List<SaleSingleRecord> SaleSingleRecords { get; set; }
         public int AddressID { get; set; }
     }
 
@@ -39,12 +39,56 @@ namespace ECBack.Controllers
     {
         private OracleDbContext db = new OracleDbContext();
 
+        /// <summary>
+        /// 单个页面需要
+        /// </summary>
+        private const int SinglePageQuery = 6;
+
+        [AuthenticationFilter]
+        [HttpGet]
+        [Route("api/Orderforms")]
+        public async Task<IHttpActionResult> ViewOrderform([FromUri] QueryPageURI queryData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            bool usePn = true;
+            if (queryData == null || queryData.UsePag == false)
+            {
+                usePn = false;
+            }
+
+            var usr = (User)HttpContext.Current.User;
+            var entities = db.Orderforms.Where(odf => odf.UserID == usr.UserID).OrderBy(odf => odf.TransacDateTime);
+            if (usePn)
+            {
+                int pn = queryData.Pn ?? 1;
+                var results = await entities.Skip((pn - 1) * SinglePageQuery).Take(SinglePageQuery).ToListAsync();
+                return Ok(new
+                {
+                    Orderforms = results,
+                    ResultNums = results.Count(),
+                    Pn = pn
+                });
+            } else
+            {
+                return Ok(new
+                {
+                    Orderforms = entities,
+                    ResultNums = entities.Count()
+                });
+            }
+            // await goodEntities.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
+            
+        }
+
         // GET: api/User/{UserID:int}/Orderforms
         [AuthenticationFilter]
         [HttpPost]
         [Route("api/Orderforms")]
         public async Task<IHttpActionResult> AddPostForm([FromBody]AddPostFormRequest addPostFormRequest) {
-            if (addPostFormRequest == null || addPostFormRequest.SaleSingleRecord == null)
+            if (addPostFormRequest == null || addPostFormRequest.SaleSingleRecords == null)
             {
                 return BadRequest();
             }
@@ -68,7 +112,7 @@ namespace ECBack.Controllers
 
             float totalPrice = 0;
 
-            var record = addPostFormRequest.SaleSingleRecord;
+            foreach (var record in addPostFormRequest.SaleSingleRecords)
             {
                 var seRecord = new SERecord()
                 {
@@ -76,8 +120,9 @@ namespace ECBack.Controllers
                     EntityNum = record.Number ?? 1,
 
                 };
-                
-                orderform.SERecord = seRecord;
+                seRecord.OrderformID = orderform.OrderformID;
+                seRecord.SaleEntityID = seRecord.SaleEntityID;
+                // orderform.SERecord = seRecord;
                 var saleEntity = await db.SaleEntities.FindAsync(seRecord.SaleEntityID);
                 totalPrice += (float)(saleEntity).Price;
                 // load good
@@ -106,7 +151,7 @@ namespace ECBack.Controllers
             {
                 return NotFound();
             }
-            await db.Entry(orderform).Reference(odf => odf.SERecord).LoadAsync();
+            await db.Entry(orderform).Collection(odf => odf.SERecords).LoadAsync();
             return Ok(orderform);
         }
 
