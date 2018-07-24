@@ -6,27 +6,67 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ECBack.Models;
 
 namespace ECBack.Controllers
 {
+    public class CommentsQuery
+    {
+        public int GoodID { get; set; }
+        public int? Pn { get; set; }
+    }
     public class CommentsController : ApiController
     {
         private OracleDbContext db = new OracleDbContext();
-
-        // GET: api/Comments
-        public IQueryable<Comment> GetComments()
+        private const int PageDataNumber = 15;
+        /// <summary>
+        /// 获取特定商品特定页
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("api/Comments")]
+        public async Task<IHttpActionResult> GetRelatedEntities([FromUri] CommentsQuery data)
         {
-            return db.Comments;
-        }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            int pn = data.Pn ?? 1;
+            IQueryable<Comment> Comments;
+            var cate = await db.SaleEntities.FindAsync(data.GoodID);
+            db.Entry(cate).Reference(c => c.Comments).Load();
+            Comments = cate.Comments.AsQueryable();
+
+            var rs = await Comments.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
+
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
+                new
+                {
+                    ResultNum = rs.Count(),
+                    Comments = rs,
+                    PageNum = pn
+                }));
+        }
         // GET: api/Comments/5
         [ResponseType(typeof(Comment))]
-        public IHttpActionResult GetComment(int id)
+        public IHttpActionResult GetComment(int GoodID, int UserID)
         {
-            Comment comment = db.Comments.Find(id);
+            IQueryable<Comment> Comments;
+            var cate = db.SaleEntities.Find(GoodID);
+            db.Entry(cate).Reference(c => c.Comments).Load();
+            Comments = cate.Comments.AsQueryable();
+            var comments = Comments.ToList();
+            Comment comment = null;
+            foreach (var VARIABLE in comments)
+            {
+                if (VARIABLE.UserID == UserID)
+                    comment = VARIABLE;
+            }
             if (comment == null)
             {
                 return NotFound();
