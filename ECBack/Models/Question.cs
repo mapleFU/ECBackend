@@ -17,6 +17,17 @@ namespace ECBack.Models
         public string Detail { get; set; }
 
         public ICollection<Reply> Replies { get; set; }
+
+        [JsonIgnore]
+        public int GoodEntityID { get; set; }
+
+        [JsonIgnore]
+        [ForeignKey("GoodentityID")]
+        public GoodEntity GoodEntity { get; set; }
+
+
+
+
     }
 
     public class Reply//回复：回复的id，回复的内容，时间以及对应的问题
@@ -33,5 +44,12 @@ namespace ECBack.Models
         {
             UserReplyTime = DateTime.Now;
         }
+
+        [JsonIgnore]
+        public int QuestionID { get; set; }
+
+        [JsonIgnore]
+        [ForeignKey("QuestionID")]
+        public Question Question { get; set; }
     }
 }

@@ -16,17 +16,75 @@ using Newtonsoft.Json.Linq;
 
 namespace ECBack.Controllers
 {
+    public class Schema
+    {
+        public int GoodEntityID { get; set; }
+        public string GoodName { get; set; }
+        public string ImageURL { get; set; }
+        public decimal GoodPrice { get; set; }
+    }
     public class FavoritesController : ApiController
     {
         private OracleDbContext db = new OracleDbContext();
 
-        // GET: api/Favorites
-        public IQueryable<Favorite> GetFavorites()
+        [AuthenticationFilter]
+        [HttpGet]
+        [Route("api/Favorites")]
+        public IHttpActionResult GetRelatedFavorites()
         {
-            return db.Favorites;
+            
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
+            if (HttpContext.Current.User == null)
+            {
+                // 无权
+                System.Diagnostics.Debug.WriteLine("Get Carts Null");
+                return ResponseMessage(Request.CreateResponse((HttpStatusCode)403));
+            }
+            
+            List<Schema> shit = new List<Schema>();
+            IQueryable<Favorite> Favs = db.Favorites;
+            List<GoodEntity> goods = new List<GoodEntity>();
+            User requestUser = (User)HttpContext.Current.User;
+            try
+            {
+                //找到对应UserID的Favorite
+                IEnumerable<Favorite> query = Favs.Where(w => w.UserID == requestUser.UserID);
+                if (query.Count() == 0)
+                {
+                    return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest));
+                }
+               
+                //找到对应的GoodEntity
+                foreach (var VARIABLE in query)
+                {
+                    goods.Add(VARIABLE.GoodEntity);
+                }
+                //沈sb需要的类List
+                foreach (var VARIABLE in goods)
+                {
+                    Schema tmp = new Schema();
+                    tmp.GoodEntityID = VARIABLE.GoodEntityID;
+                    tmp.GoodName = VARIABLE.GoodName;
+                    tmp.GoodPrice = VARIABLE.SaleEntities.First().Price;
+                    tmp.ImageURL = VARIABLE.Images.First().ImageURL;
+                    shit.Add(tmp);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,"dd"));
         }
 
         // GET: api/Favorites/5
+
         [ResponseType(typeof(Favorite))]
         public async Task<IHttpActionResult> GetFavorite(int id)
         {
@@ -87,7 +145,7 @@ namespace ECBack.Controllers
             if (HttpContext.Current.User == null)
             {
                 // 无权
-                System.Diagnostics.Debug.WriteLine("Get Carts Null");
+                System.Diagnostics.Debug.WriteLine("Get Favorites Null");
                 return Request.CreateResponse((HttpStatusCode)403);
             }
             User requestUser = (User)HttpContext.Current.User;

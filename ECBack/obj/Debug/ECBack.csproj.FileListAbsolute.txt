@@ -268,7 +268,6 @@ D:\C++Code\ECBackend\ECBack\bin\zh-Hans\System.Web.Razor.resources.dll
 D:\C++Code\ECBackend\ECBack\bin\zh-Hans\System.Web.WebPages.resources.dll
 D:\C++Code\ECBackend\ECBack\bin\zh-Hans\System.Web.WebPages.Deployment.resources.dll
 D:\C++Code\ECBackend\ECBack\bin\zh-Hans\System.Web.WebPages.Razor.resources.dll
-D:\C++Code\ECBackend\ECBack\obj\Debug\ECBack.csprojAssemblyReference.cache
 D:\C++Code\ECBackend\ECBack\obj\Debug\ECBack.Migrations.initprojectstructure.resources
 D:\C++Code\ECBackend\ECBack\obj\Debug\ECBack.Migrations.updatethetableofquestionandattrbutes.resources
 D:\C++Code\ECBackend\ECBack\obj\Debug\ECBack.csproj.GenerateResource.cache
@@ -276,3 +275,4 @@ D:\C++Code\ECBackend\ECBack\obj\Debug\ECBack.csproj.CoreCompileInputs.cache
 D:\C++Code\ECBackend\ECBack\obj\Debug\ECBack.csproj.CopyComplete
 D:\C++Code\ECBackend\ECBack\obj\Debug\ECBack.dll
 D:\C++Code\ECBackend\ECBack\obj\Debug\ECBack.pdb
+D:\C++Code\ECBackend\ECBack\obj\Debug\ECBack.csprojAssemblyReference.cache

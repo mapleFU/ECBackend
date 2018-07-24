@@ -44,5 +44,11 @@ namespace ECBack.Models
             UserCommentTime = DateTime.Now;
             LevelRank = 0;
         }
+
+        public int SaleEntityID { get; set; }
+
+     
+        [ForeignKey("SaleEntityID")]
+        public  SaleEntity SaleEntity{ get; set; }
     }
 }
