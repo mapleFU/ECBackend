@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ECBack.Models;
@@ -75,25 +76,33 @@ namespace ECBack.Controllers
 
         /// <summary>
         /// Create a Favorite
-        /// Json中字段为user_id与good_id
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param GoodID></param>
         /// <returns></returns>
-        [Route("api/Favorites")]
+        [AuthenticationFilter]
         [HttpPost]
-        public HttpResponseMessage PostFavorite([FromBody] JObject obj)
+        [Route("api/Favorites")]
+        public HttpResponseMessage PostFavorite([FromBody] int GoodID)
         {
-            int user_id = int.Parse(obj["user_id"].ToString());
-            int good_id = int.Parse(obj["good_id"].ToString());
+            if (HttpContext.Current.User == null)
+            {
+                // 无权
+                System.Diagnostics.Debug.WriteLine("Get Carts Null");
+                return Request.CreateResponse((HttpStatusCode)403);
+            }
+            User requestUser = (User)HttpContext.Current.User;
+            int user_id = requestUser.UserID;
+            int good_id = GoodID;
+
             HttpResponseMessage response;
 
             User user = db.Users.Find(user_id);
             GoodEntity good = db.GoodEntities.Find(good_id);
-            if (user == null )
+            if (user == null)
             {
                 response = Request.CreateResponse(HttpStatusCode.NotFound, "the user not exists");
             }
-            else if (good==null)
+            else if (good == null)
             {
                 response = Request.CreateResponse(HttpStatusCode.NotFound, "the GoodEntity not exists");
             }
@@ -105,7 +114,7 @@ namespace ECBack.Controllers
                 favorite.User = user;
                 favorite.UserID = user_id;
                 db.Favorites.Add(favorite);
-                response = Request.CreateResponse(HttpStatusCode.OK,"Created");
+                response = Request.CreateResponse(HttpStatusCode.OK, "Created");
             }
             db.SaveChanges();
             return response;
