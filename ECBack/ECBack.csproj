@@ -260,41 +260,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201807220820247_Delete GoodEntity in options.cs" />
-    <Compile Include="Migrations\201807220820247_Delete GoodEntity in options.Designer.cs">
-      <DependentUpon>201807220820247_Delete GoodEntity in options.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807221419231_Change Comments to SalesEntity.cs" />
-    <Compile Include="Migrations\201807221419231_Change Comments to SalesEntity.Designer.cs">
-      <DependentUpon>201807221419231_Change Comments to SalesEntity.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807230321429_add associated table Cart.cs" />
-    <Compile Include="Migrations\201807230321429_add associated table Cart.Designer.cs">
-      <DependentUpon>201807230321429_add associated table Cart.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807230738308_adjust db.cs" />
-    <Compile Include="Migrations\201807230738308_adjust db.Designer.cs">
-      <DependentUpon>201807230738308_adjust db.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807231217488_add multi index for good entity to sale entity.cs" />
-    <Compile Include="Migrations\201807231217488_add multi index for good entity to sale entity.Designer.cs">
-      <DependentUpon>201807231217488_add multi index for good entity to sale entity.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807231519321_modify the structure of ordersale and add a mid table.cs" />
-    <Compile Include="Migrations\201807231519321_modify the structure of ordersale and add a mid table.Designer.cs">
-      <DependentUpon>201807231519321_modify the structure of ordersale and add a mid table.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807231745481_update relationship of orderform.cs" />
-    <Compile Include="Migrations\201807231745481_update relationship of orderform.Designer.cs">
-      <DependentUpon>201807231745481_update relationship of orderform.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807240249027_update logic for vip.cs" />
-    <Compile Include="Migrations\201807240249027_update logic for vip.Designer.cs">
-      <DependentUpon>201807240249027_update logic for vip.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807240255026_add reference between user and vip.cs" />
-    <Compile Include="Migrations\201807240255026_add reference between user and vip.Designer.cs">
-      <DependentUpon>201807240255026_add reference between user and vip.cs</DependentUpon>
+    <Compile Include="Migrations\201807240728143_init database.cs" />
+    <Compile Include="Migrations\201807240728143_init database.Designer.cs">
+      <DependentUpon>201807240728143_init database.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -411,32 +379,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201807220820247_Delete GoodEntity in options.resx">
-      <DependentUpon>201807220820247_Delete GoodEntity in options.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807221419231_Change Comments to SalesEntity.resx">
-      <DependentUpon>201807221419231_Change Comments to SalesEntity.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807230321429_add associated table Cart.resx">
-      <DependentUpon>201807230321429_add associated table Cart.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807230738308_adjust db.resx">
-      <DependentUpon>201807230738308_adjust db.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807231217488_add multi index for good entity to sale entity.resx">
-      <DependentUpon>201807231217488_add multi index for good entity to sale entity.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807231519321_modify the structure of ordersale and add a mid table.resx">
-      <DependentUpon>201807231519321_modify the structure of ordersale and add a mid table.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807231745481_update relationship of orderform.resx">
-      <DependentUpon>201807231745481_update relationship of orderform.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807240249027_update logic for vip.resx">
-      <DependentUpon>201807240249027_update logic for vip.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807240255026_add reference between user and vip.resx">
-      <DependentUpon>201807240255026_add reference between user and vip.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807240728143_init database.resx">
+      <DependentUpon>201807240728143_init database.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

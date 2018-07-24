@@ -134,13 +134,5 @@ C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\System.Drawing.Common.dll
 C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\System.Runtime.Serialization.Primitives.dll
 C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\UnityEngine.dll
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.csprojAssemblyReference.cache
-C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.DeleteGoodEntityinoptions.resources
+C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.initdatabase.resources
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.csproj.GenerateResource.cache
-C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.ChangeCommentstoSalesEntity.resources
-C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.addassociatedtableCart.resources
-C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.adjustdb.resources
-C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.addmultiindexforgoodentitytosaleentity.resources
-C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.modifythestructureofordersaleandaddamidtable.resources
-C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.updaterelationshipoforderform.resources
-C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.updatelogicforvip.resources
-C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.addreferencebetweenuserandvip.resources

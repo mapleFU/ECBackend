@@ -17,19 +17,11 @@ namespace ECBack.Models
         public string Detail { get; set; }
 
         public ICollection<Reply> Replies { get; set; }
-<<<<<<< HEAD
 
-        [ForeignKey("DisplayEntityID")]
-        public int DisplayEntityID;
-=======
+        public int SaleEntityID { get; set; }
 
-      //  public GoodEntity GoodEntity { get; set; }
-
-      //  [ForeignKey("GoodEntityID")]
-        //public int GoodEntityID;
-
->>>>>>> 20e9fc3485ecbceda7ef00d185fcc4d060723185
-        // public DisplayEntity DisplayEntity { get; set; }
+        [ForeignKey("SaleEntityID")]
+        public SaleEntity SaleEntity { get; set; }
     }
 
     public class Reply//回复：回复的id，回复的内容，时间以及对应的问题
@@ -42,16 +34,10 @@ namespace ECBack.Models
 
         public DateTime UserReplyTime { get; set; }
 
-        
-<<<<<<< HEAD
+       
         public int QuestionID { get; set; }
         [ForeignKey("QuestionID")]
         public Question Question { get; set; }
-=======
-       // public int QuestionID { get; set; }
-       // [ForeignKey("QuestionID")]
-      //  public Question Question { get; set; }
->>>>>>> 20e9fc3485ecbceda7ef00d185fcc4d060723185
 
     }
 }

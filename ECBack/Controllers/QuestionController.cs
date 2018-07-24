@@ -88,7 +88,7 @@ namespace ECBack.Controllers
                
                 Question question = new Question();
                 question.Detail = QuestionDetail;
-                question.DisplayEntityID = Display_id;
+                question.SaleEntityID = Display_id;
                 db.Questions.Add(question);
               
                 response = Request.CreateResponse(HttpStatusCode.OK, "Created");

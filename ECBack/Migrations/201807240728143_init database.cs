@@ -3,7 +3,7 @@ namespace ECBack.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class DeleteGoodEntityinoptions : DbMigration
+    public partial class initdatabase : DbMigration
     {
         public override void Up()
         {
@@ -38,10 +38,13 @@ namespace ECBack.Migrations
                         Local = c.String(maxLength: 100),
                         Home = c.String(maxLength: 100),
                         PasswordHash = c.String(nullable: false),
+                        VIP_VIPID = c.Decimal(precision: 10, scale: 0),
                     })
                 .PrimaryKey(t => t.UserID)
+                .ForeignKey("DB2018.VIPs", t => t.VIP_VIPID)
                 .Index(t => t.NickName)
-                .Index(t => t.PhoneNumber);
+                .Index(t => t.PhoneNumber)
+                .Index(t => t.VIP_VIPID);
             
             CreateTable(
                 "DB2018.Carts",
@@ -54,18 +57,31 @@ namespace ECBack.Migrations
                 .Index(t => t.UserID);
             
             CreateTable(
+                "DB2018.CartRecords",
+                c => new
+                    {
+                        CartRecordID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
+                        UserID = c.Decimal(nullable: false, precision: 10, scale: 0),
+                        SaleEntityID = c.Decimal(nullable: false, precision: 10, scale: 0),
+                        RecordNum = c.Decimal(nullable: false, precision: 10, scale: 0),
+                    })
+                .PrimaryKey(t => t.CartRecordID)
+                .ForeignKey("DB2018.Carts", t => t.UserID, cascadeDelete: true)
+                .ForeignKey("DB2018.SaleEntities", t => t.SaleEntityID, cascadeDelete: true)
+                .Index(t => t.UserID)
+                .Index(t => t.SaleEntityID);
+            
+            CreateTable(
                 "DB2018.SaleEntities",
                 c => new
                     {
                         SaleEntityID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
                         Price = c.Decimal(nullable: false, precision: 18, scale: 2),
                         GoodEntityID = c.Decimal(nullable: false, precision: 10, scale: 0),
-                        Cart_UserID = c.Decimal(precision: 10, scale: 0),
                     })
                 .PrimaryKey(t => t.SaleEntityID)
-                .ForeignKey("DB2018.Carts", t => t.Cart_UserID)
-                .Index(t => t.GoodEntityID)
-                .Index(t => t.Cart_UserID);
+                .ForeignKey("DB2018.GoodEntities", t => t.GoodEntityID, cascadeDelete: true)
+                .Index(t => t.GoodEntityID);
             
             CreateTable(
                 "DB2018.Options",
@@ -93,6 +109,21 @@ namespace ECBack.Migrations
                 .PrimaryKey(t => t.GAttributeID)
                 .ForeignKey("DB2018.GoodEntities", t => t.GoodEntity_GoodEntityID)
                 .Index(t => t.GoodEntity_GoodEntityID);
+            
+            CreateTable(
+                "DB2018.Comments",
+                c => new
+                    {
+                        CommentID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
+                        Detail = c.String(maxLength: 400),
+                        LevelRank = c.Decimal(nullable: false, precision: 10, scale: 0),
+                        UserCommentTime = c.DateTime(nullable: false),
+                        UserID = c.Decimal(nullable: false, precision: 10, scale: 0),
+                        SaleEntity_SaleEntityID = c.Decimal(precision: 10, scale: 0),
+                    })
+                .PrimaryKey(t => t.CommentID)
+                .ForeignKey("DB2018.SaleEntities", t => t.SaleEntity_SaleEntityID)
+                .Index(t => t.SaleEntity_SaleEntityID);
             
             CreateTable(
                 "DB2018.Coupons",
@@ -150,21 +181,6 @@ namespace ECBack.Migrations
                 .Index(t => t.BrandName);
             
             CreateTable(
-                "DB2018.Comments",
-                c => new
-                    {
-                        CommentID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
-                        Detail = c.String(maxLength: 400),
-                        LevelRank = c.Decimal(nullable: false, precision: 10, scale: 0),
-                        UserCommentTime = c.DateTime(nullable: false),
-                        UserID = c.Decimal(nullable: false, precision: 10, scale: 0),
-                        GoodEntity_GoodEntityID = c.Decimal(precision: 10, scale: 0),
-                    })
-                .PrimaryKey(t => t.CommentID)
-                .ForeignKey("DB2018.GoodEntities", t => t.GoodEntity_GoodEntityID)
-                .Index(t => t.GoodEntity_GoodEntityID);
-            
-            CreateTable(
                 "DB2018.Images",
                 c => new
                     {
@@ -176,6 +192,34 @@ namespace ECBack.Migrations
                 .PrimaryKey(t => t.ImageID)
                 .ForeignKey("DB2018.GoodEntities", t => t.GoodEntity_GoodEntityID)
                 .Index(t => t.GoodEntity_GoodEntityID);
+            
+            CreateTable(
+                "DB2018.Questions",
+                c => new
+                    {
+                        QuestionID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
+                        Detail = c.String(maxLength: 50),
+                        SaleEntityID = c.Decimal(nullable: false, precision: 10, scale: 0),
+                        GoodEntity_GoodEntityID = c.Decimal(precision: 10, scale: 0),
+                    })
+                .PrimaryKey(t => t.QuestionID)
+                .ForeignKey("DB2018.SaleEntities", t => t.SaleEntityID, cascadeDelete: true)
+                .ForeignKey("DB2018.GoodEntities", t => t.GoodEntity_GoodEntityID)
+                .Index(t => t.SaleEntityID)
+                .Index(t => t.GoodEntity_GoodEntityID);
+            
+            CreateTable(
+                "DB2018.Replies",
+                c => new
+                    {
+                        ReplyID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
+                        ReplyDetail = c.String(maxLength: 200),
+                        UserReplyTime = c.DateTime(nullable: false),
+                        QuestionID = c.Decimal(nullable: false, precision: 10, scale: 0),
+                    })
+                .PrimaryKey(t => t.ReplyID)
+                .ForeignKey("DB2018.Questions", t => t.QuestionID, cascadeDelete: true)
+                .Index(t => t.QuestionID);
             
             CreateTable(
                 "DB2018.Favorites",
@@ -200,10 +244,16 @@ namespace ECBack.Migrations
                         State = c.Decimal(nullable: false, precision: 10, scale: 0),
                         TotalPrice = c.Single(nullable: false),
                         UserID = c.Decimal(nullable: false, precision: 10, scale: 0),
+                        AddressID = c.Decimal(nullable: false, precision: 10, scale: 0),
+                        SERecord_SaleEntityRecordID = c.Decimal(precision: 10, scale: 0),
                     })
                 .PrimaryKey(t => t.OrderformID)
+                .ForeignKey("DB2018.Addresses", t => t.AddressID, cascadeDelete: true)
                 .ForeignKey("DB2018.Users", t => t.UserID, cascadeDelete: true)
-                .Index(t => t.UserID);
+                .ForeignKey("DB2018.SERecords", t => t.SERecord_SaleEntityRecordID)
+                .Index(t => t.UserID)
+                .Index(t => t.AddressID)
+                .Index(t => t.SERecord_SaleEntityRecordID);
             
             CreateTable(
                 "DB2018.Logistics",
@@ -233,26 +283,16 @@ namespace ECBack.Migrations
                 .Index(t => t.LogisticID);
             
             CreateTable(
-                "DB2018.Questions",
+                "DB2018.SERecords",
                 c => new
                     {
-                        QuestionID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
-                        Detail = c.String(maxLength: 50),
+                        SaleEntityRecordID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
+                        EntityNum = c.Decimal(nullable: false, precision: 10, scale: 0),
+                        SaleEntityID = c.Decimal(nullable: false, precision: 10, scale: 0),
                     })
-                .PrimaryKey(t => t.QuestionID);
-            
-            CreateTable(
-                "DB2018.Replies",
-                c => new
-                    {
-                        ReplyID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
-                        ReplyDetail = c.String(maxLength: 200),
-                        UserCommentTime = c.DateTime(nullable: false),
-                        QuestionID = c.Decimal(nullable: false, precision: 10, scale: 0),
-                    })
-                .PrimaryKey(t => t.ReplyID)
-                .ForeignKey("DB2018.Questions", t => t.QuestionID, cascadeDelete: true)
-                .Index(t => t.QuestionID);
+                .PrimaryKey(t => t.SaleEntityRecordID)
+                .ForeignKey("DB2018.SaleEntities", t => t.SaleEntityID, cascadeDelete: true)
+                .Index(t => t.SaleEntityID);
             
             CreateTable(
                 "DB2018.VIPs",
@@ -261,6 +301,8 @@ namespace ECBack.Migrations
                         VIPID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
                         StartDate = c.DateTime(nullable: false),
                         DueDate = c.DateTime(nullable: false),
+                        TotalCredits = c.Decimal(nullable: false, precision: 10, scale: 0),
+                        AvailCredits = c.Decimal(nullable: false, precision: 10, scale: 0),
                     })
                 .PrimaryKey(t => t.VIPID);
             
@@ -294,70 +336,87 @@ namespace ECBack.Migrations
         
         public override void Down()
         {
-            DropForeignKey("DB2018.Replies", "QuestionID", "DB2018.Questions");
+            DropForeignKey("DB2018.Users", "VIP_VIPID", "DB2018.VIPs");
+            DropForeignKey("DB2018.Orderforms", "SERecord_SaleEntityRecordID", "DB2018.SERecords");
+            DropForeignKey("DB2018.SERecords", "SaleEntityID", "DB2018.SaleEntities");
             DropForeignKey("DB2018.Logistics", "LogisticID", "DB2018.Orderforms");
             DropForeignKey("DB2018.LogisticInfoes", "LogisticID", "DB2018.Logistics");
             DropForeignKey("DB2018.Orderforms", "UserID", "DB2018.Users");
+            DropForeignKey("DB2018.Orderforms", "AddressID", "DB2018.Addresses");
             DropForeignKey("DB2018.Favorites", "UserID", "DB2018.Users");
             DropForeignKey("DB2018.Favorites", "GoodEntityID", "DB2018.GoodEntities");
             DropForeignKey("DB2018.CouponsUsers", "User_UserID", "DB2018.Users");
             DropForeignKey("DB2018.CouponsUsers", "Coupons_CouponID", "DB2018.Coupons");
+            DropForeignKey("DB2018.SaleEntities", "GoodEntityID", "DB2018.GoodEntities");
+            DropForeignKey("DB2018.Questions", "GoodEntity_GoodEntityID", "DB2018.GoodEntities");
+            DropForeignKey("DB2018.Questions", "SaleEntityID", "DB2018.SaleEntities");
+            DropForeignKey("DB2018.Replies", "QuestionID", "DB2018.Questions");
             DropForeignKey("DB2018.Images", "GoodEntity_GoodEntityID", "DB2018.GoodEntities");
             DropForeignKey("DB2018.GAttributes", "GoodEntity_GoodEntityID", "DB2018.GoodEntities");
-            DropForeignKey("DB2018.Comments", "GoodEntity_GoodEntityID", "DB2018.GoodEntities");
             DropForeignKey("DB2018.GoodEntityCategories", "Category_CategoryID", "DB2018.Categories");
             DropForeignKey("DB2018.GoodEntityCategories", "GoodEntity_GoodEntityID", "DB2018.GoodEntities");
             DropForeignKey("DB2018.GoodEntities", "BrandID", "DB2018.Brands");
             DropForeignKey("DB2018.Coupons", "CategoryID", "DB2018.Categories");
             DropForeignKey("DB2018.Carts", "UserID", "DB2018.Users");
-            DropForeignKey("DB2018.SaleEntities", "Cart_UserID", "DB2018.Carts");
+            DropForeignKey("DB2018.CartRecords", "SaleEntityID", "DB2018.SaleEntities");
+            DropForeignKey("DB2018.Comments", "SaleEntity_SaleEntityID", "DB2018.SaleEntities");
             DropForeignKey("DB2018.Options", "SaleEntity_SaleEntityID", "DB2018.SaleEntities");
             DropForeignKey("DB2018.Options", "GAttributeID", "DB2018.GAttributes");
+            DropForeignKey("DB2018.CartRecords", "UserID", "DB2018.Carts");
             DropForeignKey("DB2018.Addresses", "UserID", "DB2018.Users");
             DropIndex("DB2018.CouponsUsers", new[] { "User_UserID" });
             DropIndex("DB2018.CouponsUsers", new[] { "Coupons_CouponID" });
             DropIndex("DB2018.GoodEntityCategories", new[] { "Category_CategoryID" });
             DropIndex("DB2018.GoodEntityCategories", new[] { "GoodEntity_GoodEntityID" });
-            DropIndex("DB2018.Replies", new[] { "QuestionID" });
+            DropIndex("DB2018.SERecords", new[] { "SaleEntityID" });
             DropIndex("DB2018.LogisticInfoes", new[] { "LogisticID" });
             DropIndex("DB2018.Logistics", new[] { "LogisticID" });
+            DropIndex("DB2018.Orderforms", new[] { "SERecord_SaleEntityRecordID" });
+            DropIndex("DB2018.Orderforms", new[] { "AddressID" });
             DropIndex("DB2018.Orderforms", new[] { "UserID" });
             DropIndex("DB2018.Favorites", new[] { "UserID" });
             DropIndex("DB2018.Favorites", new[] { "GoodEntityID" });
+            DropIndex("DB2018.Replies", new[] { "QuestionID" });
+            DropIndex("DB2018.Questions", new[] { "GoodEntity_GoodEntityID" });
+            DropIndex("DB2018.Questions", new[] { "SaleEntityID" });
             DropIndex("DB2018.Images", new[] { "GoodEntity_GoodEntityID" });
-            DropIndex("DB2018.Comments", new[] { "GoodEntity_GoodEntityID" });
             DropIndex("DB2018.Brands", new[] { "BrandName" });
             DropIndex("DB2018.GoodEntities", new[] { "BrandID" });
             DropIndex("DB2018.GoodEntities", new[] { "GoodName" });
             DropIndex("DB2018.Categories", new[] { "Name" });
             DropIndex("DB2018.Coupons", new[] { "CategoryID" });
+            DropIndex("DB2018.Comments", new[] { "SaleEntity_SaleEntityID" });
             DropIndex("DB2018.GAttributes", new[] { "GoodEntity_GoodEntityID" });
             DropIndex("DB2018.Options", new[] { "SaleEntity_SaleEntityID" });
             DropIndex("DB2018.Options", new[] { "GAttributeID" });
-            DropIndex("DB2018.SaleEntities", new[] { "Cart_UserID" });
             DropIndex("DB2018.SaleEntities", new[] { "GoodEntityID" });
+            DropIndex("DB2018.CartRecords", new[] { "SaleEntityID" });
+            DropIndex("DB2018.CartRecords", new[] { "UserID" });
             DropIndex("DB2018.Carts", new[] { "UserID" });
+            DropIndex("DB2018.Users", new[] { "VIP_VIPID" });
             DropIndex("DB2018.Users", new[] { "PhoneNumber" });
             DropIndex("DB2018.Users", new[] { "NickName" });
             DropIndex("DB2018.Addresses", new[] { "UserID" });
             DropTable("DB2018.CouponsUsers");
             DropTable("DB2018.GoodEntityCategories");
             DropTable("DB2018.VIPs");
-            DropTable("DB2018.Replies");
-            DropTable("DB2018.Questions");
+            DropTable("DB2018.SERecords");
             DropTable("DB2018.LogisticInfoes");
             DropTable("DB2018.Logistics");
             DropTable("DB2018.Orderforms");
             DropTable("DB2018.Favorites");
+            DropTable("DB2018.Replies");
+            DropTable("DB2018.Questions");
             DropTable("DB2018.Images");
-            DropTable("DB2018.Comments");
             DropTable("DB2018.Brands");
             DropTable("DB2018.GoodEntities");
             DropTable("DB2018.Categories");
             DropTable("DB2018.Coupons");
+            DropTable("DB2018.Comments");
             DropTable("DB2018.GAttributes");
             DropTable("DB2018.Options");
             DropTable("DB2018.SaleEntities");
+            DropTable("DB2018.CartRecords");
             DropTable("DB2018.Carts");
             DropTable("DB2018.Users");
             DropTable("DB2018.Addresses");
