@@ -131,6 +131,7 @@ namespace ECBack.Models
         [JsonIgnore]
         public Cart Cart { get; set; }
 
+        
         public VIP VIP { get; set; }
 
         public bool IsInRole(string role)

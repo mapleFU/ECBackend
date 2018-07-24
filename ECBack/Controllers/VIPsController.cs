@@ -39,7 +39,7 @@ namespace ECBack.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != vIP.VIPID)
+            if (id != vIP.UserID)
             {
                 return BadRequest();
             }
@@ -77,7 +77,7 @@ namespace ECBack.Controllers
 
         private bool VIPExists(int id)
         {
-            return db.VIPs.Count(e => e.VIPID == id) > 0;
+            return db.VIPs.Count(e => e.UserID == id) > 0;
         }
     }
 }

@@ -13,11 +13,12 @@ namespace ECBack.Models
     {
         private readonly int[] LevelRequired = new int[] { 100, 500, 1500, 5000, 10000, 30000  };
 
-        [Key]
-        public int VIPID { get; set; }
-
         [JsonIgnore]
+        [ForeignKey("UserID")]
         public User User;
+
+        [Key]
+        public int UserID { get; set; }
 
         public DateTime StartDate { get; set; }
 

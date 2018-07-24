@@ -112,7 +112,10 @@ namespace ECBack.Controllers
                     NickName = registerData.NickName,
                     PasswordHash = registerData.Password,
                 };
+                
+
                 // 204, OK
+                
                 db.Users.Add(user);
                 db.SaveChanges();
                 db.Carts.Add(new Cart()
@@ -120,6 +123,12 @@ namespace ECBack.Controllers
                     User = user,
                     UserID = user.UserID
                 });
+                db.VIPs.Add(new VIP()
+                {
+                    User = user,
+                    UserID = user.UserID
+                });
+
                 db.SaveChanges();
                 response = Request.CreateResponse(HttpStatusCode.NoContent);
                 response.Headers.Add("Location", "api/Users/" + user.UserID);

@@ -20,7 +20,6 @@ namespace ECBack.Controllers
         public string GoodName { get; set; }
         public string Image { get; set; }
         public decimal Price { get; set; }
-
     }
 
     public class GoodEntitiesController : ApiController
@@ -28,18 +27,14 @@ namespace ECBack.Controllers
         private OracleDbContext db = new OracleDbContext();
         private const int PageDataNumber = 15;
 
-        //[NonAction]
-        //public async Task<List<T>> GetEntityWithData<T>(IQueryable<T> dataSet, CategoryQuery data)
-        //{
-        //    IQueryable<T> searchSet;
-        //    if (data.Kw == null)
-        //    {
-        //        searchSet = dataSet;
-        //    } else
-        //    {
-        //        searchSet = db.GoodEntities.Where(u => u.GoodName.ToLower().Contains(data.Kw.ToLower()));
-        //    }
-        //}
+        [HttpPost]
+        [Route("api/GoodEntities")]
+        [AuthenticationFilter]
+        public async Task<IHttpActionResult> AddGoodEntity()
+        {
+            throw new NotImplementedException();
+        }
+
 
         [HttpGet]
         [Route("api/Categories/{CategoryID:int}/GoodEntities")]
@@ -54,7 +49,7 @@ namespace ECBack.Controllers
             IQueryable<GoodEntity> fullEntities;
             IQueryable<GoodEntity> goodEntities;
             var cate = await db.Categories.FindAsync(CategoryID);
-            db.Entry(cate).Reference(c => c.GoodEntities).Load();
+            await db.Entry(cate).Collection(c => c.GoodEntities).LoadAsync();
             fullEntities = cate.GoodEntities.AsQueryable();
             if (data.Kw == null)
             {

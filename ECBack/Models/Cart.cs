@@ -56,7 +56,7 @@ namespace ECBack.Models
         {
             await dbContext.Entry(this).Reference(u => u.CartRecords).LoadAsync();
             decimal price = 0;
-            throw new NotImplementedException();
+            
             foreach (var p in dbContext.SaleEntities)
             {
                 price += p.Price;

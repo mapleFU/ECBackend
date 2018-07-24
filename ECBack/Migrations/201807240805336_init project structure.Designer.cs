@@ -7,13 +7,13 @@ namespace ECBack.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class initdatabase : IMigrationMetadata
+    public sealed partial class initprojectstructure : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(initdatabase));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(initprojectstructure));
         
         string IMigrationMetadata.Id
         {
-            get { return "201807240728143_init database"; }
+            get { return "201807240805336_init project structure"; }
         }
         
         string IMigrationMetadata.Source

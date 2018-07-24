@@ -3,7 +3,7 @@ namespace ECBack.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class initdatabase : DbMigration
+    public partial class initprojectstructure : DbMigration
     {
         public override void Up()
         {
@@ -38,13 +38,13 @@ namespace ECBack.Migrations
                         Local = c.String(maxLength: 100),
                         Home = c.String(maxLength: 100),
                         PasswordHash = c.String(nullable: false),
-                        VIP_VIPID = c.Decimal(precision: 10, scale: 0),
+                        VIP_UserID = c.Decimal(precision: 10, scale: 0),
                     })
                 .PrimaryKey(t => t.UserID)
-                .ForeignKey("DB2018.VIPs", t => t.VIP_VIPID)
+                .ForeignKey("DB2018.VIPs", t => t.VIP_UserID)
                 .Index(t => t.NickName)
                 .Index(t => t.PhoneNumber)
-                .Index(t => t.VIP_VIPID);
+                .Index(t => t.VIP_UserID);
             
             CreateTable(
                 "DB2018.Carts",
@@ -298,13 +298,13 @@ namespace ECBack.Migrations
                 "DB2018.VIPs",
                 c => new
                     {
-                        VIPID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
+                        UserID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
                         StartDate = c.DateTime(nullable: false),
                         DueDate = c.DateTime(nullable: false),
                         TotalCredits = c.Decimal(nullable: false, precision: 10, scale: 0),
                         AvailCredits = c.Decimal(nullable: false, precision: 10, scale: 0),
                     })
-                .PrimaryKey(t => t.VIPID);
+                .PrimaryKey(t => t.UserID);
             
             CreateTable(
                 "DB2018.GoodEntityCategories",
@@ -336,7 +336,7 @@ namespace ECBack.Migrations
         
         public override void Down()
         {
-            DropForeignKey("DB2018.Users", "VIP_VIPID", "DB2018.VIPs");
+            DropForeignKey("DB2018.Users", "VIP_UserID", "DB2018.VIPs");
             DropForeignKey("DB2018.Orderforms", "SERecord_SaleEntityRecordID", "DB2018.SERecords");
             DropForeignKey("DB2018.SERecords", "SaleEntityID", "DB2018.SaleEntities");
             DropForeignKey("DB2018.Logistics", "LogisticID", "DB2018.Orderforms");
@@ -393,7 +393,7 @@ namespace ECBack.Migrations
             DropIndex("DB2018.CartRecords", new[] { "SaleEntityID" });
             DropIndex("DB2018.CartRecords", new[] { "UserID" });
             DropIndex("DB2018.Carts", new[] { "UserID" });
-            DropIndex("DB2018.Users", new[] { "VIP_VIPID" });
+            DropIndex("DB2018.Users", new[] { "VIP_UserID" });
             DropIndex("DB2018.Users", new[] { "PhoneNumber" });
             DropIndex("DB2018.Users", new[] { "NickName" });
             DropIndex("DB2018.Addresses", new[] { "UserID" });

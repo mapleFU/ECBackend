@@ -12,16 +12,11 @@ namespace ECBack.Models
     {
         [Key]
         public int QuestionID { get; set; }
-         
+
         [MaxLength(50)]
         public string Detail { get; set; }
 
         public ICollection<Reply> Replies { get; set; }
-
-        public int SaleEntityID { get; set; }
-
-        [ForeignKey("SaleEntityID")]
-        public SaleEntity SaleEntity { get; set; }
     }
 
     public class Reply//回复：回复的id，回复的内容，时间以及对应的问题
@@ -34,10 +29,9 @@ namespace ECBack.Models
 
         public DateTime UserReplyTime { get; set; }
 
-       
-        public int QuestionID { get; set; }
-        [ForeignKey("QuestionID")]
-        public Question Question { get; set; }
-
+        public Reply()
+        {
+            UserReplyTime = DateTime.Now;
+        }
     }
 }

@@ -260,9 +260,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201807240728143_init database.cs" />
-    <Compile Include="Migrations\201807240728143_init database.Designer.cs">
-      <DependentUpon>201807240728143_init database.cs</DependentUpon>
+    <Compile Include="Migrations\201807240805336_init project structure.cs" />
+    <Compile Include="Migrations\201807240805336_init project structure.Designer.cs">
+      <DependentUpon>201807240805336_init project structure.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807240812090_update the table of question and attrbutes..cs" />
+    <Compile Include="Migrations\201807240812090_update the table of question and attrbutes..Designer.cs">
+      <DependentUpon>201807240812090_update the table of question and attrbutes..cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -379,8 +383,11 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201807240728143_init database.resx">
-      <DependentUpon>201807240728143_init database.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807240805336_init project structure.resx">
+      <DependentUpon>201807240805336_init project structure.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807240812090_update the table of question and attrbutes..resx">
+      <DependentUpon>201807240812090_update the table of question and attrbutes..cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

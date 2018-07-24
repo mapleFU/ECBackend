@@ -134,5 +134,6 @@ C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\System.Drawing.Common.dll
 C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\System.Runtime.Serialization.Primitives.dll
 C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\UnityEngine.dll
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.csprojAssemblyReference.cache
-C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.initdatabase.resources
+C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.initprojectstructure.resources
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.csproj.GenerateResource.cache
+C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.updatethetableofquestionandattrbutes.resources
