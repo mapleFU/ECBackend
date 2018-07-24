@@ -100,6 +100,9 @@ namespace ECBack.Models
         public ICollection<Image> Images { get; set; }
 
         public ICollection<SaleEntity> SaleEntities { get; set; }
+
+        public ICollection<Question> Questions { get; set; }
+        
         
        
     }

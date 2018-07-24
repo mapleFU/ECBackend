@@ -17,9 +17,18 @@ namespace ECBack.Models
         public string Detail { get; set; }
 
         public ICollection<Reply> Replies { get; set; }
+<<<<<<< HEAD
 
         [ForeignKey("DisplayEntityID")]
         public int DisplayEntityID;
+=======
+
+      //  public GoodEntity GoodEntity { get; set; }
+
+      //  [ForeignKey("GoodEntityID")]
+        //public int GoodEntityID;
+
+>>>>>>> 20e9fc3485ecbceda7ef00d185fcc4d060723185
         // public DisplayEntity DisplayEntity { get; set; }
     }
 
@@ -31,12 +40,18 @@ namespace ECBack.Models
         [MaxLength(200)]
         public string ReplyDetail { get; set; }
 
-        public DateTime UserCommentTime { get; set; }
+        public DateTime UserReplyTime { get; set; }
 
         
+<<<<<<< HEAD
         public int QuestionID { get; set; }
         [ForeignKey("QuestionID")]
         public Question Question { get; set; }
+=======
+       // public int QuestionID { get; set; }
+       // [ForeignKey("QuestionID")]
+      //  public Question Question { get; set; }
+>>>>>>> 20e9fc3485ecbceda7ef00d185fcc4d060723185
 
     }
 }
