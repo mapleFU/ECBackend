@@ -18,6 +18,12 @@ namespace ECBack.Controllers
         public int GoodID { get; set; }
         public int? Pn { get; set; }
     }
+
+    public class CommentQuery
+    {
+        public int GoodID { get; set; }
+        public int UserID { get; set; }
+    }
     public class CommentsController : ApiController
     {
         private OracleDbContext db = new OracleDbContext();
@@ -29,7 +35,7 @@ namespace ECBack.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("api/Comments")]
-        public async Task<IHttpActionResult> GetRelatedEntities([FromUri] CommentsQuery data)
+        public async Task<IHttpActionResult> GetRelatedComments([FromUri] CommentsQuery data)
         {
             if (!ModelState.IsValid)
             {
@@ -39,7 +45,11 @@ namespace ECBack.Controllers
             int pn = data.Pn ?? 1;
             IQueryable<Comment> Comments;
             var cate = await db.SaleEntities.FindAsync(data.GoodID);
-            db.Entry(cate).Reference(c => c.Comments).Load();
+            if (cate == null)
+            {
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, "GoodID not found"));
+            }
+            db.Entry(cate).Collection(c => c.Comments).Load();
             Comments = cate.Comments.AsQueryable();
 
             var rs = await Comments.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
@@ -52,19 +62,25 @@ namespace ECBack.Controllers
                     PageNum = pn
                 }));
         }
-        // GET: api/Comments/5
+        /// <summary>
+        /// 单个评论
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
         [ResponseType(typeof(Comment))]
-        public IHttpActionResult GetComment(int GoodID, int UserID)
+        [Route("api/Comments/find")]
+        public IHttpActionResult GetComment([FromUri] CommentQuery oneQuery)
         {
+
             IQueryable<Comment> Comments;
-            var cate = db.SaleEntities.Find(GoodID);
+            var cate = db.SaleEntities.Find(oneQuery.GoodID);
             db.Entry(cate).Reference(c => c.Comments).Load();
             Comments = cate.Comments.AsQueryable();
             var comments = Comments.ToList();
             Comment comment = null;
             foreach (var VARIABLE in comments)
             {
-                if (VARIABLE.UserID == UserID)
+                if (VARIABLE.UserID == oneQuery.UserID)
                     comment = VARIABLE;
             }
             if (comment == null)
