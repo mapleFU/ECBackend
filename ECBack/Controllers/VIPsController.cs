@@ -17,12 +17,6 @@ namespace ECBack.Controllers
     {
         private OracleDbContext db = new OracleDbContext();
 
-        // GET: api/VIPs
-        public IQueryable<VIP> GetVIPs()
-        {
-            return db.VIPs;
-        }
-
         // GET: api/VIPs/5
         [ResponseType(typeof(VIP))]
         public async Task<IHttpActionResult> GetVIP(int id)
@@ -32,7 +26,7 @@ namespace ECBack.Controllers
             {
                 return NotFound();
             }
-
+            
             return Ok(vIP);
         }
 
@@ -71,36 +65,6 @@ namespace ECBack.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/VIPs
-        [ResponseType(typeof(VIP))]
-        public async Task<IHttpActionResult> PostVIP(VIP vIP)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.VIPs.Add(vIP);
-            await db.SaveChangesAsync();
-
-            return CreatedAtRoute("DefaultApi", new { id = vIP.VIPID }, vIP);
-        }
-
-        // DELETE: api/VIPs/5
-        [ResponseType(typeof(VIP))]
-        public async Task<IHttpActionResult> DeleteVIP(int id)
-        {
-            VIP vIP = await db.VIPs.FindAsync(id);
-            if (vIP == null)
-            {
-                return NotFound();
-            }
-
-            db.VIPs.Remove(vIP);
-            await db.SaveChangesAsync();
-
-            return Ok(vIP);
-        }
 
         protected override void Dispose(bool disposing)
         {
