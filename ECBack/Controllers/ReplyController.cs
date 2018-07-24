@@ -21,6 +21,8 @@ namespace ECBack.Controllers
         private OracleDbContext db = new OracleDbContext();
 
         //GET:api/ReplyEntities
+        [Route("api/Replies")]
+        [HttpGet]
         public IQueryable<Reply> GetReplies()
         {
             return db.Replies;
@@ -31,58 +33,15 @@ namespace ECBack.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        //GET:api/Replies/5
-      //  public IQueryable<Reply>GetReplies(int id)//回复要不要分页呢，不分页的
-      //  {
-
-           // return db.Replies.Where(u => u.QuestionID == id);
-                    
-      //  }
-
-
-
-        //PUT:api/Replies/5
-       // [ResponseType(typeof(void))]
-      //  public async Task<IHttpActionResult> PutReply(int id, Reply reply)
-       // {
-         //   if (!ModelState.IsValid)
-       //     {
-          //      return BadRequest(ModelState);
-         //   }
-          //  if (id != reply.ReplyID)
-          //  {
-          //      return BadRequest();
-         //   }
-         //   db.Entry(reply).State = EntityState.Modified;
-         //   try
-          //  {
-          //      await db.SaveChangesAsync();
-         //   }
-         //   catch (DbUpdateConcurrencyException)
-          //  {
-          //      if (!ReplyExists(id))
-          //      {
-           //         return NotFound();
-           //     }
-            //    else
-           //     {
-           //         throw;
-           //     }
-          //  }
-            //return StatusCode(HttpStatusCode.NoContent);
-      //  }
-
-
+      
          //添加回复
         //POST:api/Replies
-
-
         [Route("api/Replies")]
         [HttpPost]      
         public HttpResponseMessage PostReply([FromBody]JObject obj)//添加：问题id&回复内容
         {
             HttpResponseMessage response;
-            int question_id = int.Parse(obj["Question_id"].ToString());
+            int question_id = int.Parse(obj["QuestionID"].ToString());
             string detail = obj["ReplyDeatil"].ToString();
             Question question = db.Questions.Find(question_id);
             if (question == null)
@@ -104,20 +63,7 @@ namespace ECBack.Controllers
             return response;
         }
 
-        //Delete:api/Replies/5
-      
-       // [ResponseType(typeof(Reply))]
-        //public async Task<IHttpActionResult> DeleteReply(int id)
-       // {
-        //    Reply reply = await db.Replies.FindAsync(id);
-         //   if (reply == null)
-          //      return NotFound();
-           // db.Replies.Remove(reply);
-          //  await db.SaveChangesAsync();
-
-          //  return Ok(reply);
-
-       // }
+     
 
         protected override void Dispose(bool disposing)
         {

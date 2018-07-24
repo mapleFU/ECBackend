@@ -16,11 +16,14 @@ namespace ECBack.Models
         [MaxLength(50)]
         public string Detail { get; set; }
 
-        [ForeignKey("GoodEntityID")]
-        public int GoodEntityID;
-        public virtual GoodEntity GoodEntity { get; set; }
+        public ICollection<Reply> Replies { get; set; }
 
+      //  public GoodEntity GoodEntity { get; set; }
 
+      //  [ForeignKey("GoodEntityID")]
+        //public int GoodEntityID;
+
+        // public DisplayEntity DisplayEntity { get; set; }
     }
 
     public class Reply//回复：回复的id，回复的内容，时间以及对应的问题
@@ -31,10 +34,12 @@ namespace ECBack.Models
         [MaxLength(200)]
         public string ReplyDetail { get; set; }
 
-        public DateTime UserCommentTime { get; set; }
+        public DateTime UserReplyTime { get; set; }
 
-        [ForeignKey("QuestionID")]
-        public int QuestionID { get; set; }
+        
+       // public int QuestionID { get; set; }
+       // [ForeignKey("QuestionID")]
+      //  public Question Question { get; set; }
 
     }
 }

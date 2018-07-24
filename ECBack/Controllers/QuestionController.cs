@@ -20,6 +20,8 @@ namespace ECBack.Controllers
         private const int PageDataNumber = 10;
 
         //GET:api/QuestionEntities
+        [Route("api/Questions")]
+        [HttpGet]
         public IQueryable<Question> GetQuestions()
         {
             return db.Questions;
@@ -27,23 +29,32 @@ namespace ECBack.Controllers
 
         //根据当前商品id得到当前商品的所有问题，前端传过来的是SKU1的id还有当前页数。。，然后返回所有这个商品的问题记录
         //GET:api/Questions/5
+    
         [ResponseType(typeof(Question))]
-        public async Task<IHttpActionResult> GetQuestionByDPID(int DisplayEntityid,[FromUri]int pn)
+        [Route("api/Questions/{id:int}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetQuestion(int id,[FromUri]int pn)
         {
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            //找到相关的所有问题
+
+
             IQueryable<Question> questions;
-            questions =db.Questions.Where(u => u.DisplayEntityID == DisplayEntityid);
-          
-            var ques = await questions.ToListAsync();
+            var ques = await db.GoodEntities.FindAsync(id);
+            db.Entry(ques).Reference(c => c.Questions).Load();
+            
+            
+            questions = ques.Questions.AsQueryable();
+            foreach (var que in ques.Questions)
+            {
+                await db.Entry(que).Collection(a => a.Replies).LoadAsync();
+            }
             var QuestionEntities = await questions.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
             return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, new
             {
-                PageCount=ques.Count()/PageDataNumber,
+                PageCount=QuestionEntities.Count()/PageDataNumber,
                 QuestionEntities
                 
             }));
@@ -52,6 +63,8 @@ namespace ECBack.Controllers
 
         //PUT:api/Questions/5.......其实我感觉put没必要啊，问题提出了不能修改了
         [ResponseType(typeof(void))]
+        [Route("api/Questions/{id:int}")]
+        [HttpPut]
         public async Task<IHttpActionResult> PutQuestion(int id,[FromBody]Question question)
         {
             if(!ModelState.IsValid)
@@ -92,13 +105,13 @@ namespace ECBack.Controllers
             string QuestionDetail = obj["QuestionDetail"].ToString();
             Question question = new Question();
             question.Detail = QuestionDetail;
-            question.DisplayEntityID = Goodid;
             
-
             HttpResponseMessage response;
 
             //找到这个商品的东东
             GoodEntity goodEntity = db.GoodEntities.Find(Goodid);
+            goodEntity.Questions.Add(question);
+           
            
             if (goodEntity == null)
             {
@@ -117,6 +130,8 @@ namespace ECBack.Controllers
         //删除问题的，我觉得可能用不到就先写在这里,需要有问题的id
         //Delete:api/Questions/5
         [ResponseType(typeof(Question))]
+        [Route("api/Questions/{id:int}")]
+        [HttpDelete]
         public async Task<IHttpActionResult> DeleteAddress(int id)
         {
             Question question = await db.Questions.FindAsync(id);
