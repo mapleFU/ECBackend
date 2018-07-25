@@ -33,32 +33,25 @@ namespace ECBack.Controllers
         [ResponseType(typeof(Question))]
         [Route("api/Questions/{id:int}")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetQuestion(int id,[FromUri]int pn)
+        public HttpResponseMessage GetQuestion(int id,[FromUri]int pn)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
             }
 
 
             IQueryable<Question> questions;
-            var ques = await db.GoodEntities.FindAsync(id);
-            db.Entry(ques).Reference(c => c.Questions).Load();
-            
-            
+            var ques =  db.GoodEntities.Find(id);
+            db.Entry(ques).Collection(c => c.Questions).Load();          
             questions = ques.Questions.AsQueryable();
+            var num = questions.Count();
             foreach (var que in ques.Questions)
             {
-                await db.Entry(que).Collection(a => a.Replies).LoadAsync();
+                 db.Entry(que).Collection(a => a.Replies).Load();
             }
-            var QuestionEntities = await questions.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
-            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, new
-            {
-                PageCount=QuestionEntities.Count()/PageDataNumber,
-                QuestionEntities
-                
-            }));
-           
+            var QuestionEntities =  questions.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
+            return Request.CreateResponse(HttpStatusCode.OK, new { QuestionEntities,num});
+
         }
 
         //PUT:api/Questions/5.......其实我感觉put没必要啊，问题提出了不能修改了
@@ -110,7 +103,7 @@ namespace ECBack.Controllers
 
             //找到这个商品的东东
             GoodEntity goodEntity = db.GoodEntities.Find(Goodid);
-            goodEntity.Questions.Add(question);
+            question.GoodEntityID = Goodid;
            
            
             if (goodEntity == null)
