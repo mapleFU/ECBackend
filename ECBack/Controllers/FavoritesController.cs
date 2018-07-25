@@ -136,7 +136,7 @@ namespace ECBack.Controllers
         [AuthenticationFilter]
         [HttpPost]
         [Route("api/Favorites")]
-        public HttpResponseMessage PostFavorite([FromBody] int GoodID)
+        public HttpResponseMessage PostFavorite([FromUri] int GoodID)
         {
             if (HttpContext.Current.User == null)
             {
@@ -181,7 +181,7 @@ namespace ECBack.Controllers
         [AuthenticationFilter]
         [HttpDelete]
         [Route("api/Favorites")]
-        public HttpResponseMessage DeleteFavorite([FromBody] int GoodID)
+        public HttpResponseMessage DeleteFavorite([FromUri] int GoodID)
         {
             if (HttpContext.Current.User == null)
             {

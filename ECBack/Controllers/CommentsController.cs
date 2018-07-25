@@ -7,8 +7,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
+using ECBack.Filters;
 using ECBack.Models;
 
 namespace ECBack.Controllers
@@ -35,52 +37,56 @@ namespace ECBack.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("api/Comments")]
-        public async Task<IHttpActionResult> GetRelatedComments([FromUri] CommentsQuery data)
+        public HttpResponseMessage GetRelatedComments([FromUri] CommentsQuery data)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             int pn = data.Pn ?? 1;
             IQueryable<Comment> Comments;
-            var cate = await db.SaleEntities.FindAsync(data.GoodID);
+            var cate = db.SaleEntities.Find(data.GoodID);
             if (cate == null)
             {
-                return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, "GoodID not found"));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "GoodID not found");
             }
             db.Entry(cate).Collection(c => c.Comments).Load();
             Comments = cate.Comments.AsQueryable();
 
-            var rs = await Comments.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
+            var rs = Comments.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToList();
 
-            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
+            return Request.CreateResponse(HttpStatusCode.OK,
                 new
                 {
                     ResultNum = rs.Count(),
                     Comments = rs,
                     PageNum = pn
-                }));
+                });
         }
         /// <summary>
         /// 单个评论
         /// </summary>
         /// <param name=""></param>
         /// <returns></returns>
+        [AuthenticationFilter]
         [ResponseType(typeof(Comment))]
         [Route("api/Comments/find")]
-        public HttpResponseMessage GetComment([FromUri] CommentQuery OneQuery)
+        public HttpResponseMessage GetComment([FromUri] int GoodID)
         {
+            if (HttpContext.Current.User == null)
+            {
+                // 无权
+                System.Diagnostics.Debug.WriteLine("Get Favorites Null");
+                return Request.CreateResponse((HttpStatusCode)403);
+            }
+            User requestUser = (User)HttpContext.Current.User;
+            int user_id = requestUser.UserID;
 
             IQueryable<Comment> Comments;
-            var cate = db.SaleEntities.Find(OneQuery.GoodID);
-            db.Entry(cate).Collection(c => c.Comments).Load();
-            Comments = cate.Comments.AsQueryable();
-            var comments = Comments.ToList();
+            Comments = db.Comments;
+            List<Comment> tt = Comments.ToList();
+
+            
             Comment comment = null;
-            foreach (var VARIABLE in comments)
+            foreach (var VARIABLE in tt)
             {
-                if (VARIABLE.UserID == OneQuery.UserID)
+                if (VARIABLE.UserID == user_id&&VARIABLE.SaleEntityID==GoodID)
                     comment = VARIABLE;
             }
             if (comment == null)
