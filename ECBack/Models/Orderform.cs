@@ -18,12 +18,14 @@ namespace ECBack.Models
         [JsonIgnore]
         public int SaleEntityID { get; set; }
 
+        [JsonIgnore]
         [ForeignKey("SaleEntityID")]
         public SaleEntity SaleEntity { get; set; }
 
         [JsonIgnore]
         public int OrderformID { get; set; }
 
+        [JsonIgnore]
         [ForeignKey("OrderformID")]
         public Orderform Orderform { get; set; }
     }

@@ -45,11 +45,13 @@ namespace ECBack.Controllers
             {
                 return BadRequest(ModelState);
             }
+            System.Diagnostics.Debug.WriteLine("Good Model.");
             Seller seller = (Seller)HttpContext.Current.User;
+            System.Diagnostics.Debug.WriteLine("Seller phone number " + seller.PhoneNumber);
             GoodEntity goodEntity = new GoodEntity()
             {
                 SellerID = seller.SellerID,
-                Seller = seller,
+                
                 BrandID = goodEntitySchema.BrandID,
                 Stock = goodEntitySchema.Stock ?? 0,
                 Brief = goodEntitySchema.Brief,
@@ -60,7 +62,8 @@ namespace ECBack.Controllers
 
             };
 
-            goodEntity.SellerID = seller.SellerID;
+            System.Diagnostics.Debug.WriteLine(seller.SellerID + " " + goodEntitySchema.BrandID + " " + 
+                goodEntitySchema.Stock  + " " + goodEntitySchema.Brief + " " + goodEntitySchema.DetailImages);
             db.GoodEntities.Add(goodEntity);
             await db.SaveChangesAsync();
             var resp = Request.CreateResponse(HttpStatusCode.NoContent);
@@ -132,6 +135,17 @@ namespace ECBack.Controllers
             return Ok(entity);
         }
 
+        [NonAction]
+        private int toPageNum(int allNum)
+        {
+            int pageNum = allNum / PageDataNumber;
+            if (allNum % 15 != 0)
+            {
+                pageNum += 1;
+            }
+            return pageNum;
+        }
+
         // GET: api/GoodEntities
         [HttpGet]
         [Route("api/GoodEntities")]
@@ -186,7 +200,7 @@ namespace ECBack.Controllers
                 return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
                    new
                    {
-                       ResultNum = resultSchema.Count(),
+                       ResultNum = toPageNum(resultSchema.Count()),
                        GoodEntities = resultSchema,
                        PageNum = pn,
                        AllNum = 0
@@ -197,11 +211,7 @@ namespace ECBack.Controllers
             System.Diagnostics.Debug.WriteLine("ge is still not null");
             int allNum = await goodEntities.CountAsync();
             System.Diagnostics.Debug.WriteLine("ge get success");
-            int pageNum = allNum / PageDataNumber;
-            if (allNum % 15 != 0)
-            {
-                pageNum += 1;
-            }
+            
             System.Diagnostics.Debug.WriteLine("ge cnt success");
             if (goodEntities == null)
             {
@@ -209,7 +219,7 @@ namespace ECBack.Controllers
                 return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
                    new
                    {
-                       ResultNum = resultSchema.Count(),
+                       ResultNum = toPageNum( resultSchema.Count() ),
                        GoodEntities = resultSchema,
                        PageNum = pn,
                        AllNum = allNum
@@ -267,7 +277,7 @@ namespace ECBack.Controllers
                 return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
                     new
                     {
-                        ResultNum = resultSchema.Count(),
+                        ResultNum = toPageNum( resultSchema.Count() ),
                         GoodEntities = resultSchema,
                         PageNum = pn,
                         AllNum = allNum
@@ -277,7 +287,7 @@ namespace ECBack.Controllers
                 return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
                    new
                    {
-                       ResultNum = resultSchema.Count(),
+                       ResultNum = toPageNum( resultSchema.Count() ),
                        GoodEntities = resultSchema,
                        PageNum = pn,
                        AllNum = allNum

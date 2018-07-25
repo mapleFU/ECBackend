@@ -49,10 +49,10 @@ namespace ECBack.Controllers
         [Route("api/Orderforms")]
         public async Task<IHttpActionResult> ViewOrderform([FromUri] QueryPageURI queryData)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest();
+            //}
             bool usePn = true;
             if (queryData == null || queryData.UsePag == false)
             {
@@ -105,13 +105,18 @@ namespace ECBack.Controllers
             
             orderform.UserID = currentUsr.UserID;
             orderform.AddressID = addPostFormRequest.AddressID;
-            logistic.ToAddress = (await db.Addresses.FindAsync(addPostFormRequest.AddressID)).DetailAddress;
+            var address = await db.Addresses.FindAsync(addPostFormRequest.AddressID);
+            if (address == null)
+            {
+                return NotFound();
+            }
+            logistic.ToAddress = address.DetailAddress;
             // orderform.AddressID
             db.Orderforms.Add(orderform);
             db.Logistics.Add(logistic);
 
             float totalPrice = 0;
-
+            System.Diagnostics.Debug.WriteLine("Get has:" + currentUsr.NickName);
             foreach (var record in addPostFormRequest.SaleSingleRecords)
             {
                 var seRecord = new SERecord()
@@ -120,6 +125,7 @@ namespace ECBack.Controllers
                     EntityNum = record.Number ?? 1,
 
                 };
+                System.Diagnostics.Debug.WriteLine("ADD ONE");
                 seRecord.OrderformID = orderform.OrderformID;
                 seRecord.SaleEntityID = seRecord.SaleEntityID;
                 // orderform.SERecord = seRecord;
@@ -133,7 +139,7 @@ namespace ECBack.Controllers
 
             }
             orderform.TotalPrice = totalPrice;
-
+            System.Diagnostics.Debug.WriteLine("Total Price " + totalPrice);
             await db.SaveChangesAsync();
             var resp = Request.CreateResponse(HttpStatusCode.NoContent);
             resp.Headers.Add("Location", "/api/Orderforms/" + orderform.OrderformID);
