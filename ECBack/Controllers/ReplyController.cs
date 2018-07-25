@@ -55,7 +55,7 @@ namespace ECBack.Controllers
                 reply.ReplyDetail = detail;
                 reply.UserReplyTime = DateTime.Now;
                 db.Replies.Add(reply);
-                question.Replies.Add(reply);//这玩意加到问题的list
+                reply.QuestionID = question_id;
                 db.SaveChangesAsync();
                 response = Request.CreateResponse(HttpStatusCode.OK, "Created");
             }

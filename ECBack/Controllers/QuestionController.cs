@@ -37,6 +37,7 @@ namespace ECBack.Controllers
         {
             if (!ModelState.IsValid)
             {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "comment not found");
             }
 
 
@@ -49,8 +50,8 @@ namespace ECBack.Controllers
             {
                  db.Entry(que).Collection(a => a.Replies).Load();
             }
-            var QuestionEntities =  questions.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
-            return Request.CreateResponse(HttpStatusCode.OK, new { QuestionEntities,num});
+            var qqq = questions.Skip(PageDataNumber*(pn-1));
+            return Request.CreateResponse(HttpStatusCode.OK, new { qqq,num});
 
         }
 
