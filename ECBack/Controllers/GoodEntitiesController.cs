@@ -25,6 +25,8 @@ namespace ECBack.Controllers
         public string Brief { get; set; }
         public int BrandID { get; set; }
         public decimal GoodPrice { get; set; }
+        //public int AllNum { get; set; }
+        //public int PageNum { get; set; }
     }
 
     public class GoodEntitiesController : ApiController
@@ -52,6 +54,10 @@ namespace ECBack.Controllers
                 Stock = goodEntitySchema.Stock ?? 0,
                 Brief = goodEntitySchema.Brief,
                 DetailImages = goodEntitySchema.DetailImages,
+                FavoriteNum = 0,
+                GoodEntityState = 0,
+                SellProvince = "上海",
+
             };
 
             goodEntity.SellerID = seller.SellerID;
@@ -86,6 +92,11 @@ namespace ECBack.Controllers
             {
                 goodEntities = fullEntities.Where(u => u.GoodName.ToLower().Contains(data.Kw.ToLower()));
             }
+            int allNum = (await goodEntities.CountAsync()) / PageDataNumber;
+            if (allNum % PageDataNumber != 0)
+            {
+                allNum += 1;
+            }
 
             var rs = await goodEntities.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
             int resultNum = rs.Count();
@@ -97,7 +108,8 @@ namespace ECBack.Controllers
                 {
                     ResultNum = rs.Count(),
                     GoodEntities = rs,
-                    PageNum = pn
+                    PageNum = pn,
+                   
                 }));
         }
 
@@ -138,57 +150,135 @@ namespace ECBack.Controllers
             IQueryable<GoodEntity> goodEntities;
             if (data != null && data.Kw == null)
             {
+                System.Diagnostics.Debug.WriteLine("data is not null.");
                 goodEntities = db.GoodEntities;
             }
             else
             {
-                goodEntities = db.GoodEntities.Where(u => u.GoodName.ToLower().Contains(data.Kw.ToLower()));
-            }
-            goodEntities = goodEntities.Include(ge => ge.GAttributes).OrderBy(entity => entity.GoodEntityID);
-            var rs = await goodEntities.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
+                System.Diagnostics.Debug.WriteLine("data is null.");
+                if (db.GoodEntities == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("db.GE is null.");
+                    goodEntities = null;
+                } else
+                {
+                    System.Diagnostics.Debug.WriteLine("db.GE is not null.");
 
-            List<GoodEntitySchema> resultSchema = new List<GoodEntitySchema>();
-            foreach (var entity in rs)
-            {
-                // TODO: only load one image
-                // https://stackoverflow.com/questions/3356541/entity-framework-linq-query-include-multiple-children-entities
-                await db.Entry(entity).Collection(ge => ge.Images).LoadAsync();
-                await db.Entry(entity).Collection(ge => ge.SaleEntities).LoadAsync();
-                //await db.Entry(entity).Collection(ge => ge.GAttributes).LoadAsync();
-                //foreach (var attr in entity.GAttributes)
-                //{
-                //    await db.Entry(attr).Collection(a => a.Options).LoadAsync();
-                //}
-                string image;
-                try
-                {
-                    image = entity.Images.First().ImageURL;
-                } catch
-                {
-                    image = null;
+                    goodEntities = db.GoodEntities.Where(u => u.GoodName.ToLower().Contains(data.Kw.ToLower()));
+                    System.Diagnostics.Debug.WriteLine("Get search result.");
+                    int cnt = await goodEntities.CountAsync();
+
+                    if (cnt == 0)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Cnt is zero");
+                        goodEntities = null;
+                    } else
+                    {
+                        System.Diagnostics.Debug.WriteLine("cnt is " + cnt);
+                    }
+
                 }
-                decimal min_price = entity.SaleEntities.Select(se => se.Price).Min();
-                resultSchema.Add(new GoodEntitySchema()
-                {
-                    GoodName = entity.GoodName,
-                    GoodEntityID = entity.GoodEntityID,
-                    DetailImages = image,
-                    GoodPrice = min_price
-                });
-                
-                // load attrs
-
             }
+            List<GoodEntitySchema> resultSchema = new List<GoodEntitySchema>();
+            if (goodEntities == null)
+            {
+                System.Diagnostics.Debug.WriteLine("goodentity is null ");
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
+                   new
+                   {
+                       ResultNum = resultSchema.Count(),
+                       GoodEntities = resultSchema,
+                       PageNum = pn,
+                       AllNum = 0
+                   }));
+            }
+            System.Diagnostics.Debug.WriteLine("ge is not null");
+            goodEntities = goodEntities.Include(ge => ge.GAttributes).OrderBy(entity => entity.GoodEntityID);
+            System.Diagnostics.Debug.WriteLine("ge is still not null");
+            int allNum = await goodEntities.CountAsync();
+            System.Diagnostics.Debug.WriteLine("ge get success");
+            int pageNum = allNum / PageDataNumber;
+            if (allNum % 15 != 0)
+            {
+                pageNum += 1;
+            }
+            System.Diagnostics.Debug.WriteLine("ge cnt success");
+            if (goodEntities == null)
+            {
+                System.Diagnostics.Debug.WriteLine("ge is null here, die");
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
+                   new
+                   {
+                       ResultNum = resultSchema.Count(),
+                       GoodEntities = resultSchema,
+                       PageNum = pn,
+                       AllNum = allNum
+                   }));
+            }
+            System.Diagnostics.Debug.WriteLine("See rs!");
 
-
-
-            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
-                new
+            try
+            {
+                var rs = await goodEntities.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
+                foreach (var entity in rs)
                 {
-                    ResultNum = rs.Count(),
-                    GoodEntities = resultSchema,
-                    PageNum = pn
-                }));
+                    // TODO: only load one image
+                    // https://stackoverflow.com/questions/3356541/entity-framework-linq-query-include-multiple-children-entities
+                    await db.Entry(entity).Collection(ge => ge.Images).LoadAsync();
+                    await db.Entry(entity).Collection(ge => ge.SaleEntities).LoadAsync();
+                    //await db.Entry(entity).Collection(ge => ge.GAttributes).LoadAsync();
+                    //foreach (var attr in entity.GAttributes)
+                    //{
+                    //    await db.Entry(attr).Collection(a => a.Options).LoadAsync();
+                    //}
+                    string image;
+                    try
+                    {
+                        image = entity.DescribeImages[0];
+                    }
+                    catch
+                    {
+                        image = null;
+                    }
+                    decimal min_price = entity.SaleEntities.Select(se => se.Price).Min();
+                    resultSchema.Add(new GoodEntitySchema()
+                    {
+                        GoodName = entity.GoodName,
+                        GoodEntityID = entity.GoodEntityID,
+                        DetailImages = image,
+                        GoodPrice = min_price,
+
+                    });
+
+                    // load attrs
+
+                }
+
+
+
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
+                    new
+                    {
+                        ResultNum = resultSchema.Count(),
+                        GoodEntities = resultSchema,
+                        PageNum = pn,
+                        AllNum = allNum
+                    }));
+            } catch (InvalidOperationException)
+            {
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
+                   new
+                   {
+                       ResultNum = resultSchema.Count(),
+                       GoodEntities = resultSchema,
+                       PageNum = pn,
+                       AllNum = allNum
+                   }));
+            }
+            
+
+            
+            
         }
         
         protected override void Dispose(bool disposing)
