@@ -240,7 +240,15 @@ namespace ECBack.Controllers
                     {
                         image = null;
                     }
-                    decimal min_price = entity.SaleEntities.Select(se => se.Price).Min();
+                    decimal min_price = 0;
+                    try
+                    {
+                        min_price = entity.SaleEntities.Select(se => se.Price).Min();
+                    } catch (InvalidOperationException)
+                    {
+                        min_price = 0;
+                    }
+                    
                     resultSchema.Add(new GoodEntitySchema()
                     {
                         GoodName = entity.GoodName,

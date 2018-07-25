@@ -137,6 +137,7 @@ namespace ECBack.Controllers
             var cart = await db.Carts.FindAsync(requestUser.UserID);
             // Load data
             await db.Entry(cart).Collection(c => c.CartRecords).LoadAsync();
+            
             // await db.Entry(requestUser).Reference(u => u.Cart).LoadAsync();
             return Ok(cart);
         }
