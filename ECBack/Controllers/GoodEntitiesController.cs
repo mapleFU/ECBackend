@@ -30,9 +30,17 @@ namespace ECBack.Controllers
         [HttpPost]
         [Route("api/GoodEntities")]
         [AuthenticationFilter]
-        public async Task<IHttpActionResult> AddGoodEntity()
+        public async Task<IHttpActionResult> AddGoodEntity([FromBody] GoodEntity goodEntity)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            db.GoodEntities.Add(goodEntity);
+            await db.SaveChangesAsync();
+            var resp = Request.CreateResponse(HttpStatusCode.NoContent);
+            resp.Headers.Add("Location", "api/GoodEntities/" + goodEntity.GoodEntityID);
+            return ResponseMessage(resp);
         }
 
 
@@ -93,7 +101,9 @@ namespace ECBack.Controllers
             return Ok(entity);
         }
 
-        // GET: api/GoodEntitie
+        // GET: api/GoodEntities
+        [HttpGet]
+        [Route("api/GoodEntities")]
         public async Task<IHttpActionResult> GetGoodEntities([FromUri] CategoryQuery data)
         {
             if (!ModelState.IsValid)

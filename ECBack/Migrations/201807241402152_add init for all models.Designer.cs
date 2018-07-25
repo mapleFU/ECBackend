@@ -7,13 +7,13 @@ namespace ECBack.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class updatethetableofquestionandattrbutes : IMigrationMetadata
+    public sealed partial class addinitforallmodels : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(updatethetableofquestionandattrbutes));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(addinitforallmodels));
         
         string IMigrationMetadata.Id
         {
-            get { return "201807240812090_update the table of question and attrbutes."; }
+            get { return "201807241402152_add init for all models"; }
         }
         
         string IMigrationMetadata.Source

@@ -17,7 +17,85 @@ using System.Web.Mvc;
 using System.Web.Mvc.Filters;
 
 namespace ECBack.Filters
-{ 
+{
+    public class SellerAuthFilter : Attribute, System.Web.Http.Filters.IAuthenticationFilter
+    {
+        private readonly OracleDbContext dbContext;
+
+        public SellerAuthFilter() : base()
+        {
+            dbContext = new OracleDbContext();
+        }
+
+        public bool AllowMultiple { get { return false; } }
+
+        // public bool AllowMultiple => throw new NotImplementedException();
+
+        public async Task AuthenticateAsync(HttpAuthenticationContext context, CancellationToken cancellationToken)
+        {
+            HttpRequestMessage request = context.Request;
+            AuthenticationHeaderValue authorization = request.Headers.Authorization;
+
+            if (authorization == null)
+            {
+                // No authentication was attempted (for this authentication method).
+                // Do not set either Principal (which would indicate success) or ErrorResult (indicating an error).
+                return;
+            }
+
+            System.Diagnostics.Debug.WriteLine(authorization.Scheme);
+            if (authorization.Scheme != "Bearer")
+            {
+                // no authentication was attempted (for this authentication method).
+                // do not set either principal (which would indicate success) or errorresult (indicating an error).
+                return;
+            }
+
+            if (String.IsNullOrEmpty(authorization.Parameter))
+            {
+                // Authentication was attempted but failed. Set ErrorResult to indicate an error.
+                context.ErrorResult = new AuthenticationFailureResult("Missing credentials", request);
+                return;
+            }
+
+            string phoneNumber = "";
+            System.Diagnostics.Debug.WriteLine(authorization.Parameter);
+            bool validate = AuthController.ValidateToken(authorization.Parameter, out phoneNumber, "Seller");
+            if (!validate)
+            {
+                // 403
+                return;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine(phoneNumber);
+                var usr = await dbContext.Sellers.Where(s => s.PhoneNumber == phoneNumber).FirstOrDefaultAsync();
+                if (usr == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("User is null, refused!");
+                    return;
+                }
+
+                // fill value
+                context.Principal = usr;
+                HttpContext.Current.User = usr;
+                if (context.Principal != null)
+                {
+                    System.Diagnostics.Debug.WriteLine("User is not null, but we fill in it.");
+                }
+            }
+
+        }
+
+        public Task ChallengeAsync(HttpAuthenticationChallengeContext context, CancellationToken cancellationToken)
+        {
+            var challenge = new AuthenticationHeaderValue("Bearer", cancellationToken.ToString());
+            context.Result = new AddChallengeOnUnauthorizedResult(challenge, context.Result);
+
+            return Task.FromResult(0);
+        }
+    }
+
     public class AuthenticationFailureResult : IHttpActionResult
     {
         public AuthenticationFailureResult(string reasonPhrase, HttpRequestMessage request)

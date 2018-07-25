@@ -55,10 +55,18 @@ namespace ECBack.Controllers
         private const int defaultExpireMinutes = 60;
         // 我恨asp.net，我觉得这是个傻屌玩意
         private const string Secret = "5oiR5oGoYXNwLm5ldO+8jOaIkeinieW+l+i/meaYr+S4quWCu+WxjOeOqeaEjw==";
-
-        public static string GenerateToken(string username, int expireMinutes = 20)
+        private const string SellerSecret = "5L2g5aaI5q275LqG77yM5oiR5piv5L2g5ZOl5ZOl77yM5oiR5Lus6YO95piv5L2g5aaI55qE5YS/5a2Q77yB";
+        public static string GenerateToken(string username, int expireMinutes = 20, string mode = "User")
         {
-            var symmetricKey = Convert.FromBase64String(Secret);
+            string usingSecretString;
+            if (mode == "User")
+            {
+                usingSecretString = Secret;
+            } else
+            {
+                usingSecretString = SellerSecret;
+            }
+            var symmetricKey = Convert.FromBase64String(usingSecretString);
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var now = DateTime.UtcNow;
@@ -181,11 +189,12 @@ namespace ECBack.Controllers
             return response;
         }
 
-        public static bool ValidateToken(string token, out string username)
+
+        public static bool ValidateToken(string token, out string username, string mode="User")
         {
             username = null;
 
-            var simplePrinciple = GetPrincipal(token);
+            var simplePrinciple = GetPrincipal(token, mode);
             var identity = simplePrinciple.Identity as ClaimsIdentity;
 
             if (identity == null)
@@ -205,7 +214,7 @@ namespace ECBack.Controllers
             return true;
         }
 
-        public static ClaimsPrincipal GetPrincipal(string token)
+        public static ClaimsPrincipal GetPrincipal(string token, string mode)
         {
             try
             {
@@ -215,7 +224,17 @@ namespace ECBack.Controllers
                 if (jwtToken == null)
                     return null;
 
-                var symmetricKey = Convert.FromBase64String(Secret);
+                string usingSecretString;
+                if (mode == "User")
+                {
+                    usingSecretString = Secret;
+                }
+                else
+                {
+                    usingSecretString = SellerSecret;
+                }
+
+                var symmetricKey = Convert.FromBase64String(usingSecretString);
 
                 var validationParameters = new TokenValidationParameters()
                 {

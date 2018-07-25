@@ -24,6 +24,7 @@ namespace ECBack.Controllers
     /// </summary>
     public class QueryPageURI
     {
+        public bool? UsePag { get; set; }
         public int? Pn { get; set; }
     }
     public class CartsController : ApiController
@@ -86,6 +87,28 @@ namespace ECBack.Controllers
             return ResponseMessage(Request.CreateResponse(HttpStatusCode.NoContent));
         }
 
+        [AuthenticationFilter]
+        [HttpGet]
+        [Route("api/Carts/Count")]
+        public async Task<IHttpActionResult> GetCount()
+        {
+            if (HttpContext.Current.User == null)
+            {
+                // 无权
+                System.Diagnostics.Debug.WriteLine("Get Carts Null");
+                return ResponseMessage(Request.CreateResponse((HttpStatusCode)403));
+            }
+            User requestUser = (User)HttpContext.Current.User;
+            var cart = await db.Carts.FindAsync(requestUser.UserID);
+            // Load data
+            await db.Entry(cart).Collection(c => c.CartRecords).LoadAsync();
+            
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, new
+            {
+                EntityNumber = cart.CartRecords.Count(),
+            }));
+        }
+            
 
         // GET: api/Carts
         [AuthenticationFilter]
