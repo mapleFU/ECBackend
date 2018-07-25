@@ -45,13 +45,23 @@ namespace ECBack.Controllers
             var ques =  db.GoodEntities.Find(id);
             db.Entry(ques).Collection(c => c.Questions).Load();          
             questions = ques.Questions.AsQueryable();
-            var num = questions.Count();
+            var QuestionNum = questions.Count();
+            var PageNum=0;
+           
+            if (QuestionNum % 10 == 0)
+            {
+                PageNum = QuestionNum / PageDataNumber;
+            }
+            else
+            {
+                PageNum = QuestionNum / PageDataNumber + 1;
+            }
             foreach (var que in ques.Questions)
             {
                  db.Entry(que).Collection(a => a.Replies).Load();
             }
-            var qqq = questions.Skip(PageDataNumber*(pn-1));
-            return Request.CreateResponse(HttpStatusCode.OK, new { qqq,num});
+            var QuestionEntities = questions.Skip(PageDataNumber*(pn-1));
+            return Request.CreateResponse(HttpStatusCode.OK, new { QuestionEntities, QuestionNum, PageNum });
 
         }
 
