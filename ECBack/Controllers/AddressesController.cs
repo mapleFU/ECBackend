@@ -66,19 +66,24 @@ namespace ECBack.Controllers
             return usr;
         }
 
+        
 
-        [Route("api/Addresses/{AddressId}")]
+        [Route("api/Addresses")]
         [HttpGet]
         [AuthenticationFilter]
-        public async Task<IHttpActionResult> GetAddresses(int AddressID)
+        public async Task<IHttpActionResult> ReceiveAddresses()
         {
             // load user
             var usr = (User)HttpContext.Current.User;
-            
+            if (usr == null)
+            {
+                return BadRequest();
+            }
+            System.Diagnostics.Debug.WriteLine("User name: " + usr.NickName);
             // usr is not null 
+            var addresses = await db.Addresses.Where(add => add.UserID == usr.UserID).ToListAsync();
             
-            await db.Entry(usr).Collection(u => u.Addresses).LoadAsync();
-            return Ok(usr.Addresses);
+            return Ok(addresses);
         }
 
         /// <summary>
@@ -129,10 +134,10 @@ namespace ECBack.Controllers
             return ResponseMessage(responseMessage);
         }
 
-        [Route("api/Users/{UserID:int}/Addresses/{AddressID:int}")]
+        [Route("api/Addresses/{AddressID:int}")]
         [HttpPost]
         [AuthenticationFilter]
-        public async Task<IHttpActionResult> PartialUpdateAddresses(int UserID, int AddressID, [FromBody] Address data)
+        public async Task<IHttpActionResult> PartialUpdateAddresses(int AddressID, [FromBody] Address data)
         {
             // load user
 
@@ -140,12 +145,15 @@ namespace ECBack.Controllers
             {
                 return BadRequest(ModelState);
             }
-            VerifyUser(UserID);
-            var usr = await GetUser(UserID);
+            var usr = (User)HttpContext.Current.User;
             Address address = await db.Addresses.FindAsync(AddressID);
             if (address == null)
             {
                 return NotFound();
+            }
+            if (address.UserID != usr.UserID)
+            {
+                return StatusCode((HttpStatusCode)403);
             }
             address = data;
             address.AddressID = AddressID;
@@ -154,21 +162,24 @@ namespace ECBack.Controllers
             return Ok();
         }
 
-        [Route("api/Users/{UserID:int}/Addresses/{AddressID:int}")]
-        [HttpPost]
+        [Route("api/Addresses/{AddressID:int}")]
+        [HttpDelete]
         [AuthenticationFilter]
         public async Task<IHttpActionResult> DeleteAddress(int UserID, int AddressID)
         {
-            VerifyUser(UserID);
+            var usr = (User)HttpContext.Current.User;
             var add = await db.Addresses.FindAsync(AddressID);
             if (add == null)
             {
                 return NotFound();
-            } else
+            } 
+            if (add.UserID != usr.UserID)
             {
-                db.Addresses.Remove(add);
-                return Ok();
+                return StatusCode((HttpStatusCode)403);
             }
+            db.Addresses.Remove(add);
+            return Ok();
+            
         }
 
         protected override void Dispose(bool disposing)
