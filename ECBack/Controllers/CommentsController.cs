@@ -29,7 +29,7 @@ namespace ECBack.Controllers
         private OracleDbContext db = new OracleDbContext();
         private const int PageDataNumber = 15;
         /// <summary>
-        /// 获取特定商品特定页
+        /// 获取特定商品一页评论
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
@@ -69,7 +69,7 @@ namespace ECBack.Controllers
         /// <returns></returns>
         [ResponseType(typeof(Comment))]
         [Route("api/Comments/find")]
-        public IHttpActionResult GetComment([FromUri] CommentQuery OneQuery)
+        public HttpResponseMessage GetComment([FromUri] CommentQuery OneQuery)
         {
 
             IQueryable<Comment> Comments;
@@ -85,10 +85,10 @@ namespace ECBack.Controllers
             }
             if (comment == null)
             {
-                return NotFound();
+                return Request.CreateResponse(HttpStatusCode.BadRequest,"comment not found");
             }
 
-            return Ok(comment);
+            return Request.CreateResponse(HttpStatusCode.OK,comment);
         }
 
         // PUT: api/Comments/5

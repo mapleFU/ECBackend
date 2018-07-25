@@ -45,7 +45,7 @@ namespace ECBack.Controllers
                 return ResponseMessage(Request.CreateResponse((HttpStatusCode)403));
             }
             
-            List<Schema> shit = new List<Schema>();
+            List<Schema> Schemas = new List<Schema>();
             IQueryable<Favorite> Favs = db.Favorites;
             List<GoodEntity> goods = new List<GoodEntity>();
             User requestUser = (User)HttpContext.Current.User;
@@ -67,7 +67,7 @@ namespace ECBack.Controllers
                     tmp.GoodName = VARIABLE.GoodName;
                     tmp.GoodPrice = VARIABLE.SaleEntities.First().Price;
                     tmp.ImageURL = VARIABLE.Images.First().ImageURL;
-                    shit.Add(tmp);
+                    Schemas.Add(tmp);
                 }
             }
             catch (Exception e)
@@ -76,7 +76,7 @@ namespace ECBack.Controllers
                 throw;
             }
             
-            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,shit));
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,Schemas));
         }
 
         // GET: api/Favorites/5
@@ -173,21 +173,45 @@ namespace ECBack.Controllers
             db.SaveChanges();
             return response;
         }
-
-        // DELETE: api/Favorites/5
-        [ResponseType(typeof(Favorite))]
-        public async Task<IHttpActionResult> DeleteFavorite(int id)
+        /// <summary>
+        /// 根据UserID和GoodID删除收藏
+        /// </summary>
+        /// <param name="GoodID"></param>
+        /// <returns></returns>
+        [AuthenticationFilter]
+        [HttpDelete]
+        [Route("api/Favorites")]
+        public HttpResponseMessage DeleteFavorite([FromBody] int GoodID)
         {
-            Favorite favorite = await db.Favorites.FindAsync(id);
-            if (favorite == null)
+            if (HttpContext.Current.User == null)
             {
-                return NotFound();
+                // 无权
+                System.Diagnostics.Debug.WriteLine("Get Favorites Null");
+                return Request.CreateResponse((HttpStatusCode)403);
             }
-
+            User requestUser = (User)HttpContext.Current.User;
+            int user_id = requestUser.UserID;
+            int good_id = GoodID;
+           
+            Favorite favorite=new Favorite();
+            favorite.FavoriteID = -1;
+            List <Favorite>favs= db.Favorites.ToList();
+            for(int i=0;i<favs.Count();i++)
+            {
+                if (favs[i].UserID == user_id && favs[i].GoodEntityID == good_id)
+                {
+                    favorite = favs[i];
+                    break;
+                }
+            }
+            if (!FavoriteExists(favorite.FavoriteID))
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "favorite doesn't exist.");
+            }
             db.Favorites.Remove(favorite);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
 
-            return Ok(favorite);
+            return Request.CreateErrorResponse(HttpStatusCode.OK,"deleted");
         }
 
         protected override void Dispose(bool disposing)
