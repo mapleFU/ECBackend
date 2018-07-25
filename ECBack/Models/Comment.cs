@@ -18,6 +18,12 @@ namespace ECBack.Models
         [Key]
         public int CommentID { get; set; }
 
+        //[ForeignKey("DisplayEntity")]
+        //public int DisplayEntityID { get; set; }
+
+        //[JsonIgnore]
+        //public DisplayEntity DisplayEntity { get; set; }
+
         [MaxLength(400)]
         public string Detail { get; set; }
 
@@ -39,12 +45,10 @@ namespace ECBack.Models
             LevelRank = 0;
         }
 
-        [JsonIgnore]
         public int SaleEntityID { get; set; }
 
-        [JsonIgnore]
+     
         [ForeignKey("SaleEntityID")]
-        public SaleEntity SaleEntity { get; set; }
-
+        public  SaleEntity SaleEntity{ get; set; }
     }
 }

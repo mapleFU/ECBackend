@@ -18,18 +18,24 @@ namespace ECBack.Controllers
         public int GoodID { get; set; }
         public int? Pn { get; set; }
     }
+
+    public class CommentQuery
+    {
+        public int GoodID { get; set; }
+        public int UserID { get; set; }
+    }
     public class CommentsController : ApiController
     {
         private OracleDbContext db = new OracleDbContext();
         private const int PageDataNumber = 15;
         /// <summary>
-        /// 获取特定商品特定页
+        /// 获取特定商品一页评论
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("api/Comments")]
-        public async Task<IHttpActionResult> GetRelatedEntities([FromUri] CommentsQuery data)
+        public async Task<IHttpActionResult> GetRelatedComments([FromUri] CommentsQuery data)
         {
             if (!ModelState.IsValid)
             {
@@ -39,7 +45,11 @@ namespace ECBack.Controllers
             int pn = data.Pn ?? 1;
             IQueryable<Comment> Comments;
             var cate = await db.SaleEntities.FindAsync(data.GoodID);
-            db.Entry(cate).Reference(c => c.Comments).Load();
+            if (cate == null)
+            {
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, "GoodID not found"));
+            }
+            db.Entry(cate).Collection(c => c.Comments).Load();
             Comments = cate.Comments.AsQueryable();
 
             var rs = await Comments.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToListAsync();
@@ -52,27 +62,33 @@ namespace ECBack.Controllers
                     PageNum = pn
                 }));
         }
-        // GET: api/Comments/5
+        /// <summary>
+        /// 单个评论
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns></returns>
         [ResponseType(typeof(Comment))]
-        public IHttpActionResult GetComment(int GoodID, int UserID)
+        [Route("api/Comments/find")]
+        public HttpResponseMessage GetComment([FromUri] CommentQuery OneQuery)
         {
+
             IQueryable<Comment> Comments;
-            var cate = db.SaleEntities.Find(GoodID);
-            db.Entry(cate).Reference(c => c.Comments).Load();
+            var cate = db.SaleEntities.Find(OneQuery.GoodID);
+            db.Entry(cate).Collection(c => c.Comments).Load();
             Comments = cate.Comments.AsQueryable();
             var comments = Comments.ToList();
             Comment comment = null;
             foreach (var VARIABLE in comments)
             {
-                if (VARIABLE.UserID == UserID)
+                if (VARIABLE.UserID == OneQuery.UserID)
                     comment = VARIABLE;
             }
             if (comment == null)
             {
-                return NotFound();
+                return Request.CreateResponse(HttpStatusCode.BadRequest,"comment not found");
             }
 
-            return Ok(comment);
+            return Request.CreateResponse(HttpStatusCode.OK,comment);
         }
 
         // PUT: api/Comments/5
@@ -111,18 +127,28 @@ namespace ECBack.Controllers
         }
 
         // POST: api/Comments
-        [ResponseType(typeof(Comment))]
-        public IHttpActionResult PostComment(Comment comment)
+        [HttpPost]
+        [Route("api/Comments")]
+        public IHttpActionResult PostComment([FromBody] Comment comment)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
+            IQueryable<User> users = db.Users;
+            IQueryable<SaleEntity> sales = db.SaleEntities;
+            if (users.Where(d => d.UserID == comment.UserID).Count() == 0)
+            {
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, "UserID not found"));
+            }
+            if (sales.Where(d => d.SaleEntityID == comment.SaleEntityID).Count() == 0)
+            {
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, "SaleEntityID not found"));
+            }
             db.Comments.Add(comment);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = comment.CommentID }, comment);
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,"oka"));
         }
 
         // DELETE: api/Comments/5

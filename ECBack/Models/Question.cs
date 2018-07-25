@@ -22,8 +22,12 @@ namespace ECBack.Models
         public int GoodEntityID { get; set; }
 
         [JsonIgnore]
-        [ForeignKey("GoodEntityID")]
+        [ForeignKey("GoodentityID")]
         public GoodEntity GoodEntity { get; set; }
+
+
+
+
     }
 
     public class Reply//回复：回复的id，回复的内容，时间以及对应的问题
