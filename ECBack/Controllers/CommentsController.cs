@@ -26,6 +26,15 @@ namespace ECBack.Controllers
         public int GoodID { get; set; }
         public int UserID { get; set; }
     }
+
+    public class CommentU
+    {
+        public int SaleEntityID { get; set; }
+        public string Detail { get; set; }
+        public DateTime UserCommentTime { get; set; }
+        public string UserName { get; set; }
+        public int LevelRank { get; set; }
+    }
     public class CommentsController : ApiController
     {
         private OracleDbContext db = new OracleDbContext();
@@ -49,15 +58,33 @@ namespace ECBack.Controllers
             db.Entry(cate).Collection(c => c.Comments).Load();
             Comments = cate.Comments.AsQueryable();
 
+            List<CommentU>dataList=new List<CommentU>();
             var rs = Comments.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToList();
             int res= Comments.Count() / PageDataNumber;
             if (Comments.Count() % PageDataNumber != 0)
                 res = res + 1;
+            foreach (var VARIABLE in rs)
+            {
+                CommentU tmp = new CommentU();
+                tmp.SaleEntityID = VARIABLE.SaleEntityID;
+                tmp.Detail = VARIABLE.Detail;
+                tmp.LevelRank = VARIABLE.LevelRank;
+                tmp.UserCommentTime = VARIABLE.UserCommentTime;
+                IQueryable<User> users;
+                users = db.Users;
+                List<User> t = users.ToList();
+                foreach (var va in t)
+                {
+                    if (va.UserID == VARIABLE.UserID)
+                        tmp.UserName = va.NickName;
+                }
+                dataList.Add(tmp);
+            }
             return Request.CreateResponse(HttpStatusCode.OK,
                 new
                 {
                     ResultNum = res,
-                    Comments = rs,
+                    Comments = dataList,
                     PageNum = pn
                 });
         }
