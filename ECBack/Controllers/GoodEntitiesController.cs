@@ -24,6 +24,7 @@ namespace ECBack.Controllers
         public int? Stock { get; set; } //
         public string Brief { get; set; }
         public int BrandID { get; set; }
+        public decimal GoodPrice { get; set; }
     }
 
     public class GoodEntitiesController : ApiController
@@ -172,7 +173,7 @@ namespace ECBack.Controllers
                     GoodName = entity.GoodName,
                     GoodEntityID = entity.GoodEntityID,
                     DetailImages = image,
-                    
+                    GoodPrice = min_price
                 });
                 
                 // load attrs

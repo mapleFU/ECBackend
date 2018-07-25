@@ -22,7 +22,7 @@ namespace ECBack.Models
         public int GoodEntityID { get; set; }
 
         [JsonIgnore]
-        [ForeignKey("GoodentityID")]
+        [ForeignKey("GoodEntityID")]
         public GoodEntity GoodEntity { get; set; }
 
 

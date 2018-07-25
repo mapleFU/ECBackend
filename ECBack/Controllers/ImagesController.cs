@@ -28,19 +28,73 @@ namespace ECBack.Controllers
 
         // POST: api/Images
 
-        public IHttpActionResult PostImage([FromBody] HttpPostedFileBase image)
+        public HttpResponseMessage PostImage()
         {
-            System.Diagnostics.Debug.WriteLine("Allow");
-            if (!ModelState.IsValid)
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            try
             {
-                return BadRequest(ModelState);
+
+                var httpRequest = HttpContext.Current.Request;
+                System.Diagnostics.Debug.WriteLine("Image enter");
+                foreach (string file in httpRequest.Files)
+                {
+                    System.Diagnostics.Debug.WriteLine("Image is" + file);
+                    HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.Created);
+
+                    var postedFile = httpRequest.Files[file];
+                    if (postedFile != null && postedFile.ContentLength > 0)
+                    {
+
+                        int MaxContentLength = 1024 * 1024 * 1; //Size = 1 MB
+
+                        IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png" };
+                        var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
+                        var extension = ext.ToLower();
+                        if (!AllowedFileExtensions.Contains(extension))
+                        {
+
+                            var message = string.Format("Please Upload image of type .jpg,.gif,.png.");
+
+                            dict.Add("error", message);
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, dict);
+                        }
+                        else if (postedFile.ContentLength > MaxContentLength)
+                        {
+
+                            var message = string.Format("Please Upload a file upto 1 mb.");
+
+                            dict.Add("error", message);
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, dict);
+                        }
+                        else
+                        {
+                            string fileUrl = ImageFileManager.Upload(postedFile);
+                            System.Diagnostics.Debug.WriteLine("Image is" + fileUrl);
+                            //YourModelProperty.imageurl = userInfo.email_id + extension;
+                            ////  where you want to attach your imageurl
+
+                            ////if needed write the code to update the table
+
+                            //var filePath = HttpContext.Current.Server.MapPath("~/Userimage/" + userInfo.email_id + extension);
+                            ////Userimage myfolder name where i want to save my image
+                            //postedFile.SaveAs(filePath);
+
+                        }
+                    }
+
+                    var message1 = string.Format("Image Updated Successfully.");
+                    return Request.CreateErrorResponse(HttpStatusCode.Created, message1); ;
+                }
+                var res = string.Format("Please Upload a image.");
+                dict.Add("error", res);
+                return Request.CreateResponse(HttpStatusCode.NotFound, dict);
             }
-            System.Diagnostics.Debug.WriteLine("Allow-Model, ready to update");
-            string uri = ImageFileManager.Upload(image);
-
-
-
-            return Ok(uri);
+            catch (Exception ex)
+            {
+                var res = string.Format("some Message");
+                dict.Add("error", res);
+                return Request.CreateResponse(HttpStatusCode.NotFound, dict);
+            }
         }
 
         // DELETE: api/Images/5

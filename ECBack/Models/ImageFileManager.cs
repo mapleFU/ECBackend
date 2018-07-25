@@ -22,7 +22,7 @@ namespace ECBack.Models
         /// <summary>
         /// ID
         /// </summary>
-        private const string BASE_PATH = "Uploads/Images/";
+        private const string BASE_PATH = "~/Uploads/Images/";
 
         private static string GetPath(string fileName)
         {
@@ -30,7 +30,7 @@ namespace ECBack.Models
             return path;
         }
         
-        public static string Upload(HttpPostedFileBase file)
+        public static string Upload(HttpPostedFile file)
         {
             if (file != null && file.ContentLength > 0)
             {
@@ -39,6 +39,7 @@ namespace ECBack.Models
                 {
                     fileName = Path.GetFileName(file.FileName);
                     var path = GetPath(fileName);
+                    System.Diagnostics.Debug.WriteLine(path);
                     file.SaveAs(path);
                     
                 } catch
@@ -60,7 +61,7 @@ namespace ECBack.Models
             {
                 var fs = new FileStream(path, FileMode.Open);
                 return fs;
-            } catch (FileNotFoundException _)
+            } catch (FileNotFoundException)
             {
                 return null;
             }

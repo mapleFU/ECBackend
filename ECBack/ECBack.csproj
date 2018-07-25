@@ -274,6 +274,10 @@
     <Compile Include="Migrations\201807250752464_nmsl.Designer.cs">
       <DependentUpon>201807250752464_nmsl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807251142587_update question and reply.cs" />
+    <Compile Include="Migrations\201807251142587_update question and reply.Designer.cs">
+      <DependentUpon>201807251142587_update question and reply.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\GAttribute.cs" />
@@ -393,6 +397,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201807250752464_nmsl.resx">
       <DependentUpon>201807250752464_nmsl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807251142587_update question and reply.resx">
+      <DependentUpon>201807251142587_update question and reply.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -52,9 +52,11 @@ namespace ECBack.Models
         
         public string Detail { get; set; }
 
-        // 主要图片的主要图片
-        [Required]
-        public Image MainImage { get; set; }
+        //// 主要图片的主要图片
+        //public int ImageID { get; set; }
+
+        //[ForeignKey("ImageID")]
+        //public Image MainImage { get; set; }
 
         [JsonIgnore]
         public string DetailImages { get; set; }
