@@ -136,3 +136,6 @@ C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\UnityEngine.dll
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.csprojAssemblyReference.cache
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.Migrations.nmsl.resources
 C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.csproj.GenerateResource.cache
+C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\System.Web.Cors.dll
+C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\System.Web.Http.Cors.dll
+C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\System.Web.Http.Cors.xml
