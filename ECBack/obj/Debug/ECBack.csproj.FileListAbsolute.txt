@@ -80,7 +80,6 @@ C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\System.Web.WebPages.Razor.dll
 C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\WebGrease.dll
 C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\EntityFramework.xml
 C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\EntityFramework.SqlServer.xml
-C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\Newtonsoft.Json.xml
 C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\System.Net.Http.Formatting.xml
 C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\System.Web.Helpers.xml
 C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\System.Web.Http.xml
@@ -139,3 +138,4 @@ C:\Users\fuasahi\source\repos\ECBack\ECBack\obj\Debug\ECBack.csproj.GenerateReso
 C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\System.Web.Cors.dll
 C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\System.Web.Http.Cors.dll
 C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\System.Web.Http.Cors.xml
+C:\Users\fuasahi\source\repos\ECBack\ECBack\bin\Qiniu.dll

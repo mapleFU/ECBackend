@@ -85,6 +85,22 @@ namespace ECBack.Models
         {
             Local = false;
         }
+
+        [NotMapped]
+        public string ImageShownURL
+        {
+            get
+            {
+                if (!Local)
+                {
+                    return ImageURL;
+                } else
+                {
+                    return "/Uploads/Images/" + ImageURL;
+                }
+            }
+        }
+
         ///// <summary>
         ///// 是否为主图
         ///// </summary>

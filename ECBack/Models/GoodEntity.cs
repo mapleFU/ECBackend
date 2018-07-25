@@ -25,6 +25,7 @@ namespace ECBack.Models
         {
             GoodEntityState = 1;
             FavoriteNum = 0;
+            DetailImages = null;
         }
 
         /// <summary>
@@ -50,6 +51,10 @@ namespace ECBack.Models
         public string Brief { get; set; }
         
         public string Detail { get; set; }
+
+        // 主要图片的主要图片
+        [Required]
+        public Image MainImage { get; set; }
 
         [JsonIgnore]
         public string DetailImages { get; set; }
