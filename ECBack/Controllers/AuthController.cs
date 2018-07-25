@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Net.Http.Formatting;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
+using ECBack.Filters;
 
 namespace ECBack.Controllers
 {
@@ -44,6 +45,14 @@ namespace ECBack.Controllers
         /// </summary>
         [Required]
         public string NickName { get; set; }
+    }
+
+    public class RegisterSeller
+    {
+        [Required]
+        public string Password { get; set; }
+        [Required]
+        public string PhoneNumber { get; set; }
     }
 
 
@@ -88,6 +97,38 @@ namespace ECBack.Controllers
             return token;
         }
 
+        [Route("api/Sellers/register")]
+        [HttpPost]
+        public async Task<IHttpActionResult> AddSeller([FromBody]RegisterSeller registerSeller )
+        {
+            HttpResponseMessage response;
+            if (!ModelState.IsValid)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "参数错误"));
+            }
+            var duplicate = db.Sellers.Any(x => x.Phone == registerSeller.PhoneNumber)
+                    ;
+            if (duplicate)
+            {
+                response = Request.CreateErrorResponse(HttpStatusCode.Conflict, "电话号码重复");
+            }
+            else
+            {
+                Seller seller = new Seller()
+                {
+                    PasswordHash = registerSeller.Password,
+                    PhoneNumber = registerSeller.PhoneNumber
+
+                };
+                db.Sellers.Add(seller);
+                await db.SaveChangesAsync();
+
+                response = Request.CreateResponse(HttpStatusCode.NoContent);
+                response.Headers.Add("Location", "api/Sellers/" + seller.SellerID);
+                
+            }
+            return ResponseMessage(response);
+        }
 
         [Route("api/register")]
         [HttpPost]
@@ -147,6 +188,51 @@ namespace ECBack.Controllers
             return response;
         }
 
+        [Route("api/Sellers/login")]
+        [HttpPost]
+        public HttpResponseMessage SellerLogin([FromBody] UserData data)
+        {
+            HttpResponseMessage response;
+            if (data.UserID == null)
+            {
+                response = Request.CreateResponse((HttpStatusCode)422, "No User ID");
+                return response;
+            }
+
+            try
+            {
+                if (db.Users == null)
+                {
+                    System.Diagnostics.Debug.WriteLine("Sellers is fucking null");
+                }
+                var result = db.Sellers.First(x => x.Phone == data.UserID);
+                if (!string.Equals(result.PasswordHash, data.Password))
+                {
+                    response = Request.CreateResponse(HttpStatusCode.Unauthorized, "password error");
+                }
+                else
+                {
+                    var jwt = GenerateToken(result.PhoneNumber,mode:"Seller");
+                    HttpContext.Current.User = result;
+                    response = Request.CreateResponse(HttpStatusCode.OK, new
+                    {
+                        Token = jwt,
+                        Timeout = defaultExpireMinutes,
+                        SellerID = result.SellerID
+                    });
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                response = Request.CreateResponse(HttpStatusCode.NotFound, "the phone number not exists");
+            }
+            catch (InvalidOperationException)
+            {
+                response = Request.CreateResponse(HttpStatusCode.NotFound, "the phone number not exists");
+            }
+            return response;
+        }
+
         [Route("api/login")]
         [HttpPost]
         public HttpResponseMessage Login([FromBody] UserData data)
@@ -174,9 +260,9 @@ namespace ECBack.Controllers
                     HttpContext.Current.User = result;
                     response = Request.CreateResponse(HttpStatusCode.OK, new
                     {
-                        token = jwt,
-                        timeout = defaultExpireMinutes,
-                        userID = result.UserID
+                        Token = jwt,
+                        Timeout = defaultExpireMinutes,
+                        UserID = result.UserID
                     });
                 }
             } catch (ArgumentNullException _)
@@ -189,6 +275,14 @@ namespace ECBack.Controllers
             return response;
         }
 
+        //[SellerAuthFilter]
+        //[Route("api/Sellers/test")]
+        //[HttpGet]
+        //public IHttpActionResult TestLogin()
+        //{
+        //    Seller seller = (Seller)HttpContext.Current.User;
+        //    return Ok(seller.PhoneNumber);
+        //}
 
         public static bool ValidateToken(string token, out string username, string mode="User")
         {

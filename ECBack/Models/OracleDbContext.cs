@@ -19,7 +19,7 @@ namespace ECBack.Models
         {
         }
 
-        public OracleDbContext(string connectString) : base("DATA SOURCE= (DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = 10.60.42.201)(PORT = 1521))  (CONNECT_DATA = (SERVICE_NAME = xe) ) );PASSWORD=DB2018;PERSIST SECURITY INFO=True;USER ID=DB2018")
+        public OracleDbContext(string connectString) : base("DATA SOURCE= (DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = 115.159.74.206)(PORT = 1521))  (CONNECT_DATA = (SERVICE_NAME = xe) ) );PASSWORD=DB2018;PERSIST SECURITY INFO=True;USER ID=DB2018")
         {
         }
 

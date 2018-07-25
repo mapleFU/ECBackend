@@ -7,13 +7,13 @@ namespace ECBack.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class addseller : IMigrationMetadata
+    public sealed partial class nmsl : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(addseller));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(nmsl));
         
         string IMigrationMetadata.Id
         {
-            get { return "201807241550311_add seller"; }
+            get { return "201807250752464_nmsl"; }
         }
         
         string IMigrationMetadata.Source

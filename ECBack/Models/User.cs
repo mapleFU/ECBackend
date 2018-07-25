@@ -60,8 +60,21 @@ namespace ECBack.Models
         [Key]
         public int SellerID { get; set; }
 
-        public string PhoneNumber { get; set; }
+        [MaxLength(11)]
+        [NotMapped]
+        public string PhoneNumber {
+            get { return Phone; }
+            set { Phone = value; }
+        }
         
+        [Required]
+        [MaxLength(11)]
+        public string Phone
+        {
+            get;
+            set;
+        }
+
         [JsonIgnore]
         public string PasswordHash { get; set; }
 

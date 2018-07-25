@@ -20,10 +20,10 @@ namespace ECBack.Controllers
         public int GoodEntityID { get; set; }
         public string GoodName { get; set; }
         public string DetailImages { get; set; }
-        public decimal Price { get; set; }
+        // public decimal Price { get; set; }
         public int? Stock { get; set; } //
         public string Brief { get; set; }
-        
+        public int BrandID { get; set; }
     }
 
     public class GoodEntitiesController : ApiController
@@ -34,7 +34,7 @@ namespace ECBack.Controllers
         [HttpPost]
         [Route("api/GoodEntities")]
         [SellerAuthFilter]
-        public async Task<IHttpActionResult> AddGoodEntity([FromBody] GoodEntity goodEntity)
+        public async Task<IHttpActionResult> AddGoodEntity([FromBody] GoodEntitySchema goodEntitySchema)
         {
             
 
@@ -43,6 +43,16 @@ namespace ECBack.Controllers
                 return BadRequest(ModelState);
             }
             Seller seller = (Seller)HttpContext.Current.User;
+            GoodEntity goodEntity = new GoodEntity()
+            {
+                SellerID = seller.SellerID,
+                Seller = seller,
+                BrandID = goodEntitySchema.BrandID,
+                Stock = goodEntitySchema.Stock ?? 0,
+                Brief = goodEntitySchema.Brief,
+                DetailImages = goodEntitySchema.DetailImages,
+            };
+
             goodEntity.SellerID = seller.SellerID;
             db.GoodEntities.Add(goodEntity);
             await db.SaveChangesAsync();
@@ -162,7 +172,7 @@ namespace ECBack.Controllers
                     GoodName = entity.GoodName,
                     GoodEntityID = entity.GoodEntityID,
                     DetailImages = image,
-                    Price = min_price
+                    
                 });
                 
                 // load attrs

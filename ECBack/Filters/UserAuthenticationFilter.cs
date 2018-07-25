@@ -69,7 +69,7 @@ namespace ECBack.Filters
             else
             {
                 System.Diagnostics.Debug.WriteLine(phoneNumber);
-                var usr = await dbContext.Sellers.Where(s => s.PhoneNumber == phoneNumber).FirstOrDefaultAsync();
+                var usr = await dbContext.Sellers.Where(s => s.Phone == phoneNumber).FirstOrDefaultAsync();
                 if (usr == null)
                 {
                     System.Diagnostics.Debug.WriteLine("User is null, refused!");

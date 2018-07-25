@@ -260,13 +260,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201807241402152_add init for all models.cs" />
-    <Compile Include="Migrations\201807241402152_add init for all models.Designer.cs">
-      <DependentUpon>201807241402152_add init for all models.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807241550311_add seller.cs" />
-    <Compile Include="Migrations\201807241550311_add seller.Designer.cs">
-      <DependentUpon>201807241550311_add seller.cs</DependentUpon>
+    <Compile Include="Migrations\201807250752464_nmsl.cs" />
+    <Compile Include="Migrations\201807250752464_nmsl.Designer.cs">
+      <DependentUpon>201807250752464_nmsl.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -385,11 +381,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201807241402152_add init for all models.resx">
-      <DependentUpon>201807241402152_add init for all models.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807241550311_add seller.resx">
-      <DependentUpon>201807241550311_add seller.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201807250752464_nmsl.resx">
+      <DependentUpon>201807250752464_nmsl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

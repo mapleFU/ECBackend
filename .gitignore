@@ -697,3 +697,5 @@ _[Ss]cripts
 */.vs/*
 */vs/* 
 */bin/*
+*.dll
+*.pdb

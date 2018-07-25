@@ -3,7 +3,7 @@ namespace ECBack.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class addinitforallmodels : DbMigration
+    public partial class nmsl : DbMigration
     {
         public override void Up()
         {
@@ -226,7 +226,7 @@ namespace ECBack.Migrations
                 c => new
                     {
                         SellerID = c.Decimal(nullable: false, precision: 10, scale: 0, identity: true),
-                        PhoneNumber = c.String(),
+                        Phone = c.String(nullable: false, maxLength: 11),
                         PasswordHash = c.String(),
                     })
                 .PrimaryKey(t => t.SellerID);
