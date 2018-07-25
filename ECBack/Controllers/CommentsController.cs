@@ -50,11 +50,13 @@ namespace ECBack.Controllers
             Comments = cate.Comments.AsQueryable();
 
             var rs = Comments.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToList();
-
+            int res= Comments.Count() / PageDataNumber;
+            if (Comments.Count() % PageDataNumber != 0)
+                res = res + 1;
             return Request.CreateResponse(HttpStatusCode.OK,
                 new
                 {
-                    ResultNum = rs.Count(),
+                    ResultNum = res,
                     Comments = rs,
                     PageNum = pn
                 });
