@@ -53,10 +53,6 @@ namespace ECBack.Controllers
             {
                 //找到对应UserID的Favorite
                 IEnumerable<Favorite> query = Favs.Where(w => w.UserID == requestUser.UserID);
-                if (query.Count() == 0)
-                {
-                    return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest));
-                }
                
                 //找到对应的GoodEntity
                 foreach (var VARIABLE in query)
@@ -80,7 +76,7 @@ namespace ECBack.Controllers
                 throw;
             }
             
-            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,"dd"));
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,shit));
         }
 
         // GET: api/Favorites/5
