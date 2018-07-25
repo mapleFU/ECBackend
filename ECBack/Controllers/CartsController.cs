@@ -142,7 +142,10 @@ namespace ECBack.Controllers
                 await db.Entry(rec).Reference(record => record.SaleEntity).LoadAsync();
             }
             // await db.Entry(requestUser).Reference(u => u.Cart).LoadAsync();
-            return Ok(cart);
+            return Ok(new {
+                Cart = cart,
+                TotalPrice = await cart.TotalPrice(db)
+            });
         }
 
         [AuthenticationFilter]

@@ -54,12 +54,13 @@ namespace ECBack.Models
 
         public async Task<decimal> TotalPrice(OracleDbContext dbContext)
         {
-            await dbContext.Entry(this).Reference(u => u.CartRecords).LoadAsync();
+            await dbContext.Entry(this).Collection(u => u.CartRecords).LoadAsync();
             decimal price = 0;
             
-            foreach (var p in dbContext.SaleEntities)
+            foreach (var p in this.CartRecords)
             {
-                price += p.Price;
+                await dbContext.Entry(p).Reference(pp => pp.SaleEntity).LoadAsync();
+                price += p.SaleEntity.Price * p.RecordNum;
             }
             return price;
         }

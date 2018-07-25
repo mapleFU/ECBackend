@@ -61,6 +61,7 @@ namespace ECBack.Controllers
 
             var usr = (User)HttpContext.Current.User;
             var entities = db.Orderforms.Where(odf => odf.UserID == usr.UserID).OrderBy(odf => odf.TransacDateTime);
+            
             if (usePn)
             {
                 int pn = queryData.Pn ?? 1;
@@ -87,7 +88,7 @@ namespace ECBack.Controllers
         [AuthenticationFilter]
         [HttpPost]
         [Route("api/Orderforms")]
-        public async Task<IHttpActionResult> AddPostForm([FromBody]AddPostFormRequest addPostFormRequest) {
+        public async Task<IHttpActionResult> AddPostForm([FromBody] AddPostFormRequest addPostFormRequest) {
             if (addPostFormRequest == null || addPostFormRequest.SaleSingleRecords == null)
             {
                 return BadRequest();
@@ -114,7 +115,7 @@ namespace ECBack.Controllers
             // orderform.AddressID
             db.Orderforms.Add(orderform);
             db.Logistics.Add(logistic);
-
+            
             float totalPrice = 0;
             System.Diagnostics.Debug.WriteLine("Get has:" + currentUsr.NickName);
             foreach (var record in addPostFormRequest.SaleSingleRecords)
@@ -138,6 +139,7 @@ namespace ECBack.Controllers
                 db.SaleEntityRecords.Add(seRecord);
 
             }
+            await db.Entry(logistic).Collection(logis => logis.LogisticInfos).LoadAsync();
             orderform.TotalPrice = totalPrice;
             System.Diagnostics.Debug.WriteLine("Total Price " + totalPrice);
             await db.SaveChangesAsync();

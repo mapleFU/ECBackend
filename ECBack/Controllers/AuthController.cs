@@ -265,24 +265,24 @@ namespace ECBack.Controllers
                         UserID = result.UserID
                     });
                 }
-            } catch (ArgumentNullException _)
+            } catch (ArgumentNullException)
             {
                 response = Request.CreateResponse(HttpStatusCode.NotFound, "the phone number not exists");
-            } catch (InvalidOperationException _)
+            } catch (InvalidOperationException)
             {
                 response = Request.CreateResponse(HttpStatusCode.NotFound, "the phone number not exists");
             }
             return response;
         }
 
-        //[SellerAuthFilter]
-        //[Route("api/Sellers/test")]
-        //[HttpGet]
-        //public IHttpActionResult TestLogin()
-        //{
-        //    Seller seller = (Seller)HttpContext.Current.User;
-        //    return Ok(seller.PhoneNumber);
-        //}
+        [SellerAuthFilter]
+        [Route("api/Sellers/test")]
+        [HttpGet]
+        public IHttpActionResult TestLogin()
+        {
+            Seller seller = (Seller)HttpContext.Current.User;
+            return Ok(seller.PhoneNumber);
+        }
 
         public static bool ValidateToken(string token, out string username, string mode="User")
         {

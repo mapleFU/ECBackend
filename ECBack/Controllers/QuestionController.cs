@@ -60,7 +60,7 @@ namespace ECBack.Controllers
             {
                  db.Entry(que).Collection(a => a.Replies).Load();
             }
-            var QuestionEntities = questions.Skip(PageDataNumber*(pn-1));
+            var QuestionEntities = questions.Skip(PageDataNumber*(pn-1)).Take(PageDataNumber);
             return Request.CreateResponse(HttpStatusCode.OK, new { QuestionEntities, QuestionNum, PageNum });
 
         }

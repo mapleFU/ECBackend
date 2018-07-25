@@ -29,6 +29,7 @@ namespace ECBack.Controllers
                 return NotFound();
             }
             await db.Entry(logistic).Collection(log => log.LogisticInfos).LoadAsync();
+           
             return Ok(logistic);
         }
 
