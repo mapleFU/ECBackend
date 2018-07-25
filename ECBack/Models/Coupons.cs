@@ -41,14 +41,12 @@ namespace ECBack.Models
         [Required]
         public Boolean NeedVIP { get; set; }
 
-        [JsonIgnore]
         public int CategoryID { get; set; }
 
         // 打折范围（类别）
         [ForeignKey("CategoryID")]
         public Category Category { get; set; }
 
-        [JsonIgnore]
         public virtual ICollection<User>  Users { get; set; }
 
     }
