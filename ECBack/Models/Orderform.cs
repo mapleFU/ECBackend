@@ -20,7 +20,7 @@ namespace ECBack.Models
 
         [JsonIgnore]
         [ForeignKey("SaleEntityID")]
-        public SaleEntity SaleEntity { get; set; }
+        public virtual SaleEntity SaleEntity { get; set; }
 
         [JsonIgnore]
         public int OrderformID { get; set; }
@@ -54,7 +54,7 @@ namespace ECBack.Models
         public float TotalPrice { get; set; }
 
         // 多个 SaleEntities
-        public ICollection<SERecord> SERecords { get; set; }
+        public virtual ICollection<SERecord> SERecords { get; set; }
         
         [Required]
         public int UserID { get; set; }
