@@ -28,7 +28,8 @@ namespace ECBack.Models
         [JsonIgnore]
         public virtual ICollection<GoodEntity> GoodEntities { get; set; }
 
-        public ICollection<Coupons> Coupons { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Coupons> Coupons { get; set; }
     }
 
 }

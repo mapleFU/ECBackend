@@ -154,7 +154,7 @@ namespace ECBack.Models
         public List<Address> Addresses { get; set; }
 
         [JsonIgnore]
-        public List<Orderform> Orderforms { get; set; }
+        public virtual List<Orderform> Orderforms { get; set; }
 
         [JsonIgnore]
         public ICollection<Favorite> Favorites { get; set; }
