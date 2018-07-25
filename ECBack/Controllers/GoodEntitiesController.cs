@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ECBack.Filters;
@@ -18,8 +19,11 @@ namespace ECBack.Controllers
     {
         public int GoodEntityID { get; set; }
         public string GoodName { get; set; }
-        public string Image { get; set; }
+        public string DetailImages { get; set; }
         public decimal Price { get; set; }
+        public int? Stock { get; set; } //
+        public string Brief { get; set; }
+        
     }
 
     public class GoodEntitiesController : ApiController
@@ -29,13 +33,17 @@ namespace ECBack.Controllers
 
         [HttpPost]
         [Route("api/GoodEntities")]
-        [AuthenticationFilter]
+        [SellerAuthFilter]
         public async Task<IHttpActionResult> AddGoodEntity([FromBody] GoodEntity goodEntity)
         {
+            
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            Seller seller = (Seller)HttpContext.Current.User;
+            goodEntity.SellerID = seller.SellerID;
             db.GoodEntities.Add(goodEntity);
             await db.SaveChangesAsync();
             var resp = Request.CreateResponse(HttpStatusCode.NoContent);
@@ -153,7 +161,7 @@ namespace ECBack.Controllers
                 {
                     GoodName = entity.GoodName,
                     GoodEntityID = entity.GoodEntityID,
-                    Image = image,
+                    DetailImages = image,
                     Price = min_price
                 });
                 
