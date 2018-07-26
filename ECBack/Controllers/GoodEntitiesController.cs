@@ -67,28 +67,35 @@ namespace ECBack.Controllers
         [NonAction]
         private void AddSaleEntityRec(int GoodID, List<List<Option>> optionList, int level, List<Option> currentList, decimal Price)
         {
+
             if (level == optionList.Count)
             {
+                var goodEntity = db.GoodEntities.Find(GoodID);
+                
                 var newEntity = new SaleEntity()
                 {
                     Price = Price,
                     GoodEntityID = GoodID,
-
+                    GoodEntity = goodEntity
                 };
-                
+                newEntity.AttributeOptions = new HashSet<Option>();
                 foreach (var option in currentList)
                 {
                     newEntity.AttributeOptions.Add(option);
                 }
 
                 db.SaleEntities.Add(newEntity);
+
+                
+                
+                
                 
             } else
             {
                 foreach (Option opt in optionList[level])
                 {
                     currentList.Add(opt);
-                    AddSaleEntityRec(GoodID, optionList, level, currentList, Price);
+                    AddSaleEntityRec(GoodID, optionList, level + 1, currentList, Price);
                     currentList.Remove(opt);
                 }
             }
@@ -132,16 +139,23 @@ namespace ECBack.Controllers
 
             System.Diagnostics.Debug.WriteLine("Create");
 
+            var Brand = await db.Brands.FindAsync(goodEntitySchema.BrandID);
+            if (Brand == null )
+            {
+                return NotFound();
+            }
+
             GoodEntity goodEntity = new GoodEntity()
             {
+                Seller = seller,
                 SellerID = seller.SellerID,
-                
+                Brand = Brand,
                 GoodName = goodEntitySchema.GoodName,
-                BrandID = 618,
+                BrandID = Brand.BrandID,
                 Stock = goodEntitySchema.Stock ?? 1,
                 Brief = goodEntitySchema.Brief,
                 DetailImages = goodEntitySchema.DetailImages,
-                FavoriteNum = 1,
+                FavoriteNum = 0,
                 GoodEntityState = 0,
                 SellProvince = goodEntitySchema.SellProvince,
                 Detail = goodEntitySchema.ShownImage,
@@ -170,6 +184,7 @@ namespace ECBack.Controllers
                 {
                     Option curOption = new Option()
                     {
+                        GAttribute = gAttribute,
                         GAttributeID = gAttribute.GAttributeID,
                         Describe = attrSubName
                     };
