@@ -336,7 +336,7 @@ namespace ECBack.Controllers
                    new
                    {
                       
-                       ResultNum = toPageNum(resultSchema.Count()),
+                       ResultNum = toPageNum(0),
                        GoodEntities = resultSchema,
                        PageNum = pn,
                        AllNum = 0
@@ -355,7 +355,7 @@ namespace ECBack.Controllers
                 return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
                    new
                    {
-                       ResultNum = toPageNum( resultSchema.Count() ),
+                       ResultNum = toPageNum( allNum ),
                        GoodEntities = resultSchema,
                        PageNum = pn,
                        AllNum = allNum
@@ -413,7 +413,7 @@ namespace ECBack.Controllers
                 return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
                     new
                     {
-                        ResultNum = toPageNum( resultSchema.Count() ),
+                        ResultNum = toPageNum( allNum ),
                         GoodEntities = resultSchema,
                         PageNum = pn,
                         AllNum = allNum
@@ -423,7 +423,7 @@ namespace ECBack.Controllers
                 return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
                    new
                    {
-                       ResultNum = toPageNum( resultSchema.Count() ),
+                       ResultNum = toPageNum( allNum ),
                        GoodEntities = resultSchema,
                        PageNum = pn,
                        AllNum = allNum

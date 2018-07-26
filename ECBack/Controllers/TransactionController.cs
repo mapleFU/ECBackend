@@ -1,8 +1,11 @@
-﻿using System;
+﻿using ECBack.Models;
+using QRCoder;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace ECBack.Controllers
@@ -14,13 +17,24 @@ namespace ECBack.Controllers
     /// </summary>
     public class TransactionController : ApiController
     {
+        private QRCodeGenerator qrGenerator;
+        private OracleDbContext db;
+        public TransactionController(): base()
+        {
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            db = new OracleDbContext();
+        }
+        
         /// <summary>
         /// API 开始交易
         /// </summary>
         /// <returns></returns>
-        [Route("api/begin")]
-        public IHttpActionResult StartTransaction()
+        [Route("api/Orderform/{OrderID:int}/Begin")]
+        public async Task<IHttpActionResult> StartTransaction(int OrderID)
         {
+
+            var odf = await db.Orderforms.FindAsync(OrderID);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode("The text which should be encoded.", QRCodeGenerator.ECCLevel.Q);
             throw new NotImplementedException();
         }
 
@@ -31,7 +45,7 @@ namespace ECBack.Controllers
         [Route("api/confirm")]
         [HttpGet]
         [AllowAnonymous]
-        public IHttpActionResult ConfirmTransaction()
+        public IHttpActionResult ConfirmTransaction([FromUri] string token)
         {
             throw new NotImplementedException();
         }
