@@ -88,6 +88,32 @@ namespace ECBack.Controllers
                     PageNum = pn
                 });
         }
+
+        [AuthenticationFilter]
+        [Route("api/GoodEntity/{GoodID:int}/Comments")]
+        public async Task<IHttpActionResult> GetGEComments(int GoodID)
+        {
+            if (HttpContext.Current.User.Identity != null)
+            {
+                // 无权
+                System.Diagnostics.Debug.WriteLine("Get Favorites Null");
+                return ResponseMessage( Request.CreateResponse((HttpStatusCode)403) );
+            }
+            var good = await db.GoodEntities.FindAsync(GoodID);
+            User requestUser = (User)HttpContext.Current.User;
+            await db.Entry(good).Collection(ge => ge.SaleEntities).LoadAsync();
+            List<Comment> comments = new List<Comment>();
+            foreach (var se in good.SaleEntities)
+            {
+                await db.Entry(se).Collection(saleE => saleE.Comments).LoadAsync();
+                foreach (var s_comment  in se.Comments)
+                {
+                    comments.Add(s_comment);
+                }
+            }
+            return Ok(comments);
+        }
+
         /// <summary>
         /// 单个评论
         /// </summary>
