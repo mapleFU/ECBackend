@@ -58,9 +58,9 @@ namespace ECBack.Controllers
             db.Entry(cate).Collection(c => c.Comments).Load();
             Comments = cate.Comments.AsQueryable();
 
-            List<CommentU>dataList=new List<CommentU>();
+            List<CommentU> dataList = new List<CommentU>();
             var rs = Comments.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToList();
-            int res= Comments.Count() / PageDataNumber;
+            int res = Comments.Count() / PageDataNumber;
             if (Comments.Count() % PageDataNumber != 0)
                 res = res + 1;
             foreach (var VARIABLE in rs)
@@ -98,7 +98,7 @@ namespace ECBack.Controllers
         [Route("api/Comments/find")]
         public HttpResponseMessage GetComment([FromUri] int GoodID)
         {
-            if (HttpContext.Current.User == null)
+            if (HttpContext.Current.User.Identity != null)
             {
                 // 无权
                 System.Diagnostics.Debug.WriteLine("Get Favorites Null");
@@ -111,19 +111,19 @@ namespace ECBack.Controllers
             Comments = db.Comments;
             List<Comment> tt = Comments.ToList();
 
-            
+
             Comment comment = null;
             foreach (var VARIABLE in tt)
             {
-                if (VARIABLE.UserID == user_id&&VARIABLE.SaleEntityID==GoodID)
+                if (VARIABLE.UserID == user_id && VARIABLE.SaleEntityID == GoodID)
                     comment = VARIABLE;
             }
             if (comment == null)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest,"comment not found");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "comment not found");
             }
 
-            return Request.CreateResponse(HttpStatusCode.OK,comment);
+            return Request.CreateResponse(HttpStatusCode.OK, comment);
         }
 
         // PUT: api/Comments/5
@@ -195,7 +195,7 @@ namespace ECBack.Controllers
             db.Comments.Add(comment);
             db.SaveChanges();
 
-            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,"oka"));
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, "oka"));
         }
 
         // DELETE: api/Comments/5
