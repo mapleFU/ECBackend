@@ -15,10 +15,9 @@ namespace ECBack.Models
 
         public int EntityNum { get; set; }
 
-        [JsonIgnore]
         public int SaleEntityID { get; set; }
 
-        [JsonIgnore]
+        
         [ForeignKey("SaleEntityID")]
         public virtual SaleEntity SaleEntity { get; set; }
 

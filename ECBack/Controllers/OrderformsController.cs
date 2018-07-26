@@ -61,7 +61,13 @@ namespace ECBack.Controllers
 
             var usr = (User)HttpContext.Current.User;
             var entities = db.Orderforms.Where(odf => odf.UserID == usr.UserID).OrderBy(odf => odf.TransacDateTime);
-            
+            foreach (var odf in entities) {
+                await db.Entry(odf).Collection(of => of.SERecords).LoadAsync();
+                foreach (var serec in odf.SERecords)
+                {
+                    await db.Entry(serec).Reference(ser => ser.SaleEntity).LoadAsync();
+                }
+            }
             if (usePn)
             {
                 int pn = queryData.Pn ?? 1;
@@ -145,7 +151,10 @@ namespace ECBack.Controllers
             System.Diagnostics.Debug.WriteLine("Total Price " + totalPrice);
             await db.SaveChangesAsync();
             System.Diagnostics.Debug.WriteLine("Saved");
-            var resp = Request.CreateResponse(HttpStatusCode.NoContent);
+            var resp = Request.CreateResponse(HttpStatusCode.OK, new
+            {
+                OrderformID = orderform.OrderformID
+            });
             resp.Headers.Add("Location", "/api/Orderforms/" + orderform.OrderformID);
             return ResponseMessage(resp);
         }
@@ -168,6 +177,8 @@ namespace ECBack.Controllers
             }
             await db.Entry(orderform).Collection(odf => odf.SERecords).LoadAsync();
             await db.Entry(orderform).Reference(odf => odf.Address).LoadAsync();
+            // await db.Entry(orderform).Reference(odf => odf.Logistic).LoadAsync();
+            await db.Entry(orderform.Logistic).Collection(log => log.LogisticInfos).LoadAsync();
             return Ok(orderform);
         }
 

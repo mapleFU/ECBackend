@@ -19,17 +19,12 @@ namespace ECBack.Controllers
     {
         private OracleDbContext db = new OracleDbContext();
 
-        private static string AccessKey = "X4pHLlBJDRBSCEyWZ0Lfmbx_aftvCbRUVnsW-zDp";
-        private static string SecretKey = "MAgFx6Q9PLLXRBuYu79rVkv7Lgi8LoFUZYwqPzjd";
-
-        private static Mac mac = new Mac(AccessKey, SecretKey);
-
-
 
         // POST: api/Images
-        private static string BASE_NET_URL = "//Uploads/Images/";
+        private static string BASE_NET_URL = "~/Uploads/Images/";
         public HttpResponseMessage PostImage()
         {
+            
             Dictionary<string, object> dict = new Dictionary<string, object>();
             List<object> imageUrls = new List<object>();
             
@@ -38,6 +33,8 @@ namespace ECBack.Controllers
 
                 var httpRequest = HttpContext.Current.Request;
                 System.Diagnostics.Debug.WriteLine("Image enter");
+                IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png" };
+                System.Diagnostics.Debug.WriteLine(httpRequest.Files.Count);
                 foreach (string file in httpRequest.Files)
                 {
                     System.Diagnostics.Debug.WriteLine("Image is" + file);
@@ -49,7 +46,7 @@ namespace ECBack.Controllers
 
                         int MaxContentLength = 1024 * 1024 * 5; //Size = 1 MB
 
-                        IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png" };
+                        
                         var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
                         var extension = ext.ToLower();
                         if (!AllowedFileExtensions.Contains(extension))
@@ -63,7 +60,7 @@ namespace ECBack.Controllers
                         else if (postedFile.ContentLength > MaxContentLength)
                         {
 
-                            var message = string.Format("Please Upload a file upto 1 mb.");
+                            var message = string.Format("Please Upload a file upto 5 mb.");
 
                             dict.Add("error", message);
                             return Request.CreateResponse(HttpStatusCode.BadRequest, dict);
@@ -74,10 +71,13 @@ namespace ECBack.Controllers
                             string fileUrl = pair.Key;
                             string filePath = pair.Value;
                             System.Diagnostics.Debug.WriteLine("Image is" + fileUrl);
-                            imageUrls.Add(new {
+                            var obj = new
+                            {
                                 fileUrl = fileUrl,
                                 filePath = filePath
-                            });
+                            };
+                            imageUrls.Add(obj);
+                            System.Diagnostics.Debug.WriteLine(fileUrl, filePath);
                             //YourModelProperty.imageurl = userInfo.email_id + extension;
                             ////  where you want to attach your imageurl
 
@@ -90,6 +90,10 @@ namespace ECBack.Controllers
                         }
                     }
 
+                    
+                }
+                if (imageUrls.Count == httpRequest.Files.Count)
+                {
                     var message1 = string.Format("Image Updated Successfully.");
                     dict.Add("images", imageUrls);
                     return Request.CreateResponse(HttpStatusCode.Created, dict);
