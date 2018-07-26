@@ -51,7 +51,7 @@ namespace ECBack.Controllers
             GoodEntity goodEntity = new GoodEntity()
             {
                 SellerID = seller.SellerID,
-                
+                GoodName = goodEntitySchema.GoodName,
                 BrandID = goodEntitySchema.BrandID,
                 Stock = goodEntitySchema.Stock ?? 0,
                 Brief = goodEntitySchema.Brief,

@@ -37,7 +37,10 @@ namespace ECBack.Models
                 string fileName = null;
                 try
                 {
-                    fileName = Path.GetFileName(file.FileName);
+                    var ext = Path.GetExtension(file.FileName);
+                    var onlyName = Path.GetFileNameWithoutExtension(file.FileName);
+                    fileName = Path.GetFileName(Base64Encode(onlyName) + ext);
+                    
                     var path = GetPath(fileName);
                     System.Diagnostics.Debug.WriteLine(path);
                     file.SaveAs(path);
@@ -52,6 +55,12 @@ namespace ECBack.Models
                 // 图片上传错误
                 return null;
             }
+        }
+
+        public static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
         }
 
         public static FileStream Load(string fileName)
@@ -82,6 +91,7 @@ namespace ECBack.Models
         public string ImageURL { get; set; }
 
         public bool Local { get; set; }
+
         public Image()
         {
             Local = false;
@@ -101,21 +111,5 @@ namespace ECBack.Models
                 }
             }
         }
-
-        ///// <summary>
-        ///// 是否为主图
-        ///// </summary>
-        //[Required]
-        //public Boolean IsMain { get; set; }
-
-        /// <summary>
-        /// id of foreign key DisplayEntity
-        /// </summary>
-        //[Index]
-        //[Required]
-        //public int DisplayEntityID { get; set; }
-
-        //[ForeignKey("DisplayEntityID")]
-        //public DisplayEntity DisplayEntity { get; set; }
     }
 }

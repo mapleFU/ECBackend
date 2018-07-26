@@ -61,11 +61,11 @@ namespace ECBack.Controllers
     {
         // https://stackoverflow.com/questions/40281050/jwt-authentication-for-asp-net-web-api
         private OracleDbContext db = new OracleDbContext();
-        private const int defaultExpireMinutes = 60;
+        private const int defaultExpireMinutes = 120;
         // 我恨asp.net，我觉得这是个傻屌玩意
         private const string Secret = "5oiR5oGoYXNwLm5ldO+8jOaIkeinieW+l+i/meaYr+S4quWCu+WxjOeOqeaEjw==";
         private const string SellerSecret = "5L2g5aaI5q275LqG77yM5oiR5piv5L2g5ZOl5ZOl77yM5oiR5Lus6YO95piv5L2g5aaI55qE5YS/5a2Q77yB";
-        public static string GenerateToken(string username, int expireMinutes = 20, string mode = "User")
+        public static string GenerateToken(string username, int expireMinutes = defaultExpireMinutes, string mode = "User")
         {
             string usingSecretString;
             if (mode == "User")

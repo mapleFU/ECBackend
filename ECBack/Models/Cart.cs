@@ -9,6 +9,30 @@ using System.Web;
 
 namespace ECBack.Models
 {
+    public class GoodEntityCartSchema
+    {
+        public string GoodName { get; set; }
+        public int Stock { get; set; }
+        [JsonIgnore]
+        public string DetailImages { get; set; }
+
+        public string ImageURL
+        {
+            get
+            {
+                if (DetailImages == null)
+                {
+                    return null;
+                } else
+                {
+                    return DetailImages.Split(',')[0];
+                }
+            }
+        }
+        public int? GoodEntityState { get; set; }
+        public int GoodEntityID { get; set;}
+    }
+
     public class CartRecord
     {
         [Key]
@@ -38,6 +62,28 @@ namespace ECBack.Models
             RecordNum = 1;
         }
 
+        private OracleDbContext _db = new OracleDbContext();
+
+        // TODO: can we make it more clearly?
+        [NotMapped]
+        public GoodEntityCartSchema RelatedGoodEntity
+        {
+            get
+            {
+                if (SaleEntity == null)
+                {
+                    _db.Entry(this).Reference(cd => cd.SaleEntity).Load();
+                }
+                int geID = this.SaleEntity.GoodEntityID;
+                return _db.GoodEntities.Select(ge => new GoodEntityCartSchema() {
+                    GoodName = ge.GoodName,
+                    GoodEntityState = ge.GoodEntityState,
+                    DetailImages = ge.DetailImages,
+                    Stock = ge.Stock,
+                    GoodEntityID = ge.GoodEntityID
+                }).First(e => e.GoodEntityID == geID);
+            }
+        }
     }
 
     public class Cart

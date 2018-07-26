@@ -125,21 +125,15 @@ namespace ECBack.Controllers
             User requestUser = (User)HttpContext.Current.User;
             System.Diagnostics.Debug.WriteLine("GetCarts has:" + requestUser.NickName);
 
-            //var refer = db.Entry(requestUser).Reference(u => (u as User).Cart);
-            //if (!refer.IsLoaded)
-            //{
-            //    System.Diagnostics.Debug.WriteLine("Not loaded");
-            //    await refer.LoadAsync();
-            //} else
-            //{
-            //    System.Diagnostics.Debug.WriteLine("Loaded");
-            //}
             var cart = await db.Carts.FindAsync(requestUser.UserID);
             // Load data
             await db.Entry(cart).Collection(c => c.CartRecords).LoadAsync();
+            // "ExceptionMessage": "The property 'GoodEntity' on type 'SaleEntity' is not a navigation property. The Reference and Collection methods can only be used with navigation properties. Use the Property or ComplexProperty method."
             foreach (var rec in cart.CartRecords)
             {
                 await db.Entry(rec).Reference(record => record.SaleEntity).LoadAsync();
+                var goodentity = await db.GoodEntities.FirstAsync(s => s.GoodEntityID == rec.SaleEntity.GoodEntityID);
+                rec.SaleEntity.GoodEntity = goodentity;
             }
             // await db.Entry(requestUser).Reference(u => u.Cart).LoadAsync();
             return Ok(new {

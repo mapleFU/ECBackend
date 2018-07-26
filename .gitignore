@@ -699,3 +699,5 @@ _[Ss]cripts
 */bin/*
 *.dll
 *.pdb
+
+*/Images/*
