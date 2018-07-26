@@ -25,6 +25,19 @@ namespace ECBack.Controllers
             return db.Coupons;
         }
 
+        struct CouponDetail
+        {
+            public Coupons coup;
+            public Boolean valid;
+            public CouponDetail(Coupons c,Boolean v)
+            {
+                coup = c;
+                valid = v;
+            }
+        }
+
+        // 返回该商品的优惠券及领取信息
+        [AuthenticationFilter]
         [HttpGet]
         [Route("api/GoodEntities/{GoodEntityID:int}/Coupons")]
         public IHttpActionResult GetRelatedCoupons(int GoodEntityID)
@@ -34,25 +47,68 @@ namespace ECBack.Controllers
                 return BadRequest(ModelState);
             }
 
-            //IQueryable<Coupons> coupons;
-
-            IList<ICollection<Coupons>> coupons = new List<ICollection<Coupons>>();
-
+            List<CouponDetail> couponDetails = new List<CouponDetail>();
             var good = db.GoodEntities.Find(GoodEntityID);
-            var list = good.Categories;
-            foreach (var c in list) {
-                IList<Coupons> coupon = new List<Coupons>();
-                coupons.Add(c.Coupons);
+            var cate_list = good.Categories;
+
+            // 未登录，返回该商品的所有可领取的优惠券
+            if (HttpContext.Current.User.Identity != null)
+            {
+                // IList<ICollection<Coupons>> coupons = new List<ICollection<Coupons>>();
+                foreach (var c in cate_list)
+                {
+                    foreach (var coupons_cate in c.Coupons)
+                    {
+                        couponDetails.Add(new CouponDetail(coupons_cate, true));
+                    }
+                }
+                return Ok(couponDetails);
             }
-            return Ok(coupons);
+
+            // 已登录，返回该商品的所有优惠券与用户领取信息
+            User requestUser = (User)HttpContext.Current.User;
+            int user_id = requestUser.UserID;
+            User user = db.Users.Find(user_id);
+            var coupons_user = user.Coupons;
+
+            // 若无优惠券，则返回均为可领取状态
+            if(coupons_user.Count ==0)
+            {
+                foreach (var c in cate_list)
+                {
+                    foreach (var coupons_cate in c.Coupons)
+                    {
+                        couponDetails.Add(new CouponDetail(coupons_cate, true));
+                    }
+                }
+                return Ok(couponDetails);
+            }
+            
+            // 有优惠券，则按实际情况返回领取状态
+            foreach (var c in cate_list)
+            {
+                foreach(var coupons_cate in c.Coupons)
+                {
+                    Boolean valid = true;
+                    if (coupons_user.Contains(coupons_cate))
+                    {
+                        valid = false;
+                    }
+                    couponDetails.Add(new CouponDetail(coupons_cate, valid));
+                }
+            }
+            return Ok(couponDetails);
+
         }
 
+
+        // 领取该优惠券
         [AuthenticationFilter]
         [HttpPost]
         [Route("api/Coupons")]
         public HttpResponseMessage PostCoupons([FromUri] int CouponsID)
         {
-            if (HttpContext.Current.User == null)
+            if (HttpContext.Current.User.Identity != null)
             {
                 // 无权
                 System.Diagnostics.Debug.WriteLine("Not Login");
@@ -61,8 +117,6 @@ namespace ECBack.Controllers
             User requestUser = (User)HttpContext.Current.User;
             int user_id = requestUser.UserID;
             int coupon_id = CouponsID;
-
-            HttpResponseMessage response;
 
             User user = db.Users.Find(user_id);
             Coupons coupon = db.Coupons.Find(coupon_id);
@@ -84,17 +138,18 @@ namespace ECBack.Controllers
         }
       
 
+        // 从购物车得到优惠金额
         [AuthenticationFilter]
         [HttpGet]
-        [Route("api/Orderforms/{OrderformID:int}/Coupons")]
-        public IHttpActionResult GetDiscount(int OrderformID)
+        [Route("api/Carts/Coupons")]
+        public IHttpActionResult GetDiscount()
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (HttpContext.Current.User == null)
+            if (HttpContext.Current.User.Identity != null)
             {
                 // 无权
                 System.Diagnostics.Debug.WriteLine("Not Login");
@@ -104,24 +159,15 @@ namespace ECBack.Controllers
             User requestUser = (User)HttpContext.Current.User;
             int user_id = requestUser.UserID;
 
+            var cart = db.Carts.Find(user_id);
             var user = db.Users.Find(user_id);
-            var orderform = db.Orderforms.Find(OrderformID);
-
-            if (orderform==null||user==null)
-            {
-                return NotFound();
-            }
-
-            if (orderform.UserID != user_id)
-            {
-                // 无权
-                System.Diagnostics.Debug.WriteLine("orderform与user不匹配");
-                return BadRequest();
-            }
+            decimal max_discount = 0;
 
             if (user.Coupons.Count == 0)
             {
-                return Ok(0);
+                return Ok(new {
+                    Discount = max_discount
+                });
             }
 
             // 初始化优惠券的所有类别的ID，无重复
@@ -148,16 +194,17 @@ namespace ECBack.Controllers
             }
 
             // 得到所有类别的总价
-            var SErecord = orderform.SERecords;
+            // var SErecord = orderform.SERecords;
+            var cartRecord = cart.CartRecords; 
 
-            if (SErecord ==null )
+            if (cartRecord ==null )
             {
                 // 无权
-                System.Diagnostics.Debug.WriteLine("No SERecord");
+                System.Diagnostics.Debug.WriteLine("No cartRecord");
                 return BadRequest();
             }
 
-            foreach (var record in SErecord)
+            foreach (var record in cartRecord)
             {
                 //得到该商品的所有类别
                 GoodEntity good = db.GoodEntities.Find(record.SaleEntity.GoodEntityID);
@@ -184,11 +231,16 @@ namespace ECBack.Controllers
             }
 
             Coupons valid_coupon = max_coupons[0];
-            var max_discount = get_max_discount(discount_by_category, max_coupons, ref valid_coupon);
+            max_discount = get_max_discount(discount_by_category, max_coupons, ref valid_coupon);
             user.Coupons.Remove(valid_coupon);
             db.SaveChanges();
-            return Ok(max_discount);
+            return Ok(new
+            {
+                Discount = max_discount
+            });
         }
+
+
 
         int getIndex(int value, List<int> cate_IDs)
         {
@@ -266,7 +318,10 @@ namespace ECBack.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+
         // POST: api/Coupons
+        // 发布优惠券
+        [SellerAuthFilter]
         [ResponseType(typeof(Coupons))]
         public IHttpActionResult PostCoupons(Coupons coupons)
         {
@@ -275,11 +330,20 @@ namespace ECBack.Controllers
                 return BadRequest(ModelState);
             }
 
+            if (HttpContext.Current.User.Identity != null)
+            {
+                // 无权
+                System.Diagnostics.Debug.WriteLine("Not Login");
+                return BadRequest();
+            }
+
             db.Coupons.Add(coupons);
             db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = coupons.CouponID }, coupons);
         }
+
+
 
         // DELETE: api/Coupons/5
         [ResponseType(typeof(Coupons))]
