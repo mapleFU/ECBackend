@@ -32,51 +32,50 @@ namespace ECBack.Controllers
         [Route("api/Favorites")]
         public IHttpActionResult GetRelatedFavorites()
         {
-            
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            
-            if (HttpContext.Current.User == null)
+
+            if (HttpContext.Current.User.Identity != null)
             {
                 // 无权
                 System.Diagnostics.Debug.WriteLine("Get Carts Null");
                 return ResponseMessage(Request.CreateResponse((HttpStatusCode)403));
             }
-            
+
             List<Schema> Schemas = new List<Schema>();
             IQueryable<Favorite> Favs = db.Favorites;
             List<GoodEntity> goods = new List<GoodEntity>();
             User requestUser = (User)HttpContext.Current.User;
-            try
+
+            //找到对应UserID的Favorite
+            IEnumerable<Favorite> query = Favs.Where(w => w.UserID == requestUser.UserID);
+
+            //找到对应的GoodEntity
+            foreach (var VARIABLE in query)
             {
-                //找到对应UserID的Favorite
-                IEnumerable<Favorite> query = Favs.Where(w => w.UserID == requestUser.UserID);
-               
-                //找到对应的GoodEntity
-                foreach (var VARIABLE in query)
-                {
-                    goods.Add(VARIABLE.GoodEntity);
-                }
-                //沈sb需要的类List
-                foreach (var VARIABLE in goods)
-                {
-                    Schema tmp = new Schema();
-                    tmp.GoodEntityID = VARIABLE.GoodEntityID;
-                    tmp.GoodName = VARIABLE.GoodName;
-                    tmp.GoodPrice = VARIABLE.SaleEntities.First().Price;
-                    tmp.ImageURL = VARIABLE.Images.First().ImageURL;
-                    Schemas.Add(tmp);
-                }
+                goods.Add(VARIABLE.GoodEntity);
             }
-            catch (Exception e)
+            //沈sb需要的类List
+            foreach (var VARIABLE in goods)
             {
-                Console.WriteLine(e);
-                throw;
+                Schema tmp = new Schema();
+                db.Entry(VARIABLE).Collection(c => c.SaleEntities).Load();
+                db.Entry(VARIABLE).Collection(c => c.Images).Load();
+                if (VARIABLE.SaleEntities.Count == 0 || VARIABLE.Images.Count == 0)
+                {
+                    continue;
+                }
+                tmp.GoodEntityID = VARIABLE.GoodEntityID;
+                tmp.GoodName = VARIABLE.GoodName;
+                tmp.GoodPrice = VARIABLE.SaleEntities.First().Price;
+                tmp.ImageURL = VARIABLE.Images.First().ImageURL;
+                Schemas.Add(tmp);
             }
-            
-            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,Schemas));
+
+            return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK, Schemas));
         }
 
         // GET: api/Favorites/5
@@ -138,7 +137,7 @@ namespace ECBack.Controllers
         [Route("api/Favorites")]
         public HttpResponseMessage PostFavorite([FromUri] int GoodID)
         {
-            if (HttpContext.Current.User == null)
+            if (HttpContext.Current.User.Identity != null)
             {
                 // 无权
                 System.Diagnostics.Debug.WriteLine("Get Favorites Null");
@@ -192,11 +191,11 @@ namespace ECBack.Controllers
             User requestUser = (User)HttpContext.Current.User;
             int user_id = requestUser.UserID;
             int good_id = GoodID;
-           
-            Favorite favorite=new Favorite();
+
+            Favorite favorite = new Favorite();
             favorite.FavoriteID = -1;
-            List <Favorite>favs= db.Favorites.ToList();
-            for(int i=0;i<favs.Count();i++)
+            List<Favorite> favs = db.Favorites.ToList();
+            for (int i = 0; i < favs.Count(); i++)
             {
                 if (favs[i].UserID == user_id && favs[i].GoodEntityID == good_id)
                 {
@@ -211,7 +210,7 @@ namespace ECBack.Controllers
             db.Favorites.Remove(favorite);
             db.SaveChanges();
 
-            return Request.CreateErrorResponse(HttpStatusCode.OK,"deleted");
+            return Request.CreateErrorResponse(HttpStatusCode.OK, "deleted");
         }
 
         protected override void Dispose(bool disposing)
