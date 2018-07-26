@@ -118,10 +118,6 @@ namespace ECBack.Controllers
                 if (VARIABLE.UserID == user_id && VARIABLE.SaleEntityID == GoodID)
                     comment = VARIABLE;
             }
-            if (comment == null)
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "comment not found");
-            }
 
             return Request.CreateResponse(HttpStatusCode.OK, comment);
         }
