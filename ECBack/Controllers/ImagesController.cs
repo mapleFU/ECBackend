@@ -23,14 +23,16 @@ namespace ECBack.Controllers
         private static string SecretKey = "MAgFx6Q9PLLXRBuYu79rVkv7Lgi8LoFUZYwqPzjd";
 
         private static Mac mac = new Mac(AccessKey, SecretKey);
-        
-        
+
+
 
         // POST: api/Images
-
+        private static string BASE_NET_URL = "//Uploads/Images/";
         public HttpResponseMessage PostImage()
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();
+            List<string> imageUrls = new List<string>();
+            
             try
             {
 
@@ -70,6 +72,7 @@ namespace ECBack.Controllers
                         {
                             string fileUrl = ImageFileManager.Upload(postedFile);
                             System.Diagnostics.Debug.WriteLine("Image is" + fileUrl);
+                            imageUrls.Add(BASE_NET_URL + fileUrl);
                             //YourModelProperty.imageurl = userInfo.email_id + extension;
                             ////  where you want to attach your imageurl
 
@@ -83,10 +86,12 @@ namespace ECBack.Controllers
                     }
 
                     var message1 = string.Format("Image Updated Successfully.");
-                    return Request.CreateErrorResponse(HttpStatusCode.Created, message1); ;
+                    dict.Add("images", imageUrls);
+                    return Request.CreateResponse(HttpStatusCode.Created, dict);
                 }
                 var res = string.Format("Please Upload a image.");
                 dict.Add("error", res);
+
                 return Request.CreateResponse(HttpStatusCode.NotFound, dict);
             }
             catch (Exception ex)
@@ -97,21 +102,6 @@ namespace ECBack.Controllers
             }
         }
 
-        // DELETE: api/Images/5
-        [ResponseType(typeof(Image))]
-        public async Task<IHttpActionResult> DeleteImage(int id)
-        {
-            Image image = await db.Images.FindAsync(id);
-            if (image == null)
-            {
-                return NotFound();
-            }
-
-            db.Images.Remove(image);
-            await db.SaveChangesAsync();
-
-            return Ok(image);
-        }
 
         protected override void Dispose(bool disposing)
         {

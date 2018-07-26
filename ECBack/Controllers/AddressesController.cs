@@ -123,13 +123,17 @@ namespace ECBack.Controllers
                 City = data.City,
                 Block = data.Block,
                 DetailAddress = data.DetailAddress,
-                IsDefault = data.IsDefault ?? false
+                IsDefault = data.IsDefault ?? false,
+                UserID = usr.UserID
             };
-            newAddress.UserID = usr.UserID;
+            
             db.Addresses.Add(newAddress);
             await db.SaveChangesAsync();
             string newUrl = "api/Addresses/" + newAddress.AddressID;
-            var responseMessage = Request.CreateResponse(HttpStatusCode.NoContent);
+            var responseMessage = Request.CreateResponse(HttpStatusCode.OK, new
+            {
+                AddressID = newAddress.AddressID
+            });
             responseMessage.Headers.Add("Location", newUrl);
             return ResponseMessage(responseMessage);
         }
