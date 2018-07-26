@@ -45,6 +45,8 @@ namespace ECBack.Controllers
         /// </summary>
         [Required]
         public string NickName { get; set; }
+
+        public DateTime Birthday { get; set; }
     }
 
     public class RegisterSeller
@@ -160,6 +162,7 @@ namespace ECBack.Controllers
                     PhoneNumber = registerData.PhoneNumber,
                     NickName = registerData.NickName,
                     PasswordHash = registerData.Password,
+                    BirthDay = registerData.Birthday
                 };
                 
 
@@ -179,7 +182,9 @@ namespace ECBack.Controllers
                 });
 
                 db.SaveChanges();
-                response = Request.CreateResponse(HttpStatusCode.NoContent);
+                response = Request.CreateResponse(HttpStatusCode.OK, new {
+                    UserID = user.UserID
+                });
                 response.Headers.Add("Location", "api/Users/" + user.UserID);
                 
             }

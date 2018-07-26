@@ -291,6 +291,10 @@
     <Compile Include="Migrations\201807261040065_reupdate database.Designer.cs">
       <DependentUpon>201807261040065_reupdate database.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201807261814463_make it happy.cs" />
+    <Compile Include="Migrations\201807261814463_make it happy.Designer.cs">
+      <DependentUpon>201807261814463_make it happy.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\GAttribute.cs" />
@@ -415,6 +419,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807261040065_reupdate database.resx">
       <DependentUpon>201807261040065_reupdate database.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807261814463_make it happy.resx">
+      <DependentUpon>201807261814463_make it happy.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

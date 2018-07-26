@@ -55,7 +55,6 @@ namespace ECBack.Models
         [MaxLength(20)]
         public string Block { get; set; }
 
-        [Required]
         public string DetailAddress { get; set; }
 
         /// <summary>
