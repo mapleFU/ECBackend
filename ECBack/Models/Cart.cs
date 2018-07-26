@@ -28,7 +28,7 @@ namespace ECBack.Models
         public int SaleEntityID { get; set; }
 
         [ForeignKey("SaleEntityID")]
-        public SaleEntity SaleEntity { get; set; }
+        public virtual SaleEntity SaleEntity { get; set; }
 
         [Required]
         public int RecordNum { get; set; }
@@ -50,7 +50,7 @@ namespace ECBack.Models
         [ForeignKey("User")]
         public int UserID { get; set; }
 
-        public ICollection<CartRecord> CartRecords { get; set; }
+        public virtual ICollection<CartRecord> CartRecords { get; set; }
 
         public async Task<decimal> TotalPrice(OracleDbContext dbContext)
         {

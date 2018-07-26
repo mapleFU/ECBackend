@@ -86,8 +86,8 @@ namespace ECBack.Controllers
 
         [AuthenticationFilter]
         [HttpGet]
-        [Route("api/Orderforms/{OrderformID:int}/Coupons")]
-        public IHttpActionResult GetDiscount(int OrderformID)
+        [Route("api/Carts/Coupons")]
+        public IHttpActionResult GetDiscount()
         {
             if (!ModelState.IsValid)
             {
@@ -104,24 +104,13 @@ namespace ECBack.Controllers
             User requestUser = (User)HttpContext.Current.User;
             int user_id = requestUser.UserID;
 
+            var cart = db.Carts.Find(user_id);
             var user = db.Users.Find(user_id);
-            var orderform = db.Orderforms.Find(OrderformID);
-
-            if (orderform==null||user==null)
-            {
-                return NotFound();
-            }
-
-            if (orderform.UserID != user_id)
-            {
-                // 无权
-                System.Diagnostics.Debug.WriteLine("orderform与user不匹配");
-                return BadRequest();
-            }
+            decimal max_discount = 0;
 
             if (user.Coupons.Count == 0)
             {
-                return Ok(0);
+                return Ok(max_discount);
             }
 
             // 初始化优惠券的所有类别的ID，无重复
@@ -148,16 +137,17 @@ namespace ECBack.Controllers
             }
 
             // 得到所有类别的总价
-            var SErecord = orderform.SERecords;
+            // var SErecord = orderform.SERecords;
+            var cartRecord = cart.CartRecords; 
 
-            if (SErecord ==null )
+            if (cartRecord ==null )
             {
                 // 无权
-                System.Diagnostics.Debug.WriteLine("No SERecord");
+                System.Diagnostics.Debug.WriteLine("No cartRecord");
                 return BadRequest();
             }
 
-            foreach (var record in SErecord)
+            foreach (var record in cartRecord)
             {
                 //得到该商品的所有类别
                 GoodEntity good = db.GoodEntities.Find(record.SaleEntity.GoodEntityID);
@@ -184,7 +174,7 @@ namespace ECBack.Controllers
             }
 
             Coupons valid_coupon = max_coupons[0];
-            var max_discount = get_max_discount(discount_by_category, max_coupons, ref valid_coupon);
+            max_discount = get_max_discount(discount_by_category, max_coupons, ref valid_coupon);
             user.Coupons.Remove(valid_coupon);
             db.SaveChanges();
             return Ok(max_discount);
