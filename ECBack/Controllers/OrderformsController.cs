@@ -156,9 +156,22 @@ namespace ECBack.Controllers
                 OrderformID = orderform.OrderformID
             });
             resp.Headers.Add("Location", "/api/Orderforms/" + orderform.OrderformID);
+
+            ClearCart(currentUsr.UserID);
+
             return ResponseMessage(resp);
         }
         
+        [NonAction]
+        private async void ClearCart(int UserID)
+        {
+            var cartRecords = db.CartRecords.Where(cr => cr.UserID == UserID);
+            foreach (CartRecord cartR in cartRecords)
+            {
+                db.CartRecords.Remove(cartR);
+            }
+            await db.SaveChangesAsync();
+        }
 
         // GET: api/Orderforms/5
         [ResponseType(typeof(Orderform))]

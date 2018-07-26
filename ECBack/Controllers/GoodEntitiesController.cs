@@ -12,6 +12,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ECBack.Filters;
 using ECBack.Models;
+using Newtonsoft.Json;
 
 namespace ECBack.Controllers
 {
@@ -30,7 +31,7 @@ namespace ECBack.Controllers
 
     public class GoodEntitySchema
     {
-        public int GoodEntityID { get; set; }
+        
         public string GoodName { get; set; }
         
         // image 的 URL 联合，存在多个 IMAGE 的URL
@@ -46,14 +47,69 @@ namespace ECBack.Controllers
         public string ShownImage { get; set; }
         // 基本指定的CATEGORY ?
         public List<GAttributeSchema> GAttributes { get; set; }
+        public string SellProvince { get; set; }
+
+        public GoodEntitySchema()
+        {
+            this.SellProvince = "上海";
+        }
         //public int AllNum { get; set; }
         //public int PageNum { get; set; }
     }
+
+    
 
     public class GoodEntitiesController : ApiController
     {
         private OracleDbContext db = new OracleDbContext();
         private const int PageDataNumber = 15;
+
+        [NonAction]
+        private void AddSaleEntityRec(int GoodID, List<List<Option>> optionList, int level, List<Option> currentList, decimal Price)
+        {
+            if (level == optionList.Count)
+            {
+                var newEntity = new SaleEntity()
+                {
+                    Price = Price,
+                    GoodEntityID = GoodID,
+
+                };
+                
+                foreach (var option in currentList)
+                {
+                    newEntity.AttributeOptions.Add(option);
+                }
+
+                db.SaleEntities.Add(newEntity);
+                
+            } else
+            {
+                foreach (Option opt in optionList[level])
+                {
+                    currentList.Add(opt);
+                    AddSaleEntityRec(GoodID, optionList, level, currentList, Price);
+                    currentList.Remove(opt);
+                }
+            }
+        }
+
+        [NonAction]
+        private void AddSaleEntity(int GoodID, List<List<Option>> optionList, decimal Price)
+        {
+            if (optionList.Count == 0)
+            {
+                // 注意创建一个商品
+                db.SaleEntities.Add(new SaleEntity()
+                {
+                    Price = Price,
+                    GoodEntityID = GoodID,
+                    
+                });
+                return;
+            }
+            AddSaleEntityRec(GoodID, optionList, 0, new List<Option>(), Price);
+        }
 
         [HttpPost]
         [Route("api/GoodEntities")]
@@ -69,29 +125,42 @@ namespace ECBack.Controllers
             System.Diagnostics.Debug.WriteLine("Good Model.");
             Seller seller = (Seller)HttpContext.Current.User;
             System.Diagnostics.Debug.WriteLine("Seller phone number " + seller.PhoneNumber);
+
+            System.Diagnostics.Debug.WriteLine(seller.SellerID + " " + goodEntitySchema.BrandID + " " +
+                goodEntitySchema.Stock + " " + goodEntitySchema.Brief + " " + goodEntitySchema.DetailImages 
+                + " " + goodEntitySchema.ShownImage + " " + goodEntitySchema.GoodName);
+
+            System.Diagnostics.Debug.WriteLine("Create");
+
             GoodEntity goodEntity = new GoodEntity()
             {
                 SellerID = seller.SellerID,
+                
                 GoodName = goodEntitySchema.GoodName,
-                BrandID = goodEntitySchema.BrandID,
-                Stock = goodEntitySchema.Stock ?? 0,
+                BrandID = 618,
+                Stock = goodEntitySchema.Stock ?? 1,
                 Brief = goodEntitySchema.Brief,
                 DetailImages = goodEntitySchema.DetailImages,
-                FavoriteNum = 0,
+                FavoriteNum = 1,
                 GoodEntityState = 0,
-                SellProvince = "上海",
-                Detail = goodEntitySchema.ShownImage
+                SellProvince = goodEntitySchema.SellProvince,
+                Detail = goodEntitySchema.ShownImage,
+                
             };
 
-            System.Diagnostics.Debug.WriteLine(seller.SellerID + " " + goodEntitySchema.BrandID + " " + 
-                goodEntitySchema.Stock  + " " + goodEntitySchema.Brief + " " + goodEntitySchema.DetailImages);
+            System.Diagnostics.Debug.WriteLine(JsonConvert.SerializeObject(goodEntity));
+
             db.GoodEntities.Add(goodEntity);
             // 保存单纯的 GoodEntity
+            db.Configuration.AutoDetectChangesEnabled = true;
             await db.SaveChangesAsync();
+            System.Diagnostics.Debug.WriteLine("Save GoodEntity");
             // 保存 GoodEntity 的属性
-            throw new NotImplementedException();
+
             List<List<Option>> innerList = new List<List<Option>>(); 
             foreach (var attr in goodEntitySchema.GAttributes) {
+                List<Option> currentList = new List<Option>();
+
                 GAttribute gAttribute = new GAttribute();
                 gAttribute.GAttributeName = attr.GAttributeName;
                 db.GAttributes.Add(gAttribute);
@@ -104,12 +173,18 @@ namespace ECBack.Controllers
                         GAttributeID = gAttribute.GAttributeID,
                         Describe = attrSubName
                     };
+                    currentList.Add(curOption);
                     db.Options.Add(curOption);
                 }
                 await db.SaveChangesAsync();
+                innerList.Add(currentList);
             }
-            
-            // 创建保存 SaleEntity 
+            System.Diagnostics.Debug.WriteLine("Save options and gttrs");
+
+            // 创建保存 SaleEntity , 递归开始创建
+            AddSaleEntity(goodEntity.GoodEntityID, innerList, Price:goodEntitySchema.Price);
+
+            System.Diagnostics.Debug.WriteLine("Save SaleEntities");
 
             var resp = Request.CreateResponse(HttpStatusCode.NoContent);
             resp.Headers.Add("Location", "api/GoodEntities/" + goodEntity.GoodEntityID);
@@ -307,7 +382,7 @@ namespace ECBack.Controllers
                     resultSchema.Add(new GoodEntitySchema()
                     {
                         GoodName = entity.GoodName,
-                        GoodEntityID = entity.GoodEntityID,
+                        
                         DetailImages = image,
                         Price = min_price,
 
