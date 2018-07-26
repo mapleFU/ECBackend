@@ -45,7 +45,7 @@ namespace ECBack.Controllers
         // 需要显示的图
         public string ShownImage { get; set; }
         // 基本指定的CATEGORY ?
-        public List<GAttribute> GAttributes { get; set; }
+        public List<GAttributeSchema> GAttributes { get; set; }
         //public int AllNum { get; set; }
         //public int PageNum { get; set; }
     }
@@ -89,8 +89,24 @@ namespace ECBack.Controllers
             // 保存单纯的 GoodEntity
             await db.SaveChangesAsync();
             // 保存 GoodEntity 的属性
+            throw new NotImplementedException();
+            List<List<Option>> innerList = new List<List<Option>>(); 
             foreach (var attr in goodEntitySchema.GAttributes) {
-
+                GAttribute gAttribute = new GAttribute();
+                gAttribute.GAttributeName = attr.GAttributeName;
+                db.GAttributes.Add(gAttribute);
+                // TODO: find out when to save these changes
+                await db.SaveChangesAsync();
+                foreach (var attrSubName in attr.Describes)
+                {
+                    Option curOption = new Option()
+                    {
+                        GAttributeID = gAttribute.GAttributeID,
+                        Describe = attrSubName
+                    };
+                    db.Options.Add(curOption);
+                }
+                await db.SaveChangesAsync();
             }
             
             // 创建保存 SaleEntity 
