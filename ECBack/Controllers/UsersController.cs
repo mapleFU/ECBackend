@@ -54,6 +54,7 @@ namespace ECBack.Controllers
 
         // GET: api/Users/5
         [ResponseType(typeof(User))]
+        [Route("api/Users/{id}")]
         public IHttpActionResult GetUser(int id)
         {
             User user =  db.Users.Include(u => u.Addresses).Include(u => u.VIP).First(u => u.UserID == id);
@@ -101,7 +102,7 @@ namespace ECBack.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("api/Users/{UserID}")]
         public async Task<IHttpActionResult> UpdateUser(int UserID, [FromBody] User data)
         {
@@ -110,10 +111,12 @@ namespace ECBack.Controllers
             {
                 return NotFound();
             }
-            string pwd;
+            
             if (data.PasswordHash == null)
                 data.PasswordHash = usr.PasswordHash;
-            throw new NotImplementedException();
+            usr = data;
+            await db.SaveChangesAsync();
+            return Ok();
                 
         }
 

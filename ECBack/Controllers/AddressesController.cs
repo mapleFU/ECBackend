@@ -28,7 +28,7 @@ namespace ECBack.Controllers
         public string City { get; set; }
         [Required]
         public string Block { get; set; }
-        [Required]
+        
         public string DetailAddress { get; set; }
 
         public bool? IsDefault { get; set; }
@@ -169,7 +169,7 @@ namespace ECBack.Controllers
         [Route("api/Addresses/{AddressID:int}")]
         [HttpDelete]
         [AuthenticationFilter]
-        public async Task<IHttpActionResult> DeleteAddress(int UserID, int AddressID)
+        public async Task<IHttpActionResult> RemoveAddress( int AddressID)
         {
             var usr = (User)HttpContext.Current.User;
             var add = await db.Addresses.FindAsync(AddressID);
@@ -182,6 +182,7 @@ namespace ECBack.Controllers
                 return StatusCode((HttpStatusCode)403);
             }
             db.Addresses.Remove(add);
+            await db.SaveChangesAsync();
             return Ok();
             
         }
