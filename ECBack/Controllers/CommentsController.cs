@@ -177,7 +177,7 @@ namespace ECBack.Controllers
                     VARIABLE.LevelRank = comment.LevelRank;
                     VARIABLE.UserCommentTime = comment.UserCommentTime;
                     db.SaveChanges();
-                    return ResponseMessage(Request.CreateResponse(HttpStatusCode.Accepted));
+                    return ResponseMessage(Request.CreateResponse(HttpStatusCode.Accepted,"oka"));
                 }
             }
             if (users.Where(d => d.UserID == comment.UserID).Count() == 0)
