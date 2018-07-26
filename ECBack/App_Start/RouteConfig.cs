@@ -15,6 +15,7 @@ namespace ECBack
             routes.RouteExistingFiles = true;
             routes.IgnoreRoute("Uploads/Images/*.jpg");
             routes.IgnoreRoute("Uploads/Images/*.png");
+            routes.IgnoreRoute("Static/*.html");
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             
 

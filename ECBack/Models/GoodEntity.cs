@@ -109,7 +109,7 @@ namespace ECBack.Models
         /// </summary>
         public ICollection<GAttribute> GAttributes { get; set; }
 
-        public ICollection<Image> Images { get; set; }
+        // public ICollection<Image> Images { get; set; }
 
         public ICollection<SaleEntity> SaleEntities { get; set; }
 

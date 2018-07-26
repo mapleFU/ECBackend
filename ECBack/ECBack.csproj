@@ -251,10 +251,10 @@
     <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\CouponsController.cs" />
     <Compile Include="Controllers\ControllersTool.cs" />
+    <Compile Include="Controllers\ExistsChecker.cs" />
     <Compile Include="Controllers\FavoritesController.cs" />
     <Compile Include="Controllers\GAttributesController.cs" />
     <Compile Include="Controllers\GoodEntitiesController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImagesController.cs" />
     <Compile Include="Controllers\LogisticInfoesController.cs" />
     <Compile Include="Controllers\LogisticsController.cs" />
@@ -262,6 +262,7 @@
     <Compile Include="Controllers\OrderformsController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Controllers\ReplyController.cs" />
+    <Compile Include="Controllers\ResponseGenerator.cs" />
     <Compile Include="Controllers\SaleEntitiesController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -277,6 +278,14 @@
     <Compile Include="Migrations\201807251142587_update question and reply.cs" />
     <Compile Include="Migrations\201807251142587_update question and reply.Designer.cs">
       <DependentUpon>201807251142587_update question and reply.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807260651449_update coupons.cs" />
+    <Compile Include="Migrations\201807260651449_update coupons.Designer.cs">
+      <DependentUpon>201807260651449_update coupons.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807260939513_rm images.cs" />
+    <Compile Include="Migrations\201807260939513_rm images.Designer.cs">
+      <DependentUpon>201807260939513_rm images.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Address.cs" />
@@ -354,17 +363,9 @@
     </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Coupons\Create.cshtml" />
-    <Content Include="Views\Coupons\Delete.cshtml" />
-    <Content Include="Views\Coupons\Details.cshtml" />
-    <Content Include="Views\Coupons\Edit.cshtml" />
-    <Content Include="Views\Coupons\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Hello\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -401,6 +402,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807251142587_update question and reply.resx">
       <DependentUpon>201807251142587_update question and reply.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807260651449_update coupons.resx">
+      <DependentUpon>201807260651449_update coupons.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807260939513_rm images.resx">
+      <DependentUpon>201807260939513_rm images.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

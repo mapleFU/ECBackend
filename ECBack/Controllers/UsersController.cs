@@ -101,9 +101,24 @@ namespace ECBack.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        [HttpPut]
+        [Route("api/Users/{UserID}")]
+        public async Task<IHttpActionResult> UpdateUser(int UserID, [FromBody] User data)
+        {
+            User usr = await db.Users.FindAsync(UserID);
+            if (usr == null)
+            {
+                return NotFound();
+            }
+            string pwd;
+            if (data.PasswordHash == null)
+                data.PasswordHash = usr.PasswordHash;
+            throw new NotImplementedException();
+                
+        }
+
         // POST: api/Users
         // https://stackoverflow.com/questions/21758615/why-should-i-use-ihttpactionresult-instead-of-httpresponsemessage
-        
         [HttpPost]
         [Route("api/Users")]
         public async Task<IHttpActionResult> AddOrUpdate(User data)

@@ -63,15 +63,15 @@ namespace ECBack.Controllers
             {
                 Schema tmp = new Schema();
                 db.Entry(VARIABLE).Collection(c => c.SaleEntities).Load();
-                db.Entry(VARIABLE).Collection(c => c.Images).Load();
-                if (VARIABLE.SaleEntities.Count == 0 || VARIABLE.Images.Count == 0)
+                // db.Entry(VARIABLE).Collection(c => c.Images).Load();
+                if (VARIABLE.SaleEntities.Count == 0 || VARIABLE.DescribeImages.Count == 0)
                 {
                     continue;
                 }
                 tmp.GoodEntityID = VARIABLE.GoodEntityID;
                 tmp.GoodName = VARIABLE.GoodName;
                 tmp.GoodPrice = VARIABLE.SaleEntities.First().Price;
-                tmp.ImageURL = VARIABLE.Images.First().ImageURL;
+                tmp.ImageURL = VARIABLE.DescribeImages.First();
                 Schemas.Add(tmp);
             }
 

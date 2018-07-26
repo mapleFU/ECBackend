@@ -31,7 +31,7 @@ namespace ECBack.Controllers
         public HttpResponseMessage PostImage()
         {
             Dictionary<string, object> dict = new Dictionary<string, object>();
-            List<string> imageUrls = new List<string>();
+            List<object> imageUrls = new List<object>();
             
             try
             {
@@ -47,7 +47,7 @@ namespace ECBack.Controllers
                     if (postedFile != null && postedFile.ContentLength > 0)
                     {
 
-                        int MaxContentLength = 1024 * 1024 * 1; //Size = 1 MB
+                        int MaxContentLength = 1024 * 1024 * 5; //Size = 1 MB
 
                         IList<string> AllowedFileExtensions = new List<string> { ".jpg", ".gif", ".png" };
                         var ext = postedFile.FileName.Substring(postedFile.FileName.LastIndexOf('.'));
@@ -70,9 +70,14 @@ namespace ECBack.Controllers
                         }
                         else
                         {
-                            string fileUrl = ImageFileManager.Upload(postedFile);
+                            KeyValuePair<string, string> pair = ImageFileManager.Upload(postedFile);
+                            string fileUrl = pair.Key;
+                            string filePath = pair.Value;
                             System.Diagnostics.Debug.WriteLine("Image is" + fileUrl);
-                            imageUrls.Add(BASE_NET_URL + fileUrl);
+                            imageUrls.Add(new {
+                                fileUrl = fileUrl,
+                                filePath = filePath
+                            });
                             //YourModelProperty.imageurl = userInfo.email_id + extension;
                             ////  where you want to attach your imageurl
 

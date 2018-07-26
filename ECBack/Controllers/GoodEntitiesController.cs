@@ -15,16 +15,22 @@ using ECBack.Models;
 
 namespace ECBack.Controllers
 {
+
     public class GoodEntitySchema
     {
         public int GoodEntityID { get; set; }
         public string GoodName { get; set; }
+        
+        // image 的 URL 联合，存在多个 IMAGE 的URL
         public string DetailImages { get; set; }
+
         // public decimal Price { get; set; }
         public int? Stock { get; set; } //
         public string Brief { get; set; }
         public int BrandID { get; set; }
         public decimal GoodPrice { get; set; }
+        // 基本指定的CATEGORY ?
+        public List<int> CategoryList { get; set; }
         //public int AllNum { get; set; }
         //public int PageNum { get; set; }
     }
@@ -125,7 +131,7 @@ namespace ECBack.Controllers
             {
                 return NotFound();
             }
-            await db.Entry(entity).Collection(ge => ge.Images).LoadAsync();
+            // await db.Entry(entity).Collection(ge => ge.Images).LoadAsync();
             await db.Entry(entity).Collection(ge => ge.SaleEntities).LoadAsync();
             await db.Entry(entity).Collection(ge => ge.GAttributes).LoadAsync();
             foreach (var attr in entity.GAttributes)
@@ -234,7 +240,7 @@ namespace ECBack.Controllers
                 {
                     // TODO: only load one image
                     // https://stackoverflow.com/questions/3356541/entity-framework-linq-query-include-multiple-children-entities
-                    await db.Entry(entity).Collection(ge => ge.Images).LoadAsync();
+                    // await db.Entry(entity).Collection(ge => ge.Images).LoadAsync();
                     await db.Entry(entity).Collection(ge => ge.SaleEntities).LoadAsync();
                     //await db.Entry(entity).Collection(ge => ge.GAttributes).LoadAsync();
                     //foreach (var attr in entity.GAttributes)

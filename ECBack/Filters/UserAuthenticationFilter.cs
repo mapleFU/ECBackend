@@ -63,6 +63,7 @@ namespace ECBack.Filters
             bool validate = AuthController.ValidateToken(authorization.Parameter, out phoneNumber, "Seller");
             if (!validate)
             {
+                System.Diagnostics.Debug.WriteLine("Not validate");
                 // 403
                 return;
             }

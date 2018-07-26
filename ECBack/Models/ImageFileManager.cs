@@ -30,30 +30,32 @@ namespace ECBack.Models
             return path;
         }
         
-        public static string Upload(HttpPostedFile file)
+        public static KeyValuePair<string, string> Upload(HttpPostedFile file)
         {
+            string fileName, path;
+            
             if (file != null && file.ContentLength > 0)
             {
-                string fileName = null;
+                path = fileName = null;
                 try
                 {
                     var ext = Path.GetExtension(file.FileName);
                     var onlyName = Path.GetFileNameWithoutExtension(file.FileName);
                     fileName = Path.GetFileName(Base64Encode(onlyName) + ext);
                     
-                    var path = GetPath(fileName);
+                    path = GetPath(fileName);
                     System.Diagnostics.Debug.WriteLine(path);
                     file.SaveAs(path);
-                    
+                    return new KeyValuePair<string, string>(path, fileName);
                 } catch
                 {
-
+                    return new KeyValuePair<string, string>(path, fileName);
                 }
-                return fileName;
+                
             } else
             {
                 // 图片上传错误
-                return null;
+                return new KeyValuePair<string, string>(null, null);
             }
         }
 

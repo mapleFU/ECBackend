@@ -17,23 +17,32 @@ namespace ECBack.Controllers
     {
         private OracleDbContext db = new OracleDbContext();
 
-        // GET: api/SaleEntities
-        public IQueryable<SaleEntity> GetSaleEntities()
-        {
-            return db.SaleEntities;
-        }
-
         // GET: api/SaleEntities/5
         [ResponseType(typeof(SaleEntity))]
-        public async Task<IHttpActionResult> GetSaleEntity(int id)
+        [Route("api/GoodEntities/{GoodID:int}/SaleEntities/{SaleID:int}")]
+        public async Task<IHttpActionResult> GetSaleEntity(int GoodID, int SaleID)
         {
-            SaleEntity saleEntity = await db.SaleEntities.FindAsync(id);
-            if (saleEntity == null)
+            SaleEntity saleEntity = await db.SaleEntities.FindAsync(SaleID);
+            GoodEntity goodEntity = await db.GoodEntities.FindAsync(GoodID);
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            HttpResponseMessage resp;
+            if (saleEntity == null || goodEntity == null)
             {
-                return NotFound();
+                if (saleEntity == null)
+                {
+                    dict.Add("error", "SaleEntity " + SaleID + " not exists");
+                } else
+                {
+                    dict.Add("error", "GoodEntity " + GoodID + " not exists");
+                }
+                resp = Request.CreateResponse(HttpStatusCode.NotFound, dict);
+            } else
+            {
+                dict.Add("SaleEntity", saleEntity);
+                resp = Request.CreateResponse(HttpStatusCode.OK, dict);
             }
 
-            return Ok(saleEntity);
+            return ResponseMessage(resp);
         }
 
         // PUT: api/SaleEntities/5

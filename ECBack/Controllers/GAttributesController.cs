@@ -16,24 +16,7 @@ namespace ECBack.Controllers
     {
         private OracleDbContext db = new OracleDbContext();
 
-        // GET: api/GAttributes
-        public IQueryable<GAttribute> GetGAttributes()
-        {
-            return db.GAttributes;
-        }
 
-        // GET: api/GAttributes/5
-        [ResponseType(typeof(GAttribute))]
-        public IHttpActionResult GetGAttribute(int id)
-        {
-            GAttribute gAttribute = db.GAttributes.Find(id);
-            if (gAttribute == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(gAttribute);
-        }
 
         // PUT: api/GAttributes/5
         [ResponseType(typeof(void))]
@@ -70,19 +53,17 @@ namespace ECBack.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/GAttributes
+        // POST: api/GoodEntities/{GoodID}/GAttributes
         [ResponseType(typeof(GAttribute))]
+        [Route("api/GoodEntities/{GoodID}/GAttributes")]
+        [HttpPost]
         public IHttpActionResult PostGAttribute(GAttribute gAttribute)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            db.GAttributes.Add(gAttribute);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = gAttribute.GAttributeID }, gAttribute);
+            throw new NotImplementedException();
         }
 
         // DELETE: api/GAttributes/5
