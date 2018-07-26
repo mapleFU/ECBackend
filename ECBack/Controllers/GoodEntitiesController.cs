@@ -31,7 +31,7 @@ namespace ECBack.Controllers
 
     public class GoodEntitySchema
     {
-        
+        public int GoodEntityID { get; set; }
         public string GoodName { get; set; }
         
         // image 的 URL 联合，存在多个 IMAGE 的URL
@@ -335,6 +335,7 @@ namespace ECBack.Controllers
                 return ResponseMessage(Request.CreateResponse(HttpStatusCode.OK,
                    new
                    {
+                      
                        ResultNum = toPageNum(resultSchema.Count()),
                        GoodEntities = resultSchema,
                        PageNum = pn,
@@ -397,7 +398,7 @@ namespace ECBack.Controllers
                     resultSchema.Add(new GoodEntitySchema()
                     {
                         GoodName = entity.GoodName,
-                        
+                        GoodEntityID = entity.GoodEntityID,
                         DetailImages = image,
                         Price = min_price,
 
