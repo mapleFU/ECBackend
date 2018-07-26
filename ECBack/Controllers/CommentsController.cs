@@ -49,19 +49,23 @@ namespace ECBack.Controllers
         public HttpResponseMessage GetRelatedComments([FromUri] CommentsQuery data)
         {
             int pn = data.Pn ?? 1;
-            IQueryable<Comment> Comments;
-            var cate = db.SaleEntities.Find(data.GoodID);
-            if (cate == null)
+
+            var good = db.GoodEntities.Find(data.GoodID);
+            db.Entry(good).Collection(ge => ge.SaleEntities).Load();
+            List<Comment> comments = new List<Comment>();
+            foreach (var se in good.SaleEntities)
             {
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "GoodID not found");
+                db.Entry(se).Collection(saleE => saleE.Comments).Load();
+                foreach (var s_comment in se.Comments)
+                {
+                    comments.Add(s_comment);
+                }
             }
-            db.Entry(cate).Collection(c => c.Comments).Load();
-            Comments = cate.Comments.AsQueryable();
 
             List<CommentU> dataList = new List<CommentU>();
-            var rs = Comments.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToList();
-            int res = Comments.Count() / PageDataNumber;
-            if (Comments.Count() % PageDataNumber != 0)
+            var rs = comments.Skip((pn - 1) * PageDataNumber).Take(PageDataNumber).ToList();
+            int res = comments.Count() / PageDataNumber;
+            if (comments.Count() % PageDataNumber != 0)
                 res = res + 1;
             foreach (var VARIABLE in rs)
             {
