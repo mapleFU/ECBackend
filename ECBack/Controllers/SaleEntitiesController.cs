@@ -17,8 +17,22 @@ namespace ECBack.Controllers
     {
         private OracleDbContext db = new OracleDbContext();
 
+        [ResponseType(typeof(SaleEntity))]
+        [HttpGet]
+        [Route("api/SaleEntities/{SaleID:int}")]
+        public async Task<IHttpActionResult> GetSaleEntityByID(int SaleID)
+        {
+            SaleEntity saleEntity = await db.SaleEntities.FindAsync(SaleID);
+            if (saleEntity == null)
+            {
+                return NotFound();
+            }
+            return Ok(saleEntity);
+        }
+
         // GET: api/SaleEntities/5
         [ResponseType(typeof(SaleEntity))]
+        [HttpGet]
         [Route("api/GoodEntities/{GoodID:int}/SaleEntities/{SaleID:int}")]
         public async Task<IHttpActionResult> GetSaleEntity(int GoodID, int SaleID)
         {

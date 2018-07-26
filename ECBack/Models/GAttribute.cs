@@ -10,7 +10,12 @@ namespace ECBack.Models
 {
     public class GAttribute
     {
-        
+        //public int GoodEntityID { get; set; }
+
+        //[JsonIgnore]
+        //public GoodEntity GoodEntity { get; set; }
+
+
         /// <summary>
         /// ID of GAttribute
         /// </summary>

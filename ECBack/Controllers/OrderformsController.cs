@@ -126,7 +126,7 @@ namespace ECBack.Controllers
                     EntityNum = record.Number ?? 1,
 
                 };
-                System.Diagnostics.Debug.WriteLine("ADD ONE");
+                System.Diagnostics.Debug.WriteLine("Add one");
                 seRecord.OrderformID = orderform.OrderformID;
                 seRecord.SaleEntityID = seRecord.SaleEntityID;
                 // orderform.SERecord = seRecord;
@@ -139,10 +139,12 @@ namespace ECBack.Controllers
                 db.SaleEntityRecords.Add(seRecord);
 
             }
-            await db.Entry(logistic).Collection(logis => logis.LogisticInfos).LoadAsync();
+            System.Diagnostics.Debug.WriteLine("Load Collections logistic infos");
+            // await db.Entry(logistic).Collection(logis => logis.LogisticInfos).LoadAsync();
             orderform.TotalPrice = totalPrice;
             System.Diagnostics.Debug.WriteLine("Total Price " + totalPrice);
             await db.SaveChangesAsync();
+            System.Diagnostics.Debug.WriteLine("Saved");
             var resp = Request.CreateResponse(HttpStatusCode.NoContent);
             resp.Headers.Add("Location", "/api/Orderforms/" + orderform.OrderformID);
             return ResponseMessage(resp);
@@ -159,7 +161,13 @@ namespace ECBack.Controllers
             {
                 return NotFound();
             }
+            var usr = (User)HttpContext.Current.User;
+            if (orderform.UserID != usr.UserID)
+            {
+                return Unauthorized();
+            }
             await db.Entry(orderform).Collection(odf => odf.SERecords).LoadAsync();
+            await db.Entry(orderform).Reference(odf => odf.Address).LoadAsync();
             return Ok(orderform);
         }
 

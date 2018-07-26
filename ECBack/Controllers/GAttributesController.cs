@@ -6,6 +6,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ECBack.Models;
@@ -57,11 +58,16 @@ namespace ECBack.Controllers
         [ResponseType(typeof(GAttribute))]
         [Route("api/GoodEntities/{GoodID}/GAttributes")]
         [HttpPost]
-        public IHttpActionResult PostGAttribute(GAttribute gAttribute)
+        public async Task<IHttpActionResult> PostGAttribute(int GoodID, [FromBody]GAttribute gAttribute)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+            var goodEntity = await db.GoodEntities.FindAsync(GoodID);
+            if (goodEntity == null)
+            {
+                return NotFound();
             }
             throw new NotImplementedException();
         }
