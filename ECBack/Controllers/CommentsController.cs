@@ -172,6 +172,18 @@ namespace ECBack.Controllers
             }
             IQueryable<User> users = db.Users;
             IQueryable<SaleEntity> sales = db.SaleEntities;
+            IQueryable<Comment> comments = db.Comments;
+            foreach (var VARIABLE in comments)
+            {
+                if (VARIABLE.UserID == comment.UserID && VARIABLE.SaleEntityID == comment.SaleEntityID)
+                {
+                    VARIABLE.Detail = comment.Detail;
+                    VARIABLE.LevelRank = comment.LevelRank;
+                    VARIABLE.UserCommentTime = comment.UserCommentTime;
+                    db.SaveChanges();
+                    return ResponseMessage(Request.CreateResponse(HttpStatusCode.Accepted));
+                }
+            }
             if (users.Where(d => d.UserID == comment.UserID).Count() == 0)
             {
                 return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, "UserID not found"));
