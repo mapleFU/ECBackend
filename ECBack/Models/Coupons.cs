@@ -44,9 +44,6 @@ namespace ECBack.Models
         [JsonIgnore]
         public int CategoryID { get; set; }
 
-        [Required]
-        public string DeadlineDate { get; set; }
-
         // 打折范围（类别）
         [ForeignKey("CategoryID")]
         public Category Category { get; set; }
